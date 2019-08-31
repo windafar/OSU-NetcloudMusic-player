@@ -1,0 +1,21 @@
+﻿<Application x:Class="PlayProjectGame.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PlayProjectGame"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resource/Dictionary1_SrcollBar.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary1_SrcollBarExtend.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary3_LRCListBox.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary4_SongListBox.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary2_PlayButton.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary5_GridViewColumnHeader.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resource/Dictionary6_PlaySlider.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Dictionary_ListViewBigFaltStyle.xaml"/>
+                <ResourceDictionary Source="SongListtemContainerStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

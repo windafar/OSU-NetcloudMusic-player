@@ -1,0 +1,39 @@
+﻿<Page x:Class="PlayProjectGame.SearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayProjectGame"
+      xmlns:publicconver="clr-namespace:PlayProjectGame.PublicConver"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SearchPage" >
+    <Page.Resources>
+        <publicconver:VisibleConver x:Key="VisibleConver"></publicconver:VisibleConver>
+        <publicconver:EnableConver x:Key="EnableConver"></publicconver:EnableConver>
+
+    </Page.Resources>
+    <Grid>
+        <ListBox MouseDoubleClick="SearchList_MouseDoubleClick" Name="SearchList" Loaded="SearchList_Loaded">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,10,0,10" TextBlock.FontSize="16">
+                        <StackPanel Orientation="Horizontal"  Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                            <TextBlock Text="{Binding SongInfo.SongName}"></TextBlock>
+                            <TextBlock xml:space="preserve"> - </TextBlock>
+                            <TextBlock Text="{Binding SongInfo.SongArtist}"></TextBlock>
+                            <TextBlock Visibility="{Binding Path=SongInfo.LocalFlac,Converter={StaticResource VisibleConver}}" Foreground="#FFFE672E" FontFamily="Tempus Sans ITC" FontWeight="Bold"> SQ</TextBlock>
+                            <TextBlock Visibility="{Binding Path=SongInfo.RemoteFlac,Converter={StaticResource VisibleConver}}" Foreground="Black" FontFamily="Tempus Sans ITC" FontWeight="Bold"> SQ</TextBlock>
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>歌单：</TextBlock>
+                            <TextBlock MouseDown="SearchPageSongListLinkClick" Text="{Binding SourceName}">
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>

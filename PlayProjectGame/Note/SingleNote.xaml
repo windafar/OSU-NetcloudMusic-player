@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="PlayProjectGame.Note.SingleNote"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlayProjectGame.Note"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Name="SingleNoteWidget" Loaded="SingleNoteWidget_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" ButtonBase.Click="SingleNoteWidget_Click">
+        <Button  Name="notebutton" Click="notebutton_Click" Foreground="#BB000000" Background="#00BFACAC" BorderBrush="#99FDFDFD">⚪</Button>
+        <TextBox Visibility="Hidden" Text="{Binding Content,Mode=TwoWay}" Background="#B2FFFFFF" TextWrapping="Wrap" AcceptsReturn="True">
+            <TextBox.Triggers>
+                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.3" Duration="0:0:1"></DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:1"></DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+            </TextBox.Triggers>
+        </TextBox>
+    </Grid>
+</UserControl>

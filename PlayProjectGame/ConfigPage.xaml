@@ -1,0 +1,193 @@
+﻿<Page x:Class="PlayProjectGame.ConfigPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:PublicConver="clr-namespace:PlayProjectGame.PublicConver"
+      xmlns:sys="clr-namespace:System.Threading;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="ConfigPage">
+    <Page.Resources>
+        <PublicConver:StringConver x:Key="StringConver"/>
+    </Page.Resources>
+    <Grid>
+        <StackPanel Name="ConfigStackPanel" Loaded="ConfigStackPanel_Loaded">
+            <GroupBox Header="歌词" Name="LRC">
+                <StackPanel>
+                    <CheckBox Name="IsAtuoLrcCheckBox" Content="自动关联歌词" IsChecked="{Binding Path=IsAtuoLrc}"></CheckBox>
+                    <CheckBox Content="当前歌词显示原文" IsChecked="{Binding Path=LrcMode}"></CheckBox>
+                    <TextBox Margin="0,1,0,0" Tag="歌词目录" Name="LrcDirTextBox" Text="{Binding LrcDir}">
+                        <TextBox.Style>
+                            <Style>
+                            <Style.Triggers>
+                            <MultiTrigger>
+                                <Setter Property="TextBox.Background">
+                                    <Setter.Value>
+                                        <VisualBrush AlignmentX="Right" AlignmentY="Top" Stretch="None" FrameworkElement.FlowDirection="LeftToRight">
+                                            <VisualBrush.Visual>
+                                                <TextBlock TextAlignment="Right" Text="歌词目录"  Background="#33FFFFFF" Foreground="Silver"/>
+                                                    </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </MultiTrigger>
+                        </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <!--<TextBox Margin="0,1,0,0" Tag="歌词颜色" Text="{Binding LrcBkColor}">
+                        <TextBox.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <Setter Property="TextBox.Background">
+                                            <Setter.Value>
+                                                <VisualBrush AlignmentX="Right" AlignmentY="Top" Stretch="None" FrameworkElement.FlowDirection="LeftToRight">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock TextAlignment="Right" Text="歌词颜色"  Background="#33FFFFFF" Foreground="Silver"/>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>-->
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="源" Name="MusicSource">
+                <StackPanel>
+                    <TextBox  Margin="0,1,0,0" Tag="库" Name="LocalMusicDirTextBox" Text="{Binding LocalMusicDir}">
+                        <TextBox.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <!--<MultiTrigger.Conditions>
+                                            <Condition Property="TextBox.IsFocused" Value="False"></Condition>
+                                            <Condition Property="TextBox.Text" Value=""></Condition>
+                                        </MultiTrigger.Conditions>-->
+                                        <Setter Property="TextBox.Background">
+                                            <Setter.Value>
+                                                <VisualBrush AlignmentX="Right" AlignmentY="Top" Stretch="None">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock Text="库"  Background="#33FFFFFF" Foreground="Silver">
+                                                        </TextBlock>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+
+                    </TextBox>
+                    <TextBox  Margin="0,5,0,0" Tag="OSU目录" Name="OsuDirTextBox" Text="{Binding OsuDir}">
+                        <TextBox.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <!--<MultiTrigger.Conditions>
+                                            <Condition Property="TextBox.IsFocused" Value="False"></Condition>
+                                            <Condition Property="TextBox.Text" Value=""></Condition>
+                                        </MultiTrigger.Conditions>-->
+                                        <Setter Property="TextBox.Background">
+                                            <Setter.Value>
+                                                <VisualBrush AlignmentX="Right" AlignmentY="Top" Stretch="None">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock Text="OSU目录"  Background="#33FFFFFF" Foreground="Silver">
+                                                        </TextBlock>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+
+                    </TextBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="行为" Name="AddBeh">
+                <StackPanel>
+                    <RadioButton Name="addToLastRadioButton" Click="addToLastRadioButton_Click"  Content="加入到播放列表最后" />
+                    <RadioButton Name="addToNextRadioButton" Click="addToNextRadioButton_Click" Content="加入到播放列表下一个" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="输出" Name="OutCf">
+                <ComboBox Name="OutDevice" HorizontalAlignment="Left" Width="120" Loaded="OutDevice_Loaded" SelectedValue="{Binding DeviceName, Mode=TwoWay}"/>
+            </GroupBox>
+            <GroupBox Header="性能" Name="Performance">
+                <StackPanel>
+                    <TextBox  Margin="0,1,0,0" Text="{Binding PlaylistThreadNum}" >
+                        <TextBox.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <!--<MultiTrigger.Conditions>
+                                            <Condition Property="TextBox.IsFocused" Value="False"></Condition>
+                                            <Condition Property="TextBox.Text" Value=""></Condition>
+                                        </MultiTrigger.Conditions>-->
+                                        <Setter Property="TextBox.Background">
+                                            <Setter.Value>
+                                                <VisualBrush  AlignmentX="Right" AlignmentY="Top" Stretch="None">
+                                                    <VisualBrush.Visual >
+                                                        <TextBlock Text="播放页面处理线程数目"  Background="#33FFFFFF" Foreground="Silver">
+                                                        </TextBlock>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBox  Margin="0,5,0,0" Text="{Binding PlaylistItemNum}">
+                        <TextBox.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <!--<MultiTrigger.Conditions>
+                                            <Condition Property="TextBox.IsFocused" Value="False"></Condition>
+                                            <Condition Property="TextBox.Text" Value=""></Condition>
+                                        </MultiTrigger.Conditions>-->
+                                        <Setter Property="TextBox.Background">
+                                            <Setter.Value>
+                                                <VisualBrush AlignmentX="Right"  AlignmentY="Top" Stretch="None">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock  Text="播放页面最多项数"  Background="#33FFFFFF" Foreground="Silver">
+                                                        </TextBlock>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+
+                    </TextBox>
+                    <CheckBox IsChecked="{Binding UseAlbumImageCach}">缓存专辑图片</CheckBox>
+                    <CheckBox IsChecked="{Binding UseSRDImageCach}">缓存播放列表图片</CheckBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="外观" Name="UI">
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding UseSongListPageBackground}">是否使用歌单背景</CheckBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="网络">
+                <CheckBox IsChecked="{Binding UseCouldMusicSongListCover}">使用网络上的歌单图片(实验功能)</CheckBox>
+            </GroupBox>
+
+            <!--<Button Name="DownAllLrcButton" Click="DownAllLrcButton_Click">DownAllLrcToLrcDir</Button>-->
+            <Button Name="ReloadCloudMusicDataButton" Click="ReloadCloudMusicDataButton_Click">ReloadCloudMusicData</Button>
+            <Button Name="ReloadOsuDataButton" Click="ReloadOsuDataButton_Click">ReloadOsucData</Button>
+
+        </StackPanel>
+    </Grid>
+</Page>

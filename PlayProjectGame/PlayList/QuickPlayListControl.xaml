@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="PlayProjectGame.PlayList.QuickPlayListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlayProjectGame.PlayList"
+             xmlns:UserDefinedControl="clr-namespace:PlayProjectGame.UserDefinedControl"
+             mc:Ignorable="d" 
+             Name="quickPlayListControl" Loaded="quickPlayListControl_Loaded" MouseLeave="quickPlayListControl_MouseLeave" Unloaded="quickPlayListControl_Unloaded"
+             d:DesignHeight="450" d:DesignWidth="310.387">
+    <ListBox  MouseDoubleClick="QuickPlayListBox_MouseDoubleClick" Loaded="QuickPlayListBox_Loaded" Name="QuickPlayListBox"   ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.RowSpan="2" AllowDrop="True" Drop="QuickPlayListBox_Drop" DragEnter="QuickPlayListBox_DragEnter" DragLeave="QuickPlayListBox_DragLeave">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UserDefinedControl:VirtualizingWrapPanel
+                        ExtentContentOffset="100"  ChildWidth="{Binding ElementName=QuickPlayListBox, Path=ActualWidth}" ChildHeight="194"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        AllowDrop="True">
+                    <UserDefinedControl:VirtualizingWrapPanel.Effect>
+                        <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                    </UserDefinedControl:VirtualizingWrapPanel.Effect>
+                </UserDefinedControl:VirtualizingWrapPanel>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="120"></RowDefinition>
+                        <RowDefinition Height="74"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Unloaded="Image_Unloaded"  Loaded="Image_Loaded" Initialized="Image_Initialized" Stretch="None" StretchDirection="Both" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    </Image>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock  Text="{Binding Path=SongInfo.SongName}" FontSize="24"></TextBlock>
+                        <TextBlock  Text="{Binding Path=SongInfo.SongArtist}" FontSize="18"></TextBlock>
+                    </StackPanel>
+                    <Line X1="0" X2="0" Y1="0" HorizontalAlignment="Right" Visibility="Collapsed" Stroke="{Binding MainWindow.CurrentThemeBrush, ElementName=quickPlayListControl}" StrokeThickness="8" >
+                        <Line.Y2>
+                            <Binding Path="ActualHeight">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorLevel="1" AncestorType="Grid"></RelativeSource>
+                                </Binding.RelativeSource>
+                            </Binding>
+                        </Line.Y2>
+                    </Line>
+                </Grid>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+
+</UserControl>

@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{843C747B-C1E8-43D5-8669-DD65D983236F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PlayProjectGame</RootNamespace>
+    <AssemblyName>PlayProjectGame</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon-20180512030811818.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net451\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.99.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AlbumList.xaml.cs">
+      <DependentUpon>AlbumList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AlbumPage.xaml.cs">
+      <DependentUpon>AlbumPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigPage.xaml.cs">
+      <DependentUpon>ConfigPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Cach.cs" />
+    <Compile Include="Core\FileSerch.cs" />
+    <Compile Include="Data\CouldMusicLocalDataGeter.cs" />
+    <Compile Include="Data\Domain.cs" />
+    <Compile Include="Data\NetCloudMusicSource.cs" />
+    <Compile Include="Data\OsuLocalDataGeter.cs" />
+    <Compile Include="GlobalConfig.cs" />
+    <Compile Include="Helper\Comparer.cs" />
+    <Compile Include="Helper\MusicTag.cs" />
+    <Compile Include="Helper\OtherHelper.cs" />
+    <Compile Include="Helper\UIhelper.cs" />
+    <Compile Include="LrcViewOther\LrcShowWindow.xaml.cs">
+      <DependentUpon>LrcShowWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LrcSercher\ConvExpendHeight.cs" />
+    <Compile Include="LrcSercher\LrcSeacherPage.xaml.cs">
+      <DependentUpon>LrcSeacherPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Note\NoteViewData.cs" />
+    <Compile Include="Note\SingleNote.xaml.cs">
+      <DependentUpon>SingleNote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NotifyIcon_Winform.cs" />
+    <Compile Include="Playing.xaml.cs">
+      <DependentUpon>Playing.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlayList\GridPlayList.xaml.cs">
+      <DependentUpon>GridPlayList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlayList\QuickPlayListControl.xaml.cs">
+      <DependentUpon>QuickPlayListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PublicConver\RatioConver.cs" />
+    <Compile Include="SalientRegionDetection.cs" />
+    <Compile Include="PlayList\SimplePlayList.xaml.cs">
+      <DependentUpon>SimplePlayList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlayListJournalEntry.cs" />
+    <Compile Include="PlayList\PlayListBaes.cs" />
+    <Compile Include="PlayList\UIConverter.cs" />
+    <Compile Include="PlayList\WrapPlayList.xaml.cs">
+      <DependentUpon>WrapPlayList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PublicConver\ColorArgConver.cs" />
+    <Compile Include="PublicConver\StringConver.cs" />
+    <Compile Include="PublicConver\EnableConver.cs" />
+    <Compile Include="PublicConver\IntConver.cs" />
+    <Compile Include="PublicConver\VisibleConver.cs" />
+    <Compile Include="SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SongList.xaml.cs">
+      <DependentUpon>SongList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserDefinedControl\ListViewBigFalt.xaml.cs">
+      <DependentUpon>ListViewBigFalt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserDefinedControl\ListViewExtend.cs" />
+    <Compile Include="UserDefinedControl\UIConverter.cs" />
+    <Compile Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml.cs">
+      <DependentUpon>Hor_FisheyeEff_ListBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserDefinedControl\VirtualizingWrapPanel.cs" />
+    <Page Include="AlbumList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AlbumPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dictionary_ListViewBigFaltStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LrcViewOther\LrcShowWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LrcSercher\LrcSeacherPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Note\SingleNote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayList\GridPlayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayList\QuickPlayListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayList\WrapPlayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\Dictionary1_SrcollBarExtend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Dictionary1_SrcollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Playing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayList\SimplePlayList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Dictionary2_PlayButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\Dictionary3_LRCListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Dictionary6_PlaySlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Dictionary4_SongListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\Dictionary5_GridViewColumnHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SongList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SongListtemContainerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserDefinedControl\ListViewBigFalt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Afar.Audio\AddIn.Audio.csproj">
+      <Project>{90bd37a7-4db2-4dfe-a450-0c62e8f49606}</Project>
+      <Name>AddIn.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Afar.Cloud163\AddIn.Cloud163.csproj">
+      <Project>{87921e0a-245a-4a1f-b858-3f4617e42cf0}</Project>
+      <Name>AddIn.Cloud163</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Afar.Lrc\AddIn.Lrc.csproj">
+      <Project>{3b53fc0b-f544-41a1-b935-cf88d5ee4874}</Project>
+      <Name>AddIn.Lrc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Data.PublicElem\Communication.csproj">
+      <Project>{d6c10a57-bcb0-4015-b6c2-ad99bdd8ccf6}</Project>
+      <Name>Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageBasic\ImageBasic.csproj">
+      <Project>{2d95120a-b885-4cde-8b6f-7aae702d7f61}</Project>
+      <Name>ImageBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageFilter\ImageFilter.csproj">
+      <Project>{5360FD78-DA32-424F-863F-9700FE26FBC6}</Project>
+      <Name>ImageFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LrcSercher\AddIn.LrcSercher.csproj">
+      <Project>{97fa6751-ce97-45f4-8200-e04c4461d05f}</Project>
+      <Name>AddIn.LrcSercher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualAttentionDetection.CutImage\VisualAttentionDetection.CutImage.csproj">
+      <Project>{2723FBAA-7D45-475F-BECC-7DC546AD37F3}</Project>
+      <Name>VisualAttentionDetection.CutImage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualAttentionDetection.OtherAppy\VisualAttentionDetection.OtherAppy.csproj">
+      <Project>{7FDD2263-3304-46FF-A043-F580EAC45C1F}</Project>
+      <Name>VisualAttentionDetection.OtherAppy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualAttentionDetection\VisualAttentionDetection.csproj">
+      <Project>{068dbf2c-9889-415d-b251-bb5fa697bcbe}</Project>
+      <Name>VisualAttentionDetection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowDemo\WindowDemo\WindowDemo.csproj">
+      <Project>{cdcc0fdc-b3fa-4462-a37f-863cb93eb452}</Project>
+      <Name>WindowDemo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TextFile1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppResource\un.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="favicon-20180512030811818.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AppResource\overlap1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此项目引用这台计算机上缺少的 NuGet 程序包。使用 NuGet 程序包还原可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,73 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+<!--用于主页面左侧的listbox-->
+    <ControlTemplate TargetType="ListBoxItem" x:Key="ListBoxItemTemp2">
+        <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="Bd" SnapsToDevicePixels="True">
+            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="UIElement.IsMouseOver">
+                        <Condition.Value>
+                            <s:Boolean>True</s:Boolean>
+                        </Condition.Value>
+                    </Condition>
+                </MultiTrigger.Conditions>
+                <Setter Property="Opacity" Value="1"></Setter>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive">
+                        <Condition.Value>
+                            <s:Boolean>False</s:Boolean>
+                        </Condition.Value>
+                    </Condition>
+                    <Condition Property="Selector.IsSelected">
+                        <Condition.Value>
+                            <s:Boolean>True</s:Boolean>
+                        </Condition.Value>
+                    </Condition>
+                </MultiTrigger.Conditions>
+                <Setter Property="Panel.Background" TargetName="Bd">
+                    <Setter.Value>
+                        <SolidColorBrush>#3DDADADA</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Border.BorderBrush" TargetName="Bd">
+                    <Setter.Value>
+                        <SolidColorBrush>#FFDADADA</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelectionActive">
+                        <Condition.Value>
+                            <s:Boolean>True</s:Boolean>
+                        </Condition.Value>
+                    </Condition>
+                    <Condition Property="Selector.IsSelected">
+                        <Condition.Value>
+                            <s:Boolean>True</s:Boolean>
+                        </Condition.Value>
+                    </Condition>
+                </MultiTrigger.Conditions>
+                <Setter Property="Panel.Background" TargetName="Bd" Value="#33000000"/>
+                <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#33000000"/>
+                <Setter Property="Opacity" Value="1"></Setter>
+            </MultiTrigger>
+            <Trigger Property="UIElement.IsEnabled">
+                <Setter Property="TextElement.Foreground" TargetName="Bd">
+                    <Setter.Value>
+                        <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <s:Boolean>False</s:Boolean>
+                </Trigger.Value>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+</ResourceDictionary>

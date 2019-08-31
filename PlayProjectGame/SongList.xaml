@@ -1,0 +1,247 @@
+﻿<Page x:Class="PlayProjectGame.SongList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayProjectGame"
+      xmlns:publicconver="clr-namespace:PlayProjectGame.PublicConver"
+      xmlns:userdefinedcontrol="clr-namespace:PlayProjectGame.UserDefinedControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="400"
+      Title="SongList" Loaded="Page_Loaded"
+      Name="SongListPage"  VisualClearTypeHint="Auto"
+      SizeChanged="SongListPage_SizeChanged"
+      >
+    <Page.Resources>
+        <Style TargetType="GridViewColumnHeader" x:Key="GridViewColumnHeaderStyle">
+            <Setter Property="Template" Value="{StaticResource GridViewColumnHeaderTemp}"></Setter>
+            <Setter Property="Panel.Background" Value="White"></Setter>
+            <Setter Property="Border.Margin" Value="0,0,0,0"></Setter>
+            <Setter Property="Border.Background" Value="Transparent"></Setter>
+            <Setter Property="Border.BorderThickness" Value="0"></Setter>
+            <Setter Property="Border.BorderBrush" Value="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"></Setter>
+            <Setter Property="Border.Height" Value="36"></Setter>
+        </Style>
+        <Style TargetType="ListViewItem" x:Key="ListBoxItemContainerStyle">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="true">
+                    <Setter Property="Background" Value="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+
+            <Setter Property="Template" Value="{StaticResource SongListItemTemp}"></Setter>
+        </Style>
+        <publicconver:VisibleConver x:Key="VisibleConver"></publicconver:VisibleConver>
+        <publicconver:EnableConver x:Key="EnableConver"></publicconver:EnableConver>
+        <AlternationConverter x:Key="conBack">
+            <SolidColorBrush Color="#FFF2F2F2"></SolidColorBrush>
+            <SolidColorBrush Color="White"></SolidColorBrush>
+        </AlternationConverter>
+        <AlternationConverter x:Key="conAlign">
+            <HorizontalAlignment>Left</HorizontalAlignment>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <HorizontalAlignment>Right</HorizontalAlignment>
+        </AlternationConverter>
+        <Style x:Key="hyberlinkEffect" TargetType="{x:Type Hyperlink}">
+            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,0,0,0" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="228"/>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="16"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="220"/>
+                <RowDefinition Height="109*"/>
+            </Grid.RowDefinitions>
+            <Image Mouse.PreviewMouseWheel="SongListListView_MouseWheel" x:Name="SongListImage" HorizontalAlignment="Left" Margin="12" VerticalAlignment="Top" Stretch="UniformToFill"/>
+            <StackPanel Mouse.PreviewMouseWheel="SongListListView_MouseWheel" Grid.Column="1" Margin="0,16,0,0">
+
+                <TextBlock Name="SongListName" TextWrapping="Wrap" FontSize="14" FontWeight="Light"/>
+                <TextBlock Name="SongListCreator" TextWrapping="Wrap" Margin="0,12,0,0"/>
+                <StackPanel Panel.ZIndex="-1" Orientation="Horizontal" Margin="0,12,0,0">
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#126ea1" >
+                        <Hyperlink Style="{StaticResource hyberlinkEffect}" FontSize="24" Name="AddSongListAddButton"   Click="AddSongListAddButton_Click">+</Hyperlink>
+                    </TextBlock>
+                    <TextBlock  FontSize="18" Foreground="#126ea1" Name="PlaySongListButton" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0" Background="{x:Null}" >
+                        <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="PlaySongListButton_Click" >播放全部</Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="18,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" >操作：</TextBlock>
+                    <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="RemoveLoalNotExistSQButton" Margin="0,0,0,0" >
+                        <Hyperlink Style="{StaticResource hyberlinkEffect}"  Click="RemoveLoalNotExistSQButton_Click">移除歌单的非无损音频</Hyperlink>
+                    </TextBlock>
+                    <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="ExportSongList"   Margin="12,0,0,0" Background="{x:Null}">
+                        <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="ExportSongList_Click">导出歌单</Hyperlink>
+                    </TextBlock>
+                    <StackPanel VerticalAlignment="Center" Margin="18,0,0,0">
+                        <TextBlock FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                            <Hyperlink Style="{StaticResource hyberlinkEffect}"  Click="ShowSearcherBox">过滤</Hyperlink>
+                        </TextBlock>
+                        <TextBox Visibility="Collapsed" Name="SearcherBox" TextChanged="SearcherBox_TextChanged" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"  HorizontalAlignment="Right" Width="128" Height="17" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,12,8">
+                        </TextBox>
+                    </StackPanel>
+
+                </StackPanel >
+                <ScrollViewer Name="SongListInfoSrcoller"  MaxHeight="150" VerticalScrollBarVisibility="Hidden" Margin="0,12">
+                    <TextBlock Name="SongListInfo" TextWrapping="WrapWithOverflow" ScrollViewer.CanContentScroll="True"  Margin="0"/>
+                </ScrollViewer>
+            </StackPanel>
+            <userdefinedcontrol:ListViewBigFalt x:Name="SongListListView" Grid.Row="1" MouseDoubleClick="SongListListView_MouseDoubleClick" GridViewColumnHeader.Click="SongListListView_Click" Margin="0" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      Loaded="SongListListView_Loaded" 
+                      ScrollViewer.ScrollChanged="SongListListView_ScrollChanged" 
+                      Mouse.PreviewMouseWheel="SongListListView_MouseWheel" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      BorderBrush="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"
+                      AlternationCount="2" 
+                      BorderThickness="0,0,0,0"
+                      userdefinedcontrol:ListViewBigFalt.GridViewHearderBackgroud="{Binding ElementName=SongListPage, Path=HearderBackgroud}"
+                      Style="{DynamicResource ListViewBigFaltStyle}" Grid.ColumnSpan="2"
+                      Background="{Binding ElementName=SongListPage, Path=ListViewBackgroud }"
+                      DragEnter="SongListListView_DragEnter"
+                      DragLeave="SongListListView_DragLeave" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+                      >
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                        <GridView.Columns>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <HeaderedContentControl Width="24">
+                                        <TextBlock Text="序号" x:Name="Index"></TextBlock>
+                                    </HeaderedContentControl>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Height="34px" Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                                            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding Path=SongInfoIndex}"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <HeaderedContentControl>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Name="SongNameGridLable" Grid.Row="0" Text="歌名" HorizontalAlignment="Center"/>
+                                            <!--<TextBox Name="SongGridHead" Grid.Row="1" TextChanged="TextBox_TextChanged_1"></TextBox>-->
+                                        </Grid>
+                                    </HeaderedContentControl>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                                            <TextBlock FontSize="18"  Text="{Binding Path=SongInfo.SongName}"></TextBlock>
+                                            <TextBlock Visibility="{Binding Path=SongInfo.LocalFlac,Converter={StaticResource VisibleConver}}" Foreground="#FFFE672E" FontFamily="Tempus Sans ITC" FontWeight="Bold"> SQ</TextBlock>
+                                            <TextBlock Visibility="{Binding Path=SongInfo.RemoteFlac,Converter={StaticResource VisibleConver}}" Foreground="Black" FontFamily="Tempus Sans ITC" FontWeight="Bold"> SQ</TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <HeaderedContentControl>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Name="ArtistGridLable" Grid.Row="0" Text="艺术家" HorizontalAlignment="Center"/>
+                                            <!--<TextBox Name="ArtistGridHead" Grid.Row="1" TextChanged="TextBox_TextChanged_2"></TextBox>-->
+                                        </Grid>
+                                    </HeaderedContentControl>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                                            <TextBlock  FontSize="18" Text="{Binding Path=SongInfo.SongArtist}"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.Header>
+                                    <HeaderedContentControl>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Name="SongAlbumGridHead" Grid.Row="0" Text="专辑" HorizontalAlignment="Center"/>
+                                            <!--<TextBox Name="AlbumGridHead"  Grid.Row="1" TextChanged="TextBox_TextChanged_3"></TextBox>-->
+                                        </Grid>
+                                    </HeaderedContentControl>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                                            <TextBlock  FontSize="18" Text="{Binding Path=SongInfo.SongAlbum}"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="30">
+                                <GridViewColumn.Header>
+                                    <HeaderedContentControl>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" Text="长度" HorizontalAlignment="Center"/>
+                                        </Grid>
+                                    </HeaderedContentControl>
+                                </GridViewColumn.Header>
+
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
+                                            <TextBlock  FontSize="18" Text="{Binding Path=SongInfo.SongLengh}"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="SongListAddMenu" Header="加入播放列表" Click="SongListAddMenu_Click"></MenuItem>
+                        <MenuItem Name="SongListGoDir" Header="转到目录" Click="SongListGoDir_Click"></MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <userdefinedcontrol:VirtualizingWrapPanel ChildHeight="39" ChildWidth="{Binding ActualWidth, ElementName=SongListListView, Mode=OneWay}" ExtentContentOffset="100.0" ></userdefinedcontrol:VirtualizingWrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <!--<ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
+                            Path=(ItemsControl.AlternationIndex),
+                            Converter={StaticResource conBack}}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self},
+                            Path=(ItemsControl.AlternationIndex),
+                            Converter={StaticResource conAlign}}"/>
+                    </Style>
+                </ListView.ItemContainerStyle>-->
+            </userdefinedcontrol:ListViewBigFalt>
+        </Grid>
+        <ScrollBar Scroll="SongListPageScrollBar_Scroll" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Grid.Column="8"/>
+
+    </Grid>
+    
+</Page>

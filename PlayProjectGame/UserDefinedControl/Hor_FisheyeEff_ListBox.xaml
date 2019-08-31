@@ -1,0 +1,26 @@
+﻿<UserControl x:Name="userControl" x:Class="PlayProjectGame.UserDefinedControl.Hor_FisheyeEff_ListBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlayProjectGame.UserDefinedControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="200">
+    <UserControl.Resources>
+        <local:ConvaSongInfoToAlbum x:Key="ConvaSongInfoToAlbum"></local:ConvaSongInfoToAlbum>
+    </UserControl.Resources>
+
+    <ListBox  ScrollViewer.ScrollChanged="Image_ScrollChanged" Name="ImageListBox" Background="Black" SelectionChanged="ImageListBox_SelectionChanged" PreviewMouseWheel="ImageListBox_PreviewMouseWheel" >
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel Orientation="Horizontal" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.CacheLength="10" VirtualizingPanel.VirtualizationMode="Recycling">
+                </VirtualizingStackPanel>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Image  Width="150" Source="{Binding Converter={StaticResource ConvaSongInfoToAlbum}}" Loaded="Image_Loaded" HorizontalAlignment="Center" Stretch="Uniform" IsEnabled="True"/>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

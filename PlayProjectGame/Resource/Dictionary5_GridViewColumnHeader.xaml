@@ -1,0 +1,171 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:PlayProjectGame.Resource"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib" 
+                    >
+    <ControlTemplate TargetType="GridViewColumnHeader" x:Key="GridViewColumnHeaderTemp">
+        <Grid SnapsToDevicePixels="True">
+            <Border BorderThickness="0,1,0,1" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="HeaderBorder">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MaxHeight="7" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#FFE3F7FF" Name="UpperHighlight" Visibility="Collapsed" />
+                    <Border Padding="{TemplateBinding Control.Padding}" Grid.RowSpan="2">
+                        <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Name="HeaderContent" Margin="0,0,0,1" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                    </Border>
+                </Grid>
+            </Border>
+            <Border BorderThickness="1,0,1,1" Name="HeaderHoverBorder" Margin="1,1,0,0" />
+            <Border BorderThickness="1,1,1,0" Name="HeaderPressBorder" Margin="1,0,0,1" />
+            <Canvas>
+                <Thumb Name="PART_HeaderGripper">
+                    <Thumb.Style>
+                        <Style TargetType="Thumb">
+                            <Style.Resources>
+                                <ResourceDictionary />
+                            </Style.Resources>
+                            <Setter Property="Canvas.Right">
+                                <Setter.Value>
+                                    <s:Double>-9</s:Double>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="FrameworkElement.Width">
+                                <Setter.Value>
+                                    <s:Double>18</s:Double>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="FrameworkElement.Height">
+                                <Setter.Value>
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Control.Padding">
+                                <Setter.Value>
+                                    <Thickness>0,0,0,0</Thickness>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Panel.Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="#FFF2F2F2" Offset="0" />
+                                            <GradientStop Color="#FFD5D5D5" Offset="1" />
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Border Padding="{TemplateBinding Control.Padding}" Background="#00FFFFFF">
+                                            <Rectangle Fill="{TemplateBinding Panel.Background}" Width="1" HorizontalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Thumb.Style>
+                </Thumb>
+            </Canvas>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver">
+                <Setter Property="Panel.Background" TargetName="HeaderBorder">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="#FFBDEDFF" Offset="0" />
+                                <GradientStop Color="#FFB7E7FB" Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder">
+                    <Setter.Value>
+                        <SolidColorBrush>#FF88CBEB</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                    <Setter.Value>
+                        <x:Static Member="Visibility.Visible" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Panel.Background" TargetName="PART_HeaderGripper">
+                    <Setter.Value>
+                        <SolidColorBrush>#00FFFFFF</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <s:Boolean>True</s:Boolean>
+                </Trigger.Value>
+            </Trigger>
+            <Trigger Property="ButtonBase.IsPressed">
+                <Setter Property="Panel.Background" TargetName="HeaderBorder">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="#FF8DD6F7" Offset="0" />
+                                <GradientStop Color="#FF8AD1F5" Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder">
+                    <Setter.Value>
+                        <SolidColorBrush>#FF95DAF9</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Border.BorderBrush" TargetName="HeaderPressBorder">
+                    <Setter.Value>
+                        <SolidColorBrush>#FF7A9EB1</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                    <Setter.Value>
+                        <x:Static Member="Visibility.Visible" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Shape.Fill" TargetName="UpperHighlight">
+                    <Setter.Value>
+                        <SolidColorBrush>#FFBCE4F9</SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="UIElement.Visibility" TargetName="PART_HeaderGripper">
+                    <Setter.Value>
+                        <x:Static Member="Visibility.Hidden" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FrameworkElement.Margin" TargetName="HeaderContent">
+                    <Setter.Value>
+                        <Thickness>1,1,0,0</Thickness>
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <s:Boolean>True</s:Boolean>
+                </Trigger.Value>
+            </Trigger>
+            <Trigger Property="FrameworkElement.Height">
+                <Setter Property="FrameworkElement.MinHeight">
+                    <Setter.Value>
+                        <s:Double>20</s:Double>
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <s:Double>NaN</s:Double>
+                </Trigger.Value>
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled">
+                <Setter Property="TextElement.Foreground">
+                    <Setter.Value>
+                        <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <s:Boolean>False</s:Boolean>
+                </Trigger.Value>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+</ResourceDictionary>

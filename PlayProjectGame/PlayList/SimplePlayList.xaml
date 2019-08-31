@@ -1,0 +1,116 @@
+﻿<Page x:Class="PlayProjectGame.SimplePlayList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayProjectGame"
+      xmlns:usControl="clr-namespace:PlayProjectGame.UserDefinedControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="PlayList" Loaded="Page_Loaded" Unloaded="Page_Unloaded">
+    <Page.Resources>
+        <DataTemplate x:Key="PlayListItemSelectedDataTemplate">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="▶"></TextBlock>
+                    <TextBlock Text="{Binding Path=SongInfo.SongName}"/>
+                </StackPanel>
+                <Grid.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=SongInfo.SongName}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="艺术家："></TextBlock>
+                            <TextBlock Text="{Binding Path=SongInfo.SongArtist}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="来源："></TextBlock>
+                            <TextBlock Text="{Binding Path=Source}"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid.ToolTip>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PlayListItemDataTemplate">
+            <Grid>
+                <TextBlock Text="{Binding Path=SongInfo.SongName}"/>
+                <Grid.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=SongInfo.SongName}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="艺术家："></TextBlock>
+                            <TextBlock Text="{Binding Path=SongInfo.SongArtist}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="来源："></TextBlock>
+                            <TextBlock Text="{Binding Path=Source}"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid.ToolTip>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="23*"/>
+        </Grid.RowDefinitions>
+        <usControl:Hor_FisheyeEff_ListBox x:Name="PlayListAlbumImageShowListBox" MouseDoubleClick="PlayListAlbumImageShowListBox_MouseDoubleClick"></usControl:Hor_FisheyeEff_ListBox>
+        <ListBox x:Name="UserSongList" SelectionMode="Extended" ItemTemplate="{StaticResource PlayListItemDataTemplate}" FontSize="14" FontFamily="Segoe Print" Padding="0,5,0,0" Grid.Row="1" MouseDoubleClick="UserSongList_MouseDoubleClick" >
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="清除选定的歌曲" Click="MenuItem_UserSongList_Click"></MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.OpacityMask>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Offset="1"/>
+                    <GradientStop Color="#FF6D6D6D" Offset="0.087"/>
+                    <GradientStop Color="#FF7E7E7E" Offset="0.934"/>
+                </LinearGradientBrush>
+            </ListBox.OpacityMask>
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers></Style.Triggers>
+                </Style>
+            </ListBox.Style>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true"></Condition>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="BorderThickness" Value="1.5"></Setter>
+                                <Setter Property="BorderBrush" Value="#FF21895F"></Setter>
+                                <Setter Property="Foreground" Value="#FF18681B"></Setter>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="FontSize" To="16"></DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="FontSize"></DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel></StackPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+    </Grid>
+</Page>

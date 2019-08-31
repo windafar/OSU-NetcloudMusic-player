@@ -1,0 +1,265 @@
+﻿<PlayProjectGame:CustomWindow
+        xmlns:PlayProjectGame="clr-namespace:WindowDemo;assembly=WindowDemo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlayProjectGame"
+        xmlns:PublicConver="clr-namespace:PlayProjectGame.PublicConver" xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:playlist="clr-namespace:PlayProjectGame.PlayList" x:Name="window"
+        x:Class="PlayProjectGame.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="533.95"
+        Width="864"
+        Icon="./favicon-20180512030811818.ico"
+    TextBoxBase.TextChanged="MainSearcher_TextChanged"
+    ButtonBase.Click="NavButtonClick"
+    PreviewMouseDown="Window_MouseDown"
+        Closing="Window_Closing" Loaded="window_Loaded" StateChanged="Window_StateChanged" BorderBrush="{Binding CurrentThemeBrush, ElementName=window}" >
+    <Window.Background>
+        <SolidColorBrush>#6599b5</SolidColorBrush>
+    </Window.Background>
+    <Window.Resources>
+        <PublicConver:IntConver x:Key="IntConver"/>
+        <Style x:Key="{x:Type ScrollBar}"
+           TargetType="{x:Type ScrollBar}">
+            <Setter Property="SnapsToDevicePixels"
+              Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+              Value="true" />
+            <Setter Property="Panel.Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation"
+                 Value="Horizontal">
+                    <Setter Property="Width"
+                  Value="Auto" />
+                    <Setter Property="Height"
+                  Value="8" />
+                    <Setter Property="Template"
+                        Value="{StaticResource HScrollBarTemp}" />
+                </Trigger>
+                <Trigger Property="Orientation"
+                 Value="Vertical">
+                    <Setter Property="Width"
+                  Value="8" />
+                    <Setter Property="Height"
+                  Value="Auto" />
+                    <Setter Property="Template"
+                        Value="{StaticResource VScrollBarTemp}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="PlayButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Template" Value="{StaticResource ButtonTemp}"/>
+        </Style>
+        <Style x:Key="SongListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="Template" Value="{StaticResource ListBoxItemTemp2}"/>
+        </Style>
+        <Style x:Key="SliderStyle">
+            <Setter Property="Control.Template" Value="{StaticResource SliderTemp}"/>
+        </Style>
+        <DataTemplate x:Key="PlayLisBoxItemtDataTemp">
+            <TextBlock Text="{Binding PlatListName}"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid x:Name="grid" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0" />
+            <RowDefinition />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="22*" />
+            <ColumnDefinition Width="73*" />
+            <ColumnDefinition MaxWidth="96" Width="13*"/>
+        </Grid.ColumnDefinitions>
+        <!--<Border Grid.RowSpan="5" Grid.ColumnSpan="5" Background="White">
+            <Border.Effect>
+                <DropShadowEffect Direction="-182" BlurRadius="20" Color="#FF535353" Opacity="0.3"/>
+            </Border.Effect>
+        </Border>-->
+        <playlist:QuickPlayListControl Panel.ZIndex="1" Visibility="Collapsed" x:Name="quickPlayListControl"  Grid.Row="1"/>
+        <ScrollViewer x:Name="scrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Grid.Row="1" Mouse.PreviewMouseDown="scrollViewer_MouseDown" Mouse.MouseMove="scrollViewer_MouseMove" Mouse.MouseUp="scrollViewer_MouseUp" Grid.RowSpan="2">
+            <StackPanel HorizontalAlignment="Left"
+                  Margin="5,0,0,0"
+                  VerticalAlignment="Top">
+                <TextBlock x:Name="PlayListTextBox"
+                   Text="正在播放"
+                   MouseDown="PlayListTextBox_MouseDown_1"
+                   FontSize="18"
+                   FontFamily="DengXian" Margin="0,10,0,10"/>
+                <!--<TextBlock x:Name="PlayingTextBox"
+                   Text="正在播放"
+                   Margin="0,10,0,10"
+                   FontSize="18"
+                   FontFamily="DengXian"
+                   MouseLeftButtonDown="PlayingTextBox_MouseLeftButtonDown"/>-->
+                <Expander Header="歌单" IsEnabled="True" Margin="0,10,0,10" FontSize="18">
+                    <ListBox  x:Name="NetClouldMusicaListBox" PreviewMouseWheel="NetClouldMusicaListBox_PreviewMouseWheel"
+                  ItemContainerStyle="{StaticResource SongListBoxItemStyle}"
+                              VirtualizingPanel.IsVirtualizing="True"
+                  Background="{x:Null}"
+                  FontSize="18"
+                  FontFamily="Segoe Print"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  SelectionChanged="NetClouldMusicaListBox_SelectItemChanged"
+                  ItemTemplate="{StaticResource PlayLisBoxItemtDataTemp}"
+                  Margin="12,5,0,0" BorderBrush="{x:Null}"
+                  />
+                </Expander>
+                <Expander Header="OSU收藏夹" IsEnabled="True" Margin="0,10,0,10" FontSize="18">
+                    <ListBox x:Name="OSUListBox"
+                  ItemContainerStyle="{StaticResource SongListBoxItemStyle}"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  Background="{x:Null}"
+                  FontSize="18"
+                  FontFamily="Segoe Print"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  SelectionChanged="OSUListBox_SelectionChanged"
+                  ItemTemplate="{StaticResource PlayLisBoxItemtDataTemp}"
+                  Margin="12,5,0,0" BorderBrush="{x:Null}" PreviewMouseWheel="OSUListBox_PreviewMouseWheel">
+
+                        <System:String>&gt;</System:String>
+                    </ListBox>
+                </Expander>
+                <TextBlock x:Name="ConfigTextBox"
+                   Text="设置"
+                   Margin="0,10,0,10"
+                   MouseDown="ConfigTextBox_MouseDown" FontSize="18"/>
+                <Rectangle Height="167"></Rectangle>
+            </StackPanel>
+        </ScrollViewer>
+        <GridSplitter Grid.Row="1" Width="2" Background="#66F0F0F0" BorderThickness="0" />
+        <Frame x:Name="frame"
+           LoadCompleted="Frame_LoadCompleted"
+           Grid.Row="1"
+           Grid.Column="1"
+           NavigationFailed="frame_NavigationFailed"
+           NavigationUIVisibility="Hidden"
+           NavigationStopped="frame_NavigationStopped"
+           Navigated="frame_Navigated" Grid.RowSpan="2" Focusable="False" Grid.ColumnSpan="2" />
+
+        <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" FlowDirection="RightToLeft" Height="10" Margin="0,10" Width="70">
+            <Canvas Width="10" Height="10" Margin="10,0,0,0" MouseDown="Canvas_MouseDown" Background="#02000000">
+                <Line Stroke="Black" Y2="10" X2="10"/>
+                <Line Stroke="Black" Y1="10" X2="10"/>
+            </Canvas>
+            <Rectangle RadiusX="1" RadiusY="1" Height="10" Width="10" Stroke="Black" HorizontalAlignment="Center" Margin="15,0,0,0" MouseDown="Rectangle_MouseDown" Fill="#02000000"/>
+            <Canvas MouseDown="Line_MouseDown" Width="10" Height="10" Margin="15,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#02000000">
+                <Line Stroke="Black" X1="10" VerticalAlignment="Center" Margin="0"  Y1="5" Y2="5"/>
+            </Canvas>
+        </StackPanel>
+
+        <StackPanel  MouseDown="CurPlayStackPanel_MouseDown"  Name="CurPlayStackPanel" Width="{Binding ActualWidth, ElementName=scrollViewer, Mode=OneWay}"  Grid.Row="2" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Height="98" Margin="0,-158,0,0" Orientation="Horizontal"  Visibility="{Binding Path=BottomControlVisibility, ElementName=window}">
+            <Border BorderThickness="1,1,1,1" BorderBrush="{Binding CurrentThemeBrush, ElementName=window}">
+                <Image  Height="98" x:Name="PlayAblum" />
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="1" BlurRadius="2" Opacity="0.5"></DropShadowEffect>
+                </Border.Effect>
+            </Border>
+            <Grid x:Name="grid1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24px"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Line Grid.Row="1" Panel.ZIndex="1"  VerticalAlignment="Top"  StrokeThickness="0.5" Opacity="0.5" Stroke="Black" X2="{Binding ActualWidth, ElementName=grid1, Mode=OneWay}"></Line>
+                <TextBlock Padding="0,5" FontSize="18" Background="White" TextAlignment="Justify"  VerticalAlignment="Stretch"  Grid.Row="1" x:Name="PlaySongName"/>
+                <TextBlock FontSize="16" Background="White" TextAlignment="Justify" VerticalAlignment="Stretch"  Grid.Row="2" x:Name="PlaySongArt"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Panel.ZIndex="1" x:Name="PlayButtonStackPanel" Orientation="Horizontal"
+                Grid.Row="2" RenderTransformOrigin="0.5,0.5"
+                Background="{Binding CurrentThemeBrush, ElementName=window}"
+                Visibility="{Binding Path=BottomControlVisibility, ElementName=window}"
+                    >
+            <Button x:Name="previousButton"
+              Background="Transparent"
+              BorderBrush="{x:Null}"
+              Foreground="{x:Null}"
+                    Style="{StaticResource PlayButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Click="previousButton_Click">
+                <Canvas Width="40" Height="40" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
+                    <Polyline StrokeThickness="2" Points="7,20 33,0 33,40 7,20" Stroke="White" Fill="#22EEEEEE" />
+                    <Polyline StrokeThickness="1.5" Points="0,0 0,40 5,40 5,0 0,0" Stroke="White" Fill="#22EEEEEE" />
+                </Canvas>
+            </Button>
+            <Button x:Name="PlayButton"
+              Background="Transparent"
+              BorderBrush="{x:Null}"
+              Foreground="{x:Null}"
+              Style="{StaticResource PlayButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Click="PlayButton_Click">
+                <StackPanel Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas Name="PlayButtonCanvas" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Polyline StrokeThickness="2" Points="0,0 26,20 0,40 0,0" Stroke="White" Fill="#22EEEEEE" Canvas.Left="9" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Polyline.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Polyline.RenderTransform>
+                        </Polyline>
+                    </Canvas>
+                    <Canvas Name="PauseButtonCanvas" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle StrokeThickness="1.5" Fill="#22EEEEEE" Stroke="White" Width="6" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="13" Canvas.Top="9"/>
+                        <Rectangle StrokeThickness="1.5" Fill="#22EEEEEE" Stroke="White" Width="6" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="23" Canvas.Top="9"/>
+                    </Canvas>
+
+                </StackPanel>
+
+            </Button>
+            
+            <Button x:Name="NextButton"
+              BorderBrush="{x:Null}"
+              Background="Transparent"
+              Foreground="{x:Null}"
+                    Style="{StaticResource PlayButtonStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0,0,0" Click="NextButton_Click">
+                <Canvas Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
+                    <Polyline StrokeThickness="2" Points="-3,0 23,20 -3,40 -3,0" Stroke="White" Fill="#22EEEEEE" Margin="10,0,0,0" />
+                    <Polyline StrokeThickness="1.5" Points="26,0 26,40 31,40 31,0 26,0" Stroke="White" Fill="#22EEEEEE" Margin="10,0,0,0" />
+                </Canvas>
+            </Button>
+        </StackPanel>
+        <Slider x:Name="PalySlider" Grid.Row="2" Grid.Column="1"
+                Panel.ZIndex="1" Style="{StaticResource SliderStyle}" Foreground="#00E5E5E5"
+                ValueChanged="PalySlider_ValueChanged" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                Background="{Binding CurrentThemeBrush, ElementName=window}" Interval="100" Delay="1500" SmallChange="1" LargeChange="5"
+                Visibility="{Binding Path=BottomControlVisibility, ElementName=window}"
+                />
+                
+        <Rectangle Panel.ZIndex="0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding Path=BottomControlVisibility, ElementName=window}">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0,0.5" MappingMode="RelativeToBoundingBox" StartPoint="1,1">
+                    <GradientStop Color="#AA505050" Offset="1"/>
+                    <GradientStop Color="#aaFFFFFF"/>
+                    <GradientStop Color="#AA979797" Offset="0.78"/>
+                    <GradientStop Color="#AA979797" Offset="0.227"/>
+                    <GradientStop Color="#AADCDCDC" Offset="0.471"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <TextBlock Visibility="{Binding Path=BottomControlVisibility, ElementName=window}" x:Name="DesktopLrctextBlock" Grid.Column="2"  Grid.Row="2" TextWrapping="Wrap" Text="Lyrics" MouseDown="DesktopLrctextBlock_MouseDown" FontSize="16" FontFamily="Times New Roman" Background="{Binding CurrentThemeBrush, ElementName=window}" Margin="0" Padding="24,18,0,0"/>
+        <Grid Visibility="{Binding ElementName=SongCoverPrvImage, Path=Visibility, Mode=OneWay}" Grid.RowSpan="3" Grid.ColumnSpan="3" Panel.ZIndex="1023" Background="#99060606"></Grid>
+        <Image MouseDown="SongCoverPrvImage_MouseDown" Visibility="Collapsed" Panel.ZIndex="1024" Grid.RowSpan="3" Grid.ColumnSpan="3" x:Name="SongCoverPrvImage" Source="{Binding Icon, ElementName=window}"/>
+    </Grid>
+</PlayProjectGame:CustomWindow>
