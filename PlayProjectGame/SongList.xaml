@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:PlayProjectGame"
       xmlns:publicconver="clr-namespace:PlayProjectGame.PublicConver"
       xmlns:userdefinedcontrol="clr-namespace:PlayProjectGame.UserDefinedControl"
+
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="400"
       Title="SongList" Loaded="Page_Loaded"
@@ -106,7 +107,7 @@
                       AlternationCount="2" 
                       BorderThickness="0,0,0,0"
                       userdefinedcontrol:ListViewBigFalt.GridViewHearderBackgroud="{Binding ElementName=SongListPage, Path=HearderBackgroud}"
-                      Style="{DynamicResource ListViewBigFaltStyle}" Grid.ColumnSpan="2"
+                      Style="{StaticResource ListViewBigFaltStyle}" Grid.ColumnSpan="2"
                       Background="{Binding ElementName=SongListPage, Path=ListViewBackgroud }"
                       DragEnter="SongListListView_DragEnter"
                       DragLeave="SongListListView_DragLeave" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"

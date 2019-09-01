@@ -13,8 +13,8 @@
                 <ResourceDictionary Source="Resource/Dictionary2_PlayButton.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Resource/Dictionary5_GridViewColumnHeader.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Resource/Dictionary6_PlaySlider.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Dictionary_ListViewBigFaltStyle.xaml"/>
-                <ResourceDictionary Source="SongListtemContainerStyle.xaml"/>
+                <ResourceDictionary Source="Resource/Dictionary_ListViewBigFaltStyle.xaml"/>
+                <ResourceDictionary Source="Resource/SongListtemContainerStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

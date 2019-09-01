@@ -173,7 +173,7 @@ namespace PlayProjectGame
                      Dispatcher.Invoke((ThreadStart)delegate ()
                      {
                          OSUListBox.Items.Clear();
-                         if (x.Result[0].Pids.Count > 0)
+                         if (x.Result.Count>0&&x.Result[0].Pids.Count > 0)
                          {
                              OsuData = x.Result[0].Pids;
                              OSUListBox.ItemsSource = x.Result[0].Pids;

@@ -59,15 +59,15 @@
             </GroupBox>
             <GroupBox Header="源" Name="MusicSource">
                 <StackPanel>
-                    <TextBox  Margin="0,1,0,0" Tag="库" Name="LocalMusicDirTextBox" Text="{Binding LocalMusicDir}">
+                    <!--<TextBox  Margin="0,1,0,0" Tag="库" Name="LocalMusicDirTextBox" Text="{Binding LocalMusicDir}">
                         <TextBox.Style>
                             <Style>
                                 <Style.Triggers>
                                     <MultiTrigger>
-                                        <!--<MultiTrigger.Conditions>
+                                        --><!--<MultiTrigger.Conditions>
                                             <Condition Property="TextBox.IsFocused" Value="False"></Condition>
                                             <Condition Property="TextBox.Text" Value=""></Condition>
-                                        </MultiTrigger.Conditions>-->
+                                        </MultiTrigger.Conditions>--><!--
                                         <Setter Property="TextBox.Background">
                                             <Setter.Value>
                                                 <VisualBrush AlignmentX="Right" AlignmentY="Top" Stretch="None">
@@ -83,7 +83,7 @@
                             </Style>
                         </TextBox.Style>
 
-                    </TextBox>
+                    </TextBox>-->
                     <TextBox  Margin="0,5,0,0" Tag="OSU目录" Name="OsuDirTextBox" Text="{Binding OsuDir}">
                         <TextBox.Style>
                             <Style>

@@ -50,6 +50,8 @@ namespace PlayProjectGame.Data
         {
             return Task.Run<List<UserData>>(() =>
             {
+                if (!Directory.Exists(OsuSongListDirPath)) return new List<UserData>();
+
                 var task = GetOsuSongListData(IsReload);
                 task.Start();
                 LoadFavorite(FavoriteFilePath);
@@ -117,7 +119,7 @@ namespace PlayProjectGame.Data
                 if (!reload && File.Exists(DataFilePath))
                     OsuDB = Helper.OtherHelper.DeserializeObject(File.ReadAllBytes(DataFilePath)) as Dictionary<string, OsuDBElem>;
                 else reload = true;
-
+                
                 var dirs = new DirectoryInfo(OsuSongListDirPath).GetDirectories().OrderByDescending(x => x.CreationTime);
                 bool IsReturn = false;
                 foreach (var dir in dirs)
