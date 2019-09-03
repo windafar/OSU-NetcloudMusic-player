@@ -186,7 +186,7 @@ namespace PlayProjectGame
             GetImage(PLD.PlayListId);
             view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
             Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
-            SongListInfoSrcoller.Height = -point.Y;
+            SongListInfoSrcoller.Height = Math.Abs(point.Y);
             _Grid = UIhelper.FindPrent<Grid>(SongListListView);
         }
 
@@ -528,6 +528,50 @@ namespace PlayProjectGame
                 SearcherBox.Visibility = Visibility.Collapsed;
             else
                 SearcherBox.Visibility = Visibility.Visible;
+        }
+
+        private void History_Click(object sender, RoutedEventArgs e)
+        {
+            var dir = new DirectoryInfo(GlobalConfigClass.DIR_CLOUDMUSIC_SONGLISTHISTORY);
+            if (!dir.Exists) dir.Create();
+            if (dir.GetDirectories().Count() == 0) return;
+            string path = dir.GetDirectories().Last().FullName + "\\" + PLD.PlatListName + PLD.PlayListId;
+            var sub = new DirectoryInfo(path);
+            if (sub.Exists)
+            {
+                TimeLineListBox.ItemsSource = sub.GetFiles().OrderBy(x => x.CreationTime)
+                    .Select(x=>new {Time=x.Name,Path=x.FullName })
+                    ;
+            }
+            if (TimeLineListBox.Visibility == Visibility.Visible)
+                TimeLineListBox.Visibility = Visibility.Collapsed;
+            else
+                TimeLineListBox.Visibility = Visibility.Visible;
+        }
+
+        private void HistoryTime_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var dataconext = ((TextBlock)sender).DataContext as dynamic;
+            string filepath = dataconext.Path;
+
+            PlayListData pld = OtherHelper.ReadXMLObj<PlayListData>(File.ReadAllText(filepath));
+            if (pld != null)
+            {
+                if (NavigationService.Content != null)
+                {
+                    SongList Pr = NavigationService.Content as SongList;
+                    if (Pr != null)
+                    {
+                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage));
+                    }
+                }
+                pld.PlatListName += "_" + dataconext.Time;
+                SongList.SetPlayListData(pld);
+                Uri NextUri = new Uri("SongList.xaml", UriKind.Relative);
+                if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList.xaml")
+                    NavigationService.Navigate(NextUri);
+                else NavigationService.Refresh();
+            }
         }
     }
 }

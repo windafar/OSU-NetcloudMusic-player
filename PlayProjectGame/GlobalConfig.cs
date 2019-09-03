@@ -17,6 +17,7 @@ namespace PlayProjectGame
         public static string XML_OSU_SAVEPATH = "OsuClloSongList.xml";
         public static string OBJ_LRCDIC_REFPATH = "LrcRefDic.dic";
         public static string XML_OSU_AllPATH = "OsuAllSongList.xml";
+        public static string DIR_CLOUDMUSIC_SONGLISTHISTORY = "SonglistHistory";
         /// <summary>
         /// 用户定义的Lrc目录
         /// </summary>

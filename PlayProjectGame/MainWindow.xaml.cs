@@ -136,25 +136,13 @@ namespace PlayProjectGame
         {
             ClundMusicTreeNewThread = new Thread(delegate ()
             {
+                List<PlayListData> List = CouldMusicLocalDataGeter.GetSongList().Last().Pids;
+                NetCloudData = List;
+
                 Dispatcher.Invoke((ThreadStart)delegate ()
                 {
-                    NetClouldMusicaListBox.ItemsSource = null;
-                    NetClouldMusicaListBox.Items.Clear();
-                    NetClouldMusicaListBox.Items.Add("正在加载中");
-                });
-                //try
-                //{
-                    List<PlayListData> List = CouldMusicLocalDataGeter.GetSongList().Last().Pids;
-                    NetCloudData = List;
-               
-                    Dispatcher.Invoke((ThreadStart)delegate ()
-                {
-                    NetClouldMusicaListBox.Items.Clear();
                     NetClouldMusicaListBox.ItemsSource = List;
-                }
-                );
-                //}
-                //catch(Exception ex){ MessageBox.Show(ex.Message+ex.StackTrace); }
+                });
             });
             ClundMusicTreeNewThread.Start();
             //Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
@@ -203,7 +191,7 @@ namespace PlayProjectGame
         /// 用于恢复SongListPage的状态（直接的回退那种）
         /// </summary>
         /// <param name="state">历史状态</param>
-        private void ReplySongListPage(PlayListJournalEntry state)
+        public void ReplySongListPage(PlayListJournalEntry state)
         {
             if (frame.Content as SongList != null)
             {

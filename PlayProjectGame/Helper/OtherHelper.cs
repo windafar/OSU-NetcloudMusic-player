@@ -13,7 +13,7 @@ namespace PlayProjectGame.Helper
 {
     static public class OtherHelper
     {
-        
+
         /// <summary>
         /// 非法路径字符替换\/:*?"<>|
         /// </summary>
@@ -25,7 +25,7 @@ namespace PlayProjectGame.Helper
             string errChar = "\\/:*?\"<>|";  //
             for (int i = 0; i < errChar.Length && fileName.Length > 0; i++)
             {
-                fileName=fileName.Replace(errChar[i], c);
+                fileName = fileName.Replace(errChar[i], c);
             }
             return fileName;
         }
@@ -41,17 +41,19 @@ namespace PlayProjectGame.Helper
             for (int i = 0; i < FileNameBud.Length; i++)
             {
                 index = FileNameBud[i];
-                if (FileNameBud[i] == '/') FileNameBud[i] = '／';
-                if (FileNameBud[i] == ':') FileNameBud[i] = '：';
-                if (FileNameBud[i] == '<') FileNameBud[i] = '＜';
-                if (FileNameBud[i] == '>') FileNameBud[i] = '＞';
-                if (FileNameBud[i] == '\\')FileNameBud[i] = ' ';
-                if (FileNameBud[i] == '\r')FileNameBud[i] = ' ';
-                if (FileNameBud[i] == '\n')FileNameBud[i] = ' ';
-                if (FileNameBud[i] == '\t') FileNameBud[i] = ' ';
-                if (FileNameBud[i] == '?') FileNameBud[i] = '？';
-                if (FileNameBud[i] == '"') FileNameBud[i] = '＂';
-                if (FileNameBud[i] == '*') FileNameBud[i] = '﹡';
+                if (index == '/') FileNameBud[i] = '／';
+                if (index == ':') FileNameBud[i] = '：';
+                if (index == '<') FileNameBud[i] = '＜';
+                if (index == '>') FileNameBud[i] = '＞';
+                if (index == '\\') FileNameBud[i] = ' ';
+                if (index == '\r') FileNameBud[i] = ' ';
+                if (index == '\n') FileNameBud[i] = ' ';
+                if (index == '\t') FileNameBud[i] = ' ';
+                if (index == '?') FileNameBud[i] = '？';
+                if (index == '"') FileNameBud[i] = '＂';
+                if (index == '*') FileNameBud[i] = '﹡';
+                if (index == '|') FileNameBud[i] = '、';
+
             }
             return FileNameBud.ToString();
         }
@@ -142,13 +144,33 @@ namespace PlayProjectGame.Helper
                 xs.Serialize(fs, obj);
                 fs.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("保存到磁盘失败，文件正在被使用，将在不被占用时自动保存", "文件保存");
+                System.Windows.MessageBox.Show(ex.Message, "xml文件保存");
             }
 
         }
 
+        static public T ReadXMLObj<T>(string xml)
+        {
+            XmlSerializer xs = new XmlSerializer(typeof(T));
+            return (T)xs.Deserialize(new StringReader(xml));
+        }
+
+        static public Stream WriteXMLSerializerToStream(object obj, Type T)
+        {
+            MemoryStream ms = new MemoryStream();
+            XmlSerializer xs = new XmlSerializer(T);
+            try
+            {
+                xs.Serialize(ms, obj);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "写入序列化到流");
+            }
+            return ms;
+        }
 
         /// <summary>
         /// 使用反射获取类的属性值
