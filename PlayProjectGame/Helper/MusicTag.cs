@@ -34,6 +34,7 @@ namespace PlayProjectGame.Helper
         /// </summary>
         MatchBtStream SEstreame;
         WebClient web;
+        object lockobj=new object();
         public MusicTag()
         {
             SEstreame.EndIndex = SEstreame.StartIndex = -1;
@@ -120,8 +121,10 @@ namespace PlayProjectGame.Helper
         {
             string path = Core.Cach.CachPool.GetAbPath(songInfo);
             if (GlobalConfigClass._Config.UseAlbumImageCach && File.Exists(path)) {
-                return File.ReadAllBytes(path);
-                
+                lock (path)
+                {
+                    return File.ReadAllBytes(path);
+                }
                 // byte[] buffer;
                 //using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 //{

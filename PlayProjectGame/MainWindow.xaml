@@ -81,6 +81,7 @@
             </Border.Effect>
         </Border>-->
         <playlist:QuickPlayListControl Panel.ZIndex="1" Visibility="Collapsed" x:Name="quickPlayListControl"  Grid.Row="1"/>
+
         <ScrollViewer x:Name="scrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   Grid.Row="1" Mouse.PreviewMouseDown="scrollViewer_MouseDown" Mouse.MouseMove="scrollViewer_MouseMove" Mouse.MouseUp="scrollViewer_MouseUp" Grid.RowSpan="2">
             <StackPanel HorizontalAlignment="Left"
@@ -132,6 +133,7 @@
                 <Rectangle Height="167"></Rectangle>
             </StackPanel>
         </ScrollViewer>
+
         <GridSplitter Grid.Row="1" Width="2" Background="#66F0F0F0" BorderThickness="0" />
         <Frame x:Name="frame"
            LoadCompleted="Frame_LoadCompleted"

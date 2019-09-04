@@ -17,36 +17,39 @@ namespace PlayProjectGame.Helper
 {
    static public class UIhelper
     {
-        private static System.Windows.Controls.Image bk1Image { get;  set; }
-        private static System.Windows.Controls.Image bkImage { get;  set; }
-        public static void SetBlurBitmapImage(System.Windows.Controls.Image AimageBK, System.Windows.Controls.Image AimageBK1, Bitmap bitmap)
+        public static void SetBlurBitmapImage(System.Windows.Controls.Image SecBK, System.Windows.Controls.Image FirBK, Bitmap bitmap)
         {
-
-            BitmapImage img;
 
             Thread Blur_Thread = new Thread(delegate ()
             {
                 try
                 {
-                    img = UIhelper.Blur(bitmap,25);
+                    BitmapImage img = UIhelper.Blur(bitmap, 25);
                     img.Freeze();
                     bitmap.Dispose();
-                    AimageBK.Dispatcher.BeginInvoke((ThreadStart)delegate
+                    SecBK.Dispatcher.BeginInvoke((ThreadStart)delegate
                     {
-                        bk1Image = AimageBK1;
-                        bkImage = AimageBK;
-                        AimageBK.Opacity = 0;
-                        AimageBK.Source = img;
+                        SecBK.Opacity = 0;
+                        SecBK.Source = img;
                         Storyboard STRORY = new Storyboard();
+
                         //AimageBK_Opacity渐现动画
                         DoubleAnimation OpeAnimation = new DoubleAnimation();
+                        OpeAnimation.From = 0;
                         OpeAnimation.To = 1;
                         OpeAnimation.Duration = TimeSpan.FromSeconds(1);
-                        Storyboard.SetTarget(OpeAnimation, AimageBK);
+                        Storyboard.SetTarget(OpeAnimation, SecBK);
                         Storyboard.SetTargetProperty(OpeAnimation, new PropertyPath("Opacity"));
                         STRORY.Children.Add(OpeAnimation);
-                        STRORY.Completed += OpacityAminComple;
+                        STRORY.Completed += (sender, e)=> 
+                        {
+                            FirBK.Source = img;
+                            ((ClockGroup)sender).Controller.Remove();
+                            //((ClockGroup)sender).Completed -= OpacityAminComple;
+                            STRORY.Remove();
+                        };
                         STRORY.Begin();
+                        //STRORY.Children.Clear();
                     });
                 }
                 catch
@@ -56,12 +59,6 @@ namespace PlayProjectGame.Helper
                 }
             });
             Blur_Thread.Start();
-        }
-        private static void OpacityAminComple(object sender, EventArgs e)
-        {
-            ((ClockGroup)sender).Controller.Remove();
-            ((ClockGroup)sender).Completed -= OpacityAminComple;
-            bk1Image.Source = bkImage.Source;
         }
 
         public static BitmapImage ConverTotBitmapImage(Bitmap bitmap) {

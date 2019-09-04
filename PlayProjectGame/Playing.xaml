@@ -19,13 +19,41 @@
 
 
     </Page.Resources>
-    <Grid >
+    <Grid Name="PlayingBorder">
         <Image Name="BackgroundImage1" Stretch="UniformToFill"></Image>
         <Image Name="BackgroundImage2" Stretch="UniformToFill"></Image>
+        <Rectangle Panel.ZIndex="1023" IsHitTestVisible="False" >
+            <Rectangle.Fill>
+                <VisualBrush Visual="{Binding ElementName=BackgroundImage1}" Stretch="Uniform"></VisualBrush>
+            </Rectangle.Fill>
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0.3" Color="Transparent"></GradientStop>
+                    <GradientStop Offset="1" Color="#44000000"></GradientStop>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+            <Rectangle.RenderTransform>
+                <ScaleTransform ScaleX="-1"></ScaleTransform>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Panel.ZIndex="1024" IsHitTestVisible="False" >
+            <Rectangle.Fill>
+                <VisualBrush Visual="{Binding ElementName=BackgroundImage2}" Stretch="Uniform"></VisualBrush>
+            </Rectangle.Fill>
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0.3" Color="Transparent"/>
+                    <GradientStop Offset="1" Color="#44000000"></GradientStop>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+            <Rectangle.RenderTransform>
+                <ScaleTransform ScaleX="-1"></ScaleTransform>
+            </Rectangle.RenderTransform>
+        </Rectangle>
 
-        <ScrollViewer x:Name="ScrollLrc" Width="Auto" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.IsSharedSizeScope="True" Grid.Column="1">
+        <ScrollViewer x:Name="ScrollLrc" Width="Auto" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.IsSharedSizeScope="True" Grid.Column="1" BorderBrush="{Binding ElementName=LrcList, Path=Background}">
             <StackPanel>
-            <ListBox ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" BorderBrush="{x:Null}" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" >
+            <ListBox ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" BorderBrush="{Binding Path=Bcakground}">
                 <!--<ListBox  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" BorderBrush="{x:Null}" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" >-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>

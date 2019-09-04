@@ -311,6 +311,7 @@ namespace PlayProjectGame
                         UIhelper.SetBlurBitmapImage(BackgroundImage2, BackgroundImage1, bitmap);
                         //bitmap.Dispose();
                     });
+
                 new MusicTag().GetCurrentColorAsync(curSongInfo.SongInfo).ContinueWith((r1) =>
                 {
                     var cc = r1.Result;

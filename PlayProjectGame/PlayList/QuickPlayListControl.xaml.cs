@@ -30,6 +30,8 @@ namespace PlayProjectGame.PlayList
         Queue<SongInfoExpend> threadQueue = new Queue<SongInfoExpend>();
         public Thread[] tArr = new Thread[GlobalConfigClass._Config.PlaylistThreadNum];
         object thelock = new object();
+        object cachlock = new object();
+
         static public bool pageClosed = false;
 
         private MainWindow mainWindow = MainWindow.CurMainWindowInstence;
@@ -146,7 +148,8 @@ namespace PlayProjectGame.PlayList
                 var apath = Core.Cach.CachPool.GetAbPath(path);
                 if (GlobalConfigClass._Config.UseSRDImageCach && File.Exists(spath))
                 {
-                    GenerImage = new System.Drawing.Bitmap(spath);
+                    lock(spath)
+                        GenerImage = new System.Drawing.Bitmap(spath);
                 }
                 else
                 {

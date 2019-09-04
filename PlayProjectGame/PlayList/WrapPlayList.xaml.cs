@@ -35,6 +35,8 @@ namespace PlayProjectGame.PlayList
         static public bool pageClosed = false;
 
         private MainWindow mainWindow = MainWindow.CurMainWindowInstence;
+        private object cachlock=new object();
+
         public MainWindow MainWindow { get => mainWindow; set => mainWindow = value; }
         void OnPlayChanged(SongInfoExpend CurSongInfoEx) {
             Dispatcher.BeginInvoke((ThreadStart)delegate
@@ -176,7 +178,8 @@ namespace PlayProjectGame.PlayList
                 {
                     try
                     {
-                        GenerImage = new System.Drawing.Bitmap(spath);
+                        lock(spath)
+                            GenerImage = new System.Drawing.Bitmap(spath);
                     }
                     catch(ArgumentException) { Debug.Print("参数无效异常"); }
                 }
