@@ -159,8 +159,16 @@ namespace PlayProjectGame
                 if (GlobalConfigClass._Config.UseSongListPageBackground)
                 {
                     srcBitmap = new System.Drawing.Bitmap(stream);
+                    if (srcBitmap.Width > 900)
+                    {
+                        MemoryStream memoryStream = new MemoryStream();
+                        ImageBasic.BasicMethodClass.MakeThumbnail(srcBitmap, memoryStream, 900, 900, "W", "jpg");
+                        srcBitmap.Dispose();
+                        srcBitmap = new System.Drawing.Bitmap(memoryStream);
+                    }
                     srcBitmap = SketchFilter.Sketch(srcBitmap, 0.1, 0);
                     //ImageBasic.BasicMethodClass.WriteEdgeGradual(srcBitmap);//目的是融合图片，有问题，考虑数学上的办法（拉普拉斯和泊松）
+
                     srcBitmap = ImageBasic.BasicMethodClass.AddSpace(srcBitmap, 0, 36, 0, 24);
                 }
                 stream.Dispose();
@@ -553,8 +561,12 @@ namespace PlayProjectGame
         {
             var dataconext = ((TextBlock)sender).DataContext as dynamic;
             string filepath = dataconext.Path;
-
-            PlayListData pld = OtherHelper.ReadXMLObj<PlayListData>(File.ReadAllText(filepath));
+            PlayListData pld = null;
+            try
+            {
+                pld = OtherHelper.ReadXMLObj<PlayListData>(File.ReadAllText(filepath));
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message,"读取历史失败"); }
             if (pld != null)
             {
                 if (NavigationService.Content != null)

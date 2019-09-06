@@ -26,7 +26,6 @@ namespace PlayProjectGame.PlayList
     {
         static public QuickPlayListControl CurInstance;
         public ListBoxItem BeforPlayItem;
-        Timer timer1;
         Queue<SongInfoExpend> threadQueue = new Queue<SongInfoExpend>();
         public Thread[] tArr = new Thread[GlobalConfigClass._Config.PlaylistThreadNum];
         object thelock = new object();

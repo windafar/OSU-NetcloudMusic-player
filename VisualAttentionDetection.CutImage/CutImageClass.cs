@@ -103,66 +103,6 @@ namespace VisualAttentionDetection.CutImage
             AreaArr = new us_AreaCount[24000];//默认定义区域数量
         }
         /// <summary>
-        /// 获取最具显著性的一个白色区域
-        /// </summary>
-        /// <returns></returns>
-        public Bitmap GCSsimp_getLightPoint()
-        {
-
-            BitmapData srcBmData = srcBitmap.LockBits(srcRect,
-                      ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
-
-            Bitmap dstBitmap = BasicMethodClass.CreateGrayscaleImage(srcBitmap.Width, srcBitmap.Height);
-            BitmapData dstBmData = dstBitmap.LockBits(new Rectangle(0, 0, srcBitmap.Width, srcHeight),
-                      ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
-
-            IntPtr srcScan = srcBmData.Scan0;
-            IntPtr dstScan = dstBmData.Scan0;
-            unsafe
-            {
-
-                srcP = (byte*)srcScan;
-                dstP = (byte*)dstScan;
-                int index = 0;
-                if (fx == null)
-                    fx = FindArea(srcBmData);
-                index = 0;
-                if (MaxAreaArrValue == 0) throw new ArgumentException("Tolerance过低");
-                int x_start = srcWidth, x_end = 0, y_start = srcHeight, y_end = 0;
-                for (int y = 1; y < srcHeight - 1; y++)
-                {
-                    index = y * srcBmData.Stride;
-                    for (int x = 1; x < srcWidth - 1; x++)
-                    {
-                        int Sx = fx[index].AreaNum;
-                        //  if (Sx != 0) throw new Exception();
-                        if (Sx == MAXAreaArrNumbler)
-                        {
-                            if (x_start > fx[index].point.X) x_start = fx[index].point.X;
-                            if (x_end < fx[index].point.X) x_end = fx[index].point.X;
-                            if (y_start > fx[index].point.Y) y_start = fx[index].point.Y;
-                            if (y_end < fx[index].point.Y) y_end = fx[index].point.Y;
-                        }
-                        index++;
-                    }
-                }
-                index = 0;
-                for (int c_i = y_start; c_i < y_end; c_i++)
-                {
-                    index = dstBmData.Stride * c_i + x_start;
-                    for (int c_j = x_start; c_j < x_end; c_j++)
-                    {
-                        dstP[index] = (byte)255;
-                        index++;
-
-                    }
-                }
-            }
-            dstBitmap.UnlockBits(dstBmData);
-            srcBitmap.UnlockBits(srcBmData);
-            return dstBitmap;
-        }
-        /// <summary>
         /// 获取一个最具显著性的源区域
         /// </summary>
         /// <param name="FinSourceImage">源图</param>
@@ -173,7 +113,7 @@ namespace VisualAttentionDetection.CutImage
             int DistHeight = CutRect.Height;
             BitmapData srcBmData = srcBitmap.LockBits(srcRect,
                       ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
-            Bitmap bmpOut=null;
+            Bitmap bmpOut = null;
             IntPtr srcScan = srcBmData.Scan0;
             unsafe
             {
@@ -183,7 +123,7 @@ namespace VisualAttentionDetection.CutImage
                 if (fx == null)
                     fx = FindArea(srcBmData);
                 index = 0;
-               // if (MaxAreaArrValue == 0) throw new ArgumentException("Tolerance过低");
+                // if (MaxAreaArrValue == 0) throw new ArgumentException("Tolerance过低");
                 int x_start = srcWidth, x_end = 0, y_start = srcHeight, y_end = 0;
                 for (int y = 1; y < srcHeight - 1; y++)
                 {
@@ -202,65 +142,48 @@ namespace VisualAttentionDetection.CutImage
                         index++;
                     }
                 }
-                int _xm = (x_end + x_start) / 2;
-                int _ym = (y_end + y_start) / 2;
-                int _xs, _ys, _xe, _ye;
-                int FinWidth = FinSourceImage.Width, FinHeight = FinSourceImage.Height;
+                double _xm = (x_end + x_start) / 2.0;
+                double _ym = (y_end + y_start) / 2.0;
+                double _xs, _ys, _xe, _ye;
+                double FinWidth = FinSourceImage.Width, FinHeight = FinSourceImage.Height;
+                //projection by ratio
                 _xm = _xm * FinWidth / srcWidth;
                 _ym = _ym * FinHeight / srcHeight;
-                _xs = _xm - DistWidth / 2 > 0 ? _xm - DistWidth / 2 : 0;
-                _xe = _xm + DistWidth / 2 < FinWidth ? _xm + DistWidth / 2 : FinWidth;
-                if (_xs == 0)
+                //get rect of objective
+                _xs = _xm - DistWidth / 2.0;
+                _xe = _xm + DistWidth / 2.0;
+                _ys = _ym - DistHeight / 2.0;
+                _ye = _ym + DistHeight / 2.0;
+                //cliping by rect
+                if (_xs < 0)
                 {
-                    _xe = _xe + DistWidth / 2 < FinWidth ?
-                        _xe += DistWidth / 2 : FinWidth;
+                    _xe += -_xs;
+                    _xs = 0;
+                    if (_xe > FinWidth+0.01) throw new ArgumentException("cutting size is larger than source map");
                 }
-                if (_xe == FinWidth)
+                else if (_xe > FinWidth)
                 {
-                    _xs = _xs - DistWidth / 2 >= 0 ?
-                        _xs -= DistWidth / 2 : 0;
-                }
-                _ys = _ym - DistHeight / 2 > 0 ? _ym - DistHeight / 2 : 0;
-                _ye = _ym + DistHeight / 2 < FinHeight ? _ym + DistHeight / 2 : FinHeight;
-                if (_ys == 0)
-                {
-                    _ye = _ye + DistHeight / 2 < FinHeight ?
-                        _ye += DistHeight / 2 : FinHeight;
-                }
-                if (_ye == FinHeight)
-                {
-                    _ys = _ys - DistHeight / 2 > 0 ?
-                        _ys -= DistHeight / 2 : 0;
+                    _xs -= _xe - FinWidth;
+                    _xe = FinWidth;
+                    if (_xs < -0.01) throw new ArgumentException("cutting size is larger than source map");
                 }
 
-                //BitmapData FinSourceImageData = FinSourceImage.LockBits(new Rectangle(0, 0, FinSourceImage.Width, FinSourceImage.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-                //byte* finP = (byte*)FinSourceImageData.Scan0;
-                //index = 0;
-                //int destIndex = 0;
-                 bmpOut = new Bitmap(_xe - _xs, _ye - _ys, PixelFormat.Format24bppRgb);
-             // bmpOut=  BasicMethodClass.CutImage(FinSourceImage, _xs, _ys, _xe - _xs, _ye - _ys);
-          //      BitmapData bmpOutData = bmpOut.LockBits(new Rectangle(0, 0, bmpOut.Width, bmpOut.Height),
-          //ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-          //      dstP = (byte*)bmpOutData.Scan0;
-                //for (int c_i = _ys, b_i=0; c_i < _ye; c_i++,b_i++)
-                //{
-                //    index = FinSourceImageData.Stride * c_i + _xs;
-                ////    destIndex = bmpOutData.Stride * b_i;
-                //    for (int c_j = _xs; c_j < _xe; c_j++)
-                //    {
-                //        dstP[destIndex] = finP[index];
-                //        dstP[destIndex + 1] = finP[index + 1];
-                //        dstP[destIndex + 2] = finP[index + 2];
-                //  //      destIndex += 3;
-                //        index += 3;
-                //    }
-                //}
-            //    bmpOut.UnlockBits(bmpOutData);
+                if (_ys < 0)
+                {
+                    _ye += -_ys;
+                    _ys = 0;
+                    if (_ye > FinHeight+0.01) throw new ArgumentException("cutting size is larger than source map");
+                }
+                else if (_ye > FinHeight)
+                {
+                    _ys -= _ye - FinHeight;
+                    _ye = FinHeight;
+                    if (_ys < -0.01) throw new ArgumentException("cutting size is larger than source map");
+                }
+
+                bmpOut = new Bitmap((int)_xe - (int)_xs, (int)_ye - (int)_ys, PixelFormat.Format24bppRgb);
                 srcBitmap.UnlockBits(srcBmData);
-                bmpOut = BasicMethodClass.CutImage(FinSourceImage, _xs, _ys, _xe - _xs, _ye - _ys);
-
-                // FinSourceImage.UnlockBits(FinSourceImageData);
-                //dstBitmap = BasicMethodClass.CutImage(dstBitmap, _xs, _ys, _xe-_xs, _ye-_ys);
+                bmpOut = BasicMethodClass.CutImage(FinSourceImage, (int)_xs, (int)_ys, (int)_xe - (int)_xs, (int)_ye - (int)_ys);
             }
             return bmpOut;
         }

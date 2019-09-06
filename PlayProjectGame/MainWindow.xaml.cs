@@ -148,7 +148,6 @@ namespace PlayProjectGame
             //Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
         }
 
-        private Thread OSUNewThread;
         public void LoadOSU(bool IsUpdate)
         {
             OSUListBox.ItemsSource = null;
@@ -392,24 +391,18 @@ namespace PlayProjectGame
             QuickPlayListControl.pageClosed = true;
             if (LrcDeskTopWindow != null)
                 LrcDeskTopWindow.Close();
-            //PlayListBase.player.Dispose();
-            //PlayListBase.timer.Dispose();
-            if (Playing.LrcTimer != null)
-                Playing.LrcTimer.Dispose();
-            //AudioProcess.Dispose();
-
-            if (PlayListBase.player != null)
-                PlayListBase.player.Dispose();
-            if (AudioProcess != null && !AudioProcess.HasExited)
-                AudioProcess.Kill();//之前的任务取消异常没处理，现在都不知道哪里抛的异常导致的不执行
-            if(PlayListBase.PlayThread!=null&& PlayListBase.PlayThread.ThreadState== System.Threading.ThreadState.Running)
-                PlayListBase.PlayThread.Abort();
+            if (PlayListBase.timer != null) PlayListBase.timer.Dispose();
+            if (Playing.LrcTimer != null)Playing.LrcTimer.Dispose();
+            if (PlayListBase.player != null)PlayListBase.player.Dispose();
+            if(PlayListBase.PlayThread!=null&& PlayListBase.PlayThread.ThreadState== System.Threading.ThreadState.Running)PlayListBase.PlayThread.Abort();
             byte[] buff = Helper.OtherHelper.SerializeObject(LRCRefClass.LrcRefDic);
             if(buff!=null) System.IO.File.WriteAllBytes(GlobalConfigClass.OBJ_LRCDIC_REFPATH, buff);
             OtherHelper.WriteXMLSerializer(ConfigPage.GlobalConfig, typeof(GlobalConfigClass), "Config.xml");
             //DataGeter.WriteSerializer(DataGeter.NetClouldMusicData, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
             //DataGeter.WriteSerializer(OsoDataGeter.OsuListData, typeof(List<UserData>), GlobalConfigClass.XML_OSU_SAVEPATH);
             //GC.Collect();
+            if (AudioProcess != null && !AudioProcess.HasExited)
+                AudioProcess.Kill();//之前的任务取消异常没处理，现在都不知道哪里抛的异常导致的不执行
 
         }
 

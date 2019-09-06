@@ -174,21 +174,21 @@ namespace AddIn.Audio
                     div = divselect.FirstOrDefault();
                 else
                 {
-                    Debug.Print("input exp");
+                    Debug.Print("*****输入异常");
                     div = divselect.FirstOrDefault();
                 }
                     if (div == null) throw new NotSupportedException("not exist directsound device");
-                _soundOut = new WaveOut() { Device= div,Latency=300 };
+                _soundOut = new WaveOut() { Device= div,Latency=100 };//300延时有个运算溢出，怀疑是其他异常造成的
 
             }
             else if (openMethods.IndexOf("WasApiOut") != -1)
             {
                 var enumerator = new MMDeviceEnumerator();
-                IEnumerable<MMDevice> mMDevices = MMDeviceEnumerator.EnumerateDevices(DataFlow.Render);
-                IEnumerable<MMDevice> dives = enumerator.EnumAudioEndpoints(DataFlow.All, DeviceState.All);
-                mMDevices = mMDevices.Join(dives, x => x.FriendlyName, x => x.FriendlyName, (x, y) => x);
+                IEnumerable<MMDevice> mMDevices = MMDeviceEnumerator.EnumerateDevices(DataFlow.Render).Where(x=>x.DeviceState== DeviceState.Active);
+                IEnumerable<MMDevice> dives = enumerator.EnumAudioEndpoints(DataFlow.All, DeviceState.All).Where(x=>x.DeviceState== DeviceState.Active);
+                mMDevices = mMDevices.Join(dives, x => x.FriendlyName, x => x.FriendlyName, (x, y) => x).ToArray();
                 mMDevice = mMDevices.Where(x => x.FriendlyName.IndexOf(device) != -1).FirstOrDefault(x=>x.DeviceState== DeviceState.Active);
-                _soundOut = new WasapiOut() { Device = mMDevice, Latency = 300 };
+                _soundOut = new WasapiOut() { Device = mMDevice, Latency = 200 };
 
             }
             else
@@ -202,11 +202,11 @@ namespace AddIn.Audio
                     div = divselect.FirstOrDefault();
                 else
                 {
-                    Debug.Print("input exp");
+                    //Debug.Print("*****输入异常*****");
                     div = divselect.FirstOrDefault();
                 }
                 if (div == null) throw new NotSupportedException("not exist directsound device");
-                _soundOut = new DirectSoundOut() { Device = div.Guid, Latency = 300 };
+                _soundOut = new DirectSoundOut() { Device = div.Guid, Latency = 100 };
 
             }
 
@@ -225,7 +225,7 @@ namespace AddIn.Audio
             else
                 _waveSource = CodecFactory.Instance.GetCodec(_filePath);
             _soundOut.Initialize(_waveSource);
-            _soundOut.Volume = Volume/100f;
+            //_soundOut.Volume = Volume/100f;
 
             //_soundOut.Stopped += _soundOut_Stopped;
             _total = _waveSource.GetLength();

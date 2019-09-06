@@ -16,7 +16,7 @@ namespace AddIn.LrcSercher
     public class NetCloudLyricsList : ILyricsSercher,IDisposable
     {
         private readonly string DownloadPath = "http://music.163.com/api/song/lyric?os=pc&id={0}&lv={1}&kv={2}&tv={3}";
-        private readonly string SercherMusicIdPath = "http://music.163.com/#/search/m/?s={0}&type=1";
+        //private readonly string SercherMusicIdPath = "http://music.163.com/#/search/m/?s={0}&type=1";
         public ObservableCollection<ILrcSercherInfoItem> SercherResultList { get; }
 
         public string SercherName { get; private set; }

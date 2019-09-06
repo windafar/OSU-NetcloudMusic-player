@@ -210,7 +210,6 @@ namespace PlayProjectGame
             set => SetValue(CurrentLrcBrushProperty, value);
         }
         public static readonly DependencyProperty CurrentLrcBrushProperty = DependencyProperty.Register("currentLrcBrush", typeof(Brush), typeof(Playing), new PropertyMetadata(Brushes.Black));
-        Timer NoteTimer;
         public Note.NotesViewData notesViewData;
 
         public Playing()
@@ -288,7 +287,7 @@ namespace PlayProjectGame
             }
             catch (Exception e2)
             {
-                //MessageBox.Show("lrcListboxScroll_Next:" + e2.Message);
+                MessageBox.Show("lrcListboxScroll_Next:" + e2.Message);
             }
 
         }

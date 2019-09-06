@@ -38,10 +38,10 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="120"></RowDefinition>
-                            <RowDefinition Height="74"></RowDefinition>
+                            <RowDefinition Height="1.666*"></RowDefinition>
+                            <RowDefinition Height="1*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Unloaded="Image_Unloaded"  Loaded="Image_Loaded" Initialized="Image_Initialized" Stretch="None" StretchDirection="Both" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Grid.Row="0" Unloaded="Image_Unloaded"  Loaded="Image_Loaded" Initialized="Image_Initialized" Stretch="Uniform"   >
                         </Image>
                         <StackPanel Grid.Row="1">
                             <TextBlock  Text="{Binding Path=SongInfo.SongName}" FontSize="24"></TextBlock>

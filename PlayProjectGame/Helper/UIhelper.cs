@@ -174,7 +174,7 @@ namespace PlayProjectGame.Helper
             }
             catch (Exception e)
             {
-                //System.Windows.MessageBox.Show(e.Message);
+                System.Windows.MessageBox.Show(e.Message);
                 return null;
             }
 

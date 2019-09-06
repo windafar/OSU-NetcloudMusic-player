@@ -55,7 +55,6 @@ namespace VisualAttentionDetection.OtherAppy
                 byte* dstP = (byte*)dstScan;
                 int SourceIndex = 0;
                 int DstIndex = 0;
-                int colorCount = 0;
                 //if (MaxAreaArrValue == 0) throw new ArgumentException("Tolerance过低");
                 //int x_start = desWidth, x_end = 0, y_start = desHeight, y_end = 0;
                 for (int y = 1; y < desHeight - 1; y++)

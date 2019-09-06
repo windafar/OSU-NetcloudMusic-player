@@ -35,18 +35,29 @@ namespace PlayProjectGame.PlayList
         {
             if (R == null) R = new System.Drawing.Rectangle(0, 0, 256, 256);
             MemoryStream ms_out = new MemoryStream();
-            BasicMethodClass.MakeThumbnail((MemoryStream)InImageStream, ms_out, prewidth, preheight, premode, pretype);
-
-            if (InImageStream == null|| ms_out == null) return null ;
-            var srcBitmap = new Bitmap(ms_out);
+            Bitmap Srcbitmap = new Bitmap(InImageStream);
+            //压缩尺寸以加快速度
+            BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out,Math.Min(prewidth,Srcbitmap.Width),Math.Min(preheight,Srcbitmap.Height), premode, pretype);
+            if (InImageStream == null) throw new Exception("not expectation result");
+            if (ms_out == null) return null ;
+            var vdcSrcBitmap = new Bitmap(ms_out);
             ms_out.Dispose();
-            var vdcmap= VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(srcBitmap);
 
+            var vdcmap= VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(vdcSrcBitmap);
+            if (R.Width > Srcbitmap.Width||R.Height>Srcbitmap.Height)
+            {//格式化输出图片尺寸
+                ms_out = new MemoryStream();
+                BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out, R.Width, R.Height, premode, pretype);
+                Srcbitmap.Dispose();
+                Srcbitmap = new Bitmap(ms_out);
+                ms_out.Dispose();
+            }
             CutImageClass cuter = new CutImageClass(vdcmap, R, Tolerance);
-            var GenerImage = cuter.GCSsimp_getLightPointFromSource(srcBitmap);
-            srcBitmap.Dispose();
-            if (GenerImage == null) throw new Exception();
+            var GenerImage = cuter.GCSsimp_getLightPointFromSource(Srcbitmap);
+            vdcSrcBitmap.Dispose();
             vdcmap.Dispose();
+            Srcbitmap.Dispose();
+
             return GenerImage;
         }
 
@@ -68,17 +79,29 @@ namespace PlayProjectGame.PlayList
             )
         {
             if (R == null) R = new System.Drawing.Rectangle(0, 0, 256, 256);
-            MemoryStream mss = new MemoryStream();
-            BasicMethodClass.MakeThumbnail(filepath, mss,prewidth, preheight, premode, pretype);
-            if (mss.Length == 0) return null;
-            var srcBitmap = new Bitmap(mss);
-            //var vdcmap = VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(srcBitmap, 0.75f);
-            var vdcmap = VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(srcBitmap);
-            mss.Dispose();
+            MemoryStream ms_out = new MemoryStream();
+            Bitmap Srcbitmap = new Bitmap(filepath);
+            //压缩尺寸以加快速度
+            BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out, Math.Min(prewidth, Srcbitmap.Width), Math.Min(preheight, Srcbitmap.Height), premode, pretype);
+            if (ms_out == null) return null;
+            var vdcSrcBitmap = new Bitmap(ms_out);
+            ms_out.Dispose();
+
+            var vdcmap = VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(vdcSrcBitmap);
+            //if (R.Width > Srcbitmap.Width || R.Height > Srcbitmap.Height)
+            {//格式化输出图片尺寸
+                ms_out = new MemoryStream();
+                BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out, R.Width*1, R.Height*1, premode, pretype);
+                Srcbitmap.Dispose();
+                Srcbitmap = new Bitmap(ms_out);
+                ms_out.Dispose();
+            }
             CutImageClass cuter = new CutImageClass(vdcmap, R, Tolerance);
-            var GenerImage = cuter.GCSsimp_getLightPointFromSource(srcBitmap);
-            srcBitmap.Dispose();
+            var GenerImage = cuter.GCSsimp_getLightPointFromSource(Srcbitmap);
+            vdcSrcBitmap.Dispose();
             vdcmap.Dispose();
+            Srcbitmap.Dispose();
+
             return GenerImage;
         }
 

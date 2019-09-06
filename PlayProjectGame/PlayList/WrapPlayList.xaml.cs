@@ -185,19 +185,19 @@ namespace PlayProjectGame.PlayList
                 }
                 if (GenerImage == null)
                 {
-                    virtualPanelHeight = listBoxItem.ActualHeight;//正常的话继承至父级VirtualizingWrapPanel自定义属性ChildHeight
+                    virtualPanelHeight = listBoxItem.ActualHeight*0.6245;//1.666/(1+1.666)
                     virtualPanelWidth = listBoxItem.ActualWidth;
-
-                    var rect =UIhelper.GetSystemDpi();
-                    var childrenItemHeight =(int)Math.Round(rect.Height * virtualPanelHeight*0.01);
-                    var childrenItemWidth = (int)Math.Round(rect.Width * virtualPanelWidth * 0.01);
-
-
+                    //获取的virtualPanel的宽高已经包含了dip设置
+                    //var rect =UIhelper.GetSystemDpi();
+                    //var childrenItemHeight =(int)Math.Round(rect.Height * virtualPanelHeight*0.01);
+                    //var childrenItemWidth = (int)Math.Round(rect.Width * virtualPanelWidth * 0.01);
+                    var childrenItemHeight = (int)virtualPanelHeight;
+                    var childrenItemWidth = (int)virtualPanelWidth;
                     if (data.SongInfo.SongType == 3)
                     {
                         spath = OsuLocalDataGeter.LoadOsuFileNameAs(1, data.SongInfo.OsuPath);
                         if (!string.IsNullOrWhiteSpace(spath))
-                            GenerImage = srd.GetSRDFromPath(spath, 600, 200, "W", "jpg", new System.Drawing.Rectangle(0, 0, 475, 120), 215);
+                            GenerImage = srd.GetSRDFromPath(spath, 600, 200, "W", "png", new System.Drawing.Rectangle(0, 0, childrenItemWidth, childrenItemHeight), 215);
                         //System.Diagnostics.Debug.Print("文件：" + (ss - DateTime.Now).TotalSeconds.ToString());
 
                     }
@@ -213,7 +213,8 @@ namespace PlayProjectGame.PlayList
                             imagebuff = new Helper.MusicTag().GetJPGBuffer(data.SongInfo);
                             if (imagebuff == null) return;
                             var ms2 = new System.IO.MemoryStream(imagebuff);
-                            GenerImage = srd.GetSRDFromStream(ms2, 600, 200, "W", "jpg", new System.Drawing.Rectangle(0, 0, 475, 120), 215);
+                            //GenerImage = srd.GetSRDFromStream(ms2, 600, 200, "W", "jpg", new System.Drawing.Rectangle(0, 0, 475, 120), 215);
+                            GenerImage = srd.GetSRDFromStream(ms2, 600, 200, "W", "jpg", new System.Drawing.Rectangle(0, 0, childrenItemWidth, childrenItemHeight), 215);
                             ms2.Dispose();
                         }
                     }

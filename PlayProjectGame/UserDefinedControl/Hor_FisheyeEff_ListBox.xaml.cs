@@ -87,7 +87,6 @@ namespace PlayProjectGame.UserDefinedControl
             
         }
 
-        double NoteMaxVlaue = 0;
         ScrollViewer scroller;
         private void Image_ScrollChanged(object sender, RoutedEventArgs e)
         {

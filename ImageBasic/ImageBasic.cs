@@ -1107,7 +1107,7 @@ namespace ImageBasic
                 g.Dispose();
                 return bmpOut;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -1249,7 +1249,7 @@ namespace ImageBasic
                 distImage_ms.Dispose();
                 return result;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return false;
             }
@@ -1385,7 +1385,7 @@ namespace ImageBasic
                 distImage_ms.Dispose();
                 return result;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return false;
             }
@@ -1518,7 +1518,7 @@ namespace ImageBasic
                 distImage_ms.Dispose();
                 return result;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return false;
             }
@@ -1532,8 +1532,6 @@ namespace ImageBasic
         }
         static public bool MakeThumbnail(Bitmap originalImage, Stream SaveStream, double width, double height, string mode, string type, int size = int.MaxValue)
         {
-            if (SaveStream == null) SaveStream = new MemoryStream();
-
             System.Drawing.Imaging.ImageFormat imgtype = System.Drawing.Imaging.ImageFormat.Jpeg;
             if (type == "png" || type == ".png")
             {
@@ -1642,14 +1640,12 @@ namespace ImageBasic
                 distImage_ms.Dispose();
                 return result;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return false;
             }
             finally
             {
-
-                originalImage.Dispose();
                 bitmap_Dist.Dispose();
                 g.Dispose();
             }
@@ -1886,7 +1882,7 @@ namespace ImageBasic
                 a.UnlockBits(bmpData);
                 return a;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
