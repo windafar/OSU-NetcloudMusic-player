@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PlayProjectGame"
       mc:Ignorable="d" 
       d:DesignHeight="200" d:DesignWidth="259"
-      Title="Playing" Unloaded="Page_Unloaded" Name="PlayingPage">
+      Title="Playing" Loaded="PlayingPage_Loaded" Unloaded="Page_Unloaded" Name="PlayingPage">
     <Page.Resources>
         <Style x:Key="LrcListStyle">
             <Setter Property="Control.Template"  Value="{StaticResource ListBoxItemTemp}"/>
@@ -51,9 +51,9 @@
             </Rectangle.RenderTransform>
         </Rectangle>
 
-        <ScrollViewer x:Name="ScrollLrc" Width="Auto" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.IsSharedSizeScope="True" Grid.Column="1" BorderBrush="{Binding ElementName=LrcList, Path=Background}">
+        <ScrollViewer x:Name="ScrollLrc" Width="Auto" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.IsSharedSizeScope="True" Grid.Column="1" BorderBrush="#ffffffff">
             <StackPanel>
-            <ListBox ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" BorderBrush="{Binding Path=Bcakground}">
+            <ListBox ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" BorderBrush="#ffffffff">
                 <!--<ListBox  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" BorderBrush="{x:Null}" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" >-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -83,6 +83,7 @@
                 <Rectangle Height="60"></Rectangle>
             </StackPanel>
         </ScrollViewer>
+        <TextBlock Visibility="{Binding ElementName=ErrorInfoTextBox, Path=Visibility}" Margin="0,-128,0,0" Text="{Binding Path=SongNameAndArtist}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
         <TextBlock Name="ErrorInfoTextBox" HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center">
             自动加载歌词失败点击<Hyperlink Name="ReSercharHyperlink" Click="ReSercharHyperlink_Click">重新搜索</Hyperlink>
         </TextBlock>

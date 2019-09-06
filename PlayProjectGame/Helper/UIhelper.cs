@@ -157,20 +157,8 @@ namespace PlayProjectGame.Helper
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
             GdipEffect.Effect.GaussianBlur(bmp, ref rect, od, false);
             try
-            {
-                bmp.Save("blur", ImageFormat.Bmp);
-                FileInfo file = new FileInfo("blur");
-                //  Read byte[] from png file
-                BinaryReader binReader = new BinaryReader(file.OpenRead());
-                byte[] bytes = binReader.ReadBytes((int)file.Length);
-                binReader.Dispose();
-
-                // Init bitmap
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.StreamSource = new MemoryStream(bytes);
-                bitmap.EndInit();
-                return bitmap;
+            {     
+                return ConverTotBitmapImage(bmp);
             }
             catch (Exception e)
             {

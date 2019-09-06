@@ -145,9 +145,7 @@ namespace PlayProjectGame.Data
         /// 指定在跨控件操作时的容器名称
         /// </summary>
         public string DataContainerName { set; get; }
-        /// <summary>
-        /// 在播放列表时，指定在播放列表的位置，否则为-1
-        /// </summary>
+        public string SongNameAndArtist { get => SongInfo.SongName + " - " + SongInfo.SongArtist.Trim(','); }
         public SongInfoExpend()
         {
         }
@@ -159,6 +157,7 @@ namespace PlayProjectGame.Data
             DataContainerName = songInfoex.DataContainerName;
             FileTime = songInfoex.FileTime;
         }
+
     }
 
     public class PlayListData //歌单数据类

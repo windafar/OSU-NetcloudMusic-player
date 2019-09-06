@@ -21,6 +21,7 @@ using PlayProjectGame.LrcSercher;
 using PlayProjectGame.PlayList;
 using PlayProjectGame.Helper;
 using PlayProjectGame.Data;
+using System.Diagnostics;
 
 namespace PlayProjectGame
 {
@@ -38,14 +39,15 @@ namespace PlayProjectGame
         private static ILyricsSercher lrcFileSercher { set; get; }
 
         void OnPlayingChanged(SongInfoExpend songInfoExpend) {
-                LoadLoaclLrc(null, Dispatcher, LoadLrcSuccessToUI, LoadLrcFailToUI);
-                InitLrcShow(Dispatcher);//性能问题：0.3-0.5s
-                PlayingPageBackgroundUpdateUIDeleLink?.Invoke();
+            LoadLoaclLrc(null, Dispatcher, LoadLrcSuccessToUI, LoadLrcFailToUI);
+            InitLrcShow(Dispatcher);//性能问题：0.3-0.5s
+            PlayingPageBackgroundUpdateUIDeleLink?.Invoke();
+
             notesViewData = new Note.NotesViewData(CurrentSongInfo.SongInfo);
             FirstNode = notesViewData.Notes.First;
-                Dispatcher.Invoke(()=>PlayingGrid.Children.Clear());
-                
+            Dispatcher.Invoke(()=>PlayingGrid.Children.Clear());
 
+            Dispatcher.Invoke(() => PlayingBorder.DataContext = CurrentSongInfo);
         }
 
         #region LRC的所有非UI全局属性，字段，函数
@@ -80,7 +82,8 @@ namespace PlayProjectGame
             if (LrcTimer == null)
                 LrcTimer = new Timer(delegate
                 {
-                    if (lrcshow != null && CurLrcItem != null)
+                    if(lrcshow != null && CurLrcItem == null) CurLrcItem = lrcshow.Items.First;
+                    else if(lrcshow != null && CurLrcItem != null)
                     {
                         //if (CurLrcItem.Value.Time <= PlayListBase.player.Position)
                         var CurPlayPosition = PlayListBase.player.Position;
@@ -277,13 +280,20 @@ namespace PlayProjectGame
                 if (IsShowOlddRowLrc)
                 {
                     if (CurLrcItem.Previous == null) return;
-                    else _curLrc =CurLrcItem.Previous;
+                    else _curLrc = CurLrcItem.Previous;
                 }
                 LrcList.SelectedItem = _curLrc.Value;
-                DependencyObject lstitem = LrcList.ItemContainerGenerator.ContainerFromItem(LrcList.SelectedItem);
-                int y = (int)((ListBoxItem)lstitem).TranslatePoint(new System.Windows.Point(0, 0), LrcList).Y;
-                y = y - (int)ScrollLrc.ActualHeight / 2;
-                ScrollLrc.ScrollToVerticalOffset(y);
+                if (LrcList.SelectedItem != null)
+                {
+                    DependencyObject lstitem = LrcList.ItemContainerGenerator.ContainerFromItem(LrcList.SelectedItem);
+                    int y = (int)((ListBoxItem)lstitem).TranslatePoint(new System.Windows.Point(0, 0), LrcList).Y;
+                    y = y - (int)ScrollLrc.ActualHeight / 2;
+                    ScrollLrc.ScrollToVerticalOffset(y);
+                }
+                else
+                {
+                    Debug.Print("在" + lrcshow.Title + "中没有找到歌词，当前播放:" + CurrentSongInfo.SongNameAndArtist);
+                }
             }
             catch (Exception e2)
             {
@@ -451,6 +461,11 @@ namespace PlayProjectGame
         private void PlayingGrid_MouseEnter(object sender, MouseEventArgs e)
         {
                 editNoteItem = CurrentSongInfo.SongInfo;
+        }
+
+        private void PlayingPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlayingBorder.DataContext = CurrentSongInfo;
         }
     }
 }

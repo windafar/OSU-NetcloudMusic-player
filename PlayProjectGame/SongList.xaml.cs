@@ -191,6 +191,7 @@ namespace PlayProjectGame
             SongListCreator.Text = PLD.UersName;
             SongListInfo.Text = PLD.PlayListInfo;
             RemoveLoalNotExistSQButton.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
+            SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
             GetImage(PLD.PlayListId);
             view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
             Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
