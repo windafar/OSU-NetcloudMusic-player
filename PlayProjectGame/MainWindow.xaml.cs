@@ -260,8 +260,8 @@ namespace PlayProjectGame
                     }
                 }
                 SongList.SetPlayListData(pld);
-                Uri NextUri = new Uri("SongList.xaml", UriKind.Relative);
-                if (frame.Source==null||frame.Source.OriginalString != "SongList.xaml")
+                Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                if (frame.Source==null||frame.Source.OriginalString != "SongList/SongList.xaml")
                     frame.Navigate(NextUri);
                 else frame.Refresh();
                 //frame.Navigate(new SongList(pld));
@@ -283,8 +283,8 @@ namespace PlayProjectGame
                     }
                 }
                 SongList.SetPlayListData(pld);
-                Uri NextUri = new Uri("SongList.xaml", UriKind.Relative);
-                if (frame.Source == null || frame.Source.OriginalString != "SongList.xaml")
+                Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                if (frame.Source == null || frame.Source.OriginalString != "SongList/SongList.xaml")
                     frame.Navigate(NextUri);
                 else frame.Refresh();
                 //frame.Navigate(new SongList(pld));

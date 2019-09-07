@@ -177,7 +177,8 @@
     <Compile Include="SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SongList.xaml.cs">
+    <Compile Include="SongList\MaximumScrollConver.cs" />
+    <Compile Include="SongList\SongList.xaml.cs">
       <DependentUpon>SongList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserDefinedControl\ListViewBigFalt.xaml.cs">
@@ -281,7 +282,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SongList.xaml">
+    <Page Include="SongList\SongList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

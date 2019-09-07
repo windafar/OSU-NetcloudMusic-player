@@ -356,7 +356,7 @@ namespace PlayProjectGame
         private void SongListListView_Loaded(object sender, RoutedEventArgs e)
         {
             var scrollbar = UIhelper.FindChild<ScrollBar>(SongListListView, "PART_VerticalScrollBar");
-            Binding MaximumScrollBinding = new Binding() { NotifyOnTargetUpdated=true, Source = scrollbar, Path = new PropertyPath("Maximum"), Mode = BindingMode.OneWay, Converter = new IntConver(), ConverterParameter = 0.0/*_Grid.Margin*/ };
+            Binding MaximumScrollBinding = new Binding() { NotifyOnTargetUpdated=true, Source = scrollbar, Path = new PropertyPath("Maximum"), Mode = BindingMode.OneWay, Converter = new MaximumScrollConver(), ConverterParameter = _Grid };
             Binding ValueScrollBinding = new Binding() { Source = scrollbar, Path = new PropertyPath("Value"), Mode = BindingMode.OneWay };
             Binding MinimumScrollBinding = new Binding() { Source = scrollbar, Path = new PropertyPath("Minimum"), Mode = BindingMode.OneWay };
             Binding ViewPortScrollBinding = new Binding() { Source = SongListPageScrollBar, Path = new PropertyPath("ActualHeight"), Mode = BindingMode.OneWay };
@@ -580,8 +580,8 @@ namespace PlayProjectGame
                 }
                 pld.PlatListName += "_" + dataconext.Time;
                 SongList.SetPlayListData(pld);
-                Uri NextUri = new Uri("SongList.xaml", UriKind.Relative);
-                if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList.xaml")
+                Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList/SongList.xaml")
                     NavigationService.Navigate(NextUri);
                 else NavigationService.Refresh();
             }

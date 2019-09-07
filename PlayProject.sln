@@ -23,6 +23,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualAttentionDetection.CutImage", "VisualAttentionDetection.CutImage\VisualAttentionDetection.CutImage.csproj", "{2723FBAA-7D45-475F-BECC-7DC546AD37F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualAttentionDetection.OtherAppy", "VisualAttentionDetection.OtherAppy\VisualAttentionDetection.OtherAppy.csproj", "{7FDD2263-3304-46FF-A043-F580EAC45C1F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{068DBF2C-9889-415D-B251-BB5FA697BCBE} = {068DBF2C-9889-415D-B251-BB5FA697BCBE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device", "Device\Device.csproj", "{912AFF49-B0CD-4F45-A6DD-D1B2FB841700}"
 EndProject

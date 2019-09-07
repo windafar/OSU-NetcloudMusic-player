@@ -11,7 +11,7 @@
                         <RowDefinition MaxHeight="7" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Rectangle Fill="#FFE3F7FF" Name="UpperHighlight" Visibility="Collapsed" />
+                    <Rectangle Fill="#66E3F7FF" Name="UpperHighlight" Visibility="Collapsed" />
                     <Border Padding="{TemplateBinding Control.Padding}" Grid.RowSpan="2">
                         <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Name="HeaderContent" Margin="0,0,0,1" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                     </Border>
@@ -76,15 +76,15 @@
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <LinearGradientBrush.GradientStops>
-                                <GradientStop Color="#FFBDEDFF" Offset="0" />
-                                <GradientStop Color="#FFB7E7FB" Offset="1" />
+                                <GradientStop Color="#01226ea1" Offset="1" />
+                                <GradientStop Color="#12026ea1" Offset="0" />
                             </LinearGradientBrush.GradientStops>
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder">
                     <Setter.Value>
-                        <SolidColorBrush>#FF88CBEB</SolidColorBrush>
+                        <SolidColorBrush>#22126ea1</SolidColorBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
@@ -106,15 +106,15 @@
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <LinearGradientBrush.GradientStops>
-                                <GradientStop Color="#FF8DD6F7" Offset="0" />
-                                <GradientStop Color="#FF8AD1F5" Offset="1" />
+                                <GradientStop Color="#11fDD6F7" Offset="0" />
+                                <GradientStop Color="#01226ea1" Offset="1" />
                             </LinearGradientBrush.GradientStops>
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder">
                     <Setter.Value>
-                        <SolidColorBrush>#FF95DAF9</SolidColorBrush>
+                        <SolidColorBrush>#0095DAF9</SolidColorBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Border.BorderBrush" TargetName="HeaderPressBorder">
@@ -129,7 +129,7 @@
                 </Setter>
                 <Setter Property="Shape.Fill" TargetName="UpperHighlight">
                     <Setter.Value>
-                        <SolidColorBrush>#FFBCE4F9</SolidColorBrush>
+                        <SolidColorBrush>#05026ea1</SolidColorBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="UIElement.Visibility" TargetName="PART_HeaderGripper">

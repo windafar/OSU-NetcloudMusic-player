@@ -21,7 +21,6 @@
         <SolidColorBrush>#6599b5</SolidColorBrush>
     </Window.Background>
     <Window.Resources>
-        <PublicConver:IntConver x:Key="IntConver"/>
         <Style x:Key="{x:Type ScrollBar}"
            TargetType="{x:Type ScrollBar}">
             <Setter Property="SnapsToDevicePixels"

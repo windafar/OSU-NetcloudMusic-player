@@ -28,13 +28,13 @@ namespace PlayProjectGame
                 {
                     this.iNotifyIcon.Icon = new System.Drawing.Icon(st);
 
-                    //System.Windows.Forms.MenuItem miExit = new System.Windows.Forms.MenuItem("退出", OnNotifyIconExitLick);
-                    //System.Windows.Forms.MenuItem miOpenWindow = new System.Windows.Forms.MenuItem("打开窗口", OnNotifyIconOpenWindow);
-                    //iNotifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
-                    //iNotifyIcon.ContextMenu.MenuItems.Add(miExit);
-                    //iNotifyIcon.ContextMenu.MenuItems.Add(miOpenWindow);
-                    //iNotifyIcon.DoubleClick += new EventHandler(OnNotifyIconOpenWindow);
-                    //iNotifyIcon.Text = this.Title;
+                    System.Windows.Forms.MenuItem miExit = new System.Windows.Forms.MenuItem("退出", OnNotifyIconExitLick);
+                    System.Windows.Forms.MenuItem miOpenWindow = new System.Windows.Forms.MenuItem("打开窗口", OnNotifyIconOpenWindow);
+                    iNotifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
+                    iNotifyIcon.ContextMenu.MenuItems.Add(miExit);
+                    iNotifyIcon.ContextMenu.MenuItems.Add(miOpenWindow);
+                    iNotifyIcon.DoubleClick += new EventHandler(OnNotifyIconOpenWindow);
+                    iNotifyIcon.Text = this.Title;
 
                 }
                 catch
@@ -44,26 +44,26 @@ namespace PlayProjectGame
             }
 
         }
-        //protected override void OnStateChanged(EventArgs e)
-        //{
-        //    base.OnStateChanged(e);
-        //    if (iNotifyIcon != null && this.WindowState == WindowState.Minimized)
-        //    {
-        //        this.iNotifyIcon.Visible = true;
-        //        this.ShowInTaskbar = false;
-        //    }
-        //}
-        //public void OnNotifyIconOpenWindow(object sender, EventArgs e)
-        //{
-        //    this.iNotifyIcon.Visible = false;
-        //    this.ShowInTaskbar = true;
-        //    this.WindowState = WindowState.Normal;
-        //    this.Activate();
-        //}
-        //private void OnNotifyIconExitLick(object sender, EventArgs e)
-        //{
-        //    this.Close();
-        //}
+        protected override void OnStateChanged(EventArgs e)
+        {
+            base.OnStateChanged(e);
+            if (iNotifyIcon != null && this.WindowState == WindowState.Minimized)
+            {
+                this.iNotifyIcon.Visible = true;
+                this.ShowInTaskbar = false;
+            }
+        }
+        public void OnNotifyIconOpenWindow(object sender, EventArgs e)
+        {
+            this.iNotifyIcon.Visible = false;
+            this.ShowInTaskbar = true;
+            this.WindowState = WindowState.Normal;
+            this.Activate();
+        }
+        private void OnNotifyIconExitLick(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
     }
 }

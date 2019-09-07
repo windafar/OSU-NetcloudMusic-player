@@ -405,7 +405,7 @@ namespace PlayProjectGame
             SongList.SetPlayListData(PlayListData);
             SongList.StartCmd.Enqueue("select_$currentplay");
             if (MainWindow.CurMainWindowInstence.frame.Source==null|| MainWindow.CurMainWindowInstence.frame.Source.OriginalString != "SongList.xml")
-                MainWindow.CurMainWindowInstence.frame.Navigate(new Uri("SongList.xaml", UriKind.Relative));
+                MainWindow.CurMainWindowInstence.frame.Navigate(new Uri("SongList/SongList.xaml", UriKind.Relative));
             else MainWindow.CurMainWindowInstence.frame.Refresh();
         }
 
