@@ -181,14 +181,11 @@
     <Compile Include="SongList\SongList.xaml.cs">
       <DependentUpon>SongList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserDefinedControl\ListViewBigFalt.xaml.cs">
-      <DependentUpon>ListViewBigFalt.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserDefinedControl\ListViewExtend.cs" />
-    <Compile Include="UserDefinedControl\UIConverter.cs" />
     <Compile Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml.cs">
       <DependentUpon>Hor_FisheyeEff_ListBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserDefinedControl\ListViewBigFalt.cs" />
+    <Compile Include="UserDefinedControl\UIConverter.cs" />
     <Compile Include="UserDefinedControl\VirtualizingWrapPanel.cs" />
     <Page Include="AlbumList.xaml">
       <SubType>Designer</SubType>
@@ -291,12 +288,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserDefinedControl\ListViewBigFalt.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -581,7 +581,7 @@ namespace PlayProjectGame
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 scroller.ScrollToTop();
-                e.Handled = true;
+                //e.Handled = true;
             }
             scroll_Dist = e.GetPosition(scroller).Y;
         }
@@ -595,7 +595,7 @@ namespace PlayProjectGame
                 //根据偏移量调节滚动速度，0.02是偏移和速度的比率，scroller.ScrollableHeight / scroller.ViewportHeight是为了保证所有大小窗口的滚动时间一致
                 scroller.ScrollToVerticalOffset(scroller.VerticalOffset +
                     (e.GetPosition(scroller).Y - scroll_Dist) * 0.001 * scroller.ScrollableHeight / scroller.ViewportHeight);
-                e.Handled = true;
+                //e.Handled = true;
             }
 
         }
@@ -699,33 +699,6 @@ namespace PlayProjectGame
         {
             SongCoverPrvImage.Visibility = Visibility.Collapsed;
         }
+
     }
 }
-
-
-
-
-///2018年4月16日
-///优化右侧显示
-///分离播放控件ui和功能上
-///做出播放页面
-/// 
-///2018年5月7日
-///所有需求难点解决
-///使用显著性生成颜色有时会过浓的问题，
-///简单的处理可以使用类似高斯模糊核的方式均摊到其他两种颜色分量，处理结果应该是单种颜色分量变浅，亮度有所增加
-///
-/// 2018年6月1日
-/// 1提交代码作为备份节点
-/// 2移除额外代码（消息通信部分不能加入core的也除掉），移入音频进程，整理代码
-/// 此次整理包含：
-/// 主线程非ui：core[缓存（磁盘缓存，线程共享资源），通信]，playbase[所有播放相关的的非UI逻辑]
-/// 主线程UI类：文件整理
-/// 
-/// 2018年6月12日
-/// 长久暂停此项目的更新，记录目前发现的问题
-/// 1，优化时，提成PlayThread和PlayingChanged后貌似有内存溢出。
-/// 2，注意测试问题时将messagebox.show的注释去掉
-/// 
-///
-

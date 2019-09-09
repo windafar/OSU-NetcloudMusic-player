@@ -225,7 +225,7 @@ namespace AddIn.Audio
             else
                 _waveSource = CodecFactory.Instance.GetCodec(_filePath);
             _soundOut.Initialize(_waveSource);
-            //_soundOut.Volume = Volume/100f;
+            _soundOut.Volume = Volume/100f;
 
             //_soundOut.Stopped += _soundOut_Stopped;
             _total = _waveSource.GetLength();

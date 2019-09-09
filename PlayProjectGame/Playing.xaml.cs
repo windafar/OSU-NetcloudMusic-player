@@ -91,7 +91,7 @@ namespace PlayProjectGame
                         {
                             if (UpdateLrcUIDeleLink != null)
                                 UIElemDispatcher.Invoke(UpdateLrcUIDeleLink);
-                            if (CurLrcItem != null)
+                            if (CurLrcItem != null&&CurLrcItem.Next!=null)
                                 CurLrcItem = CurLrcItem.Next;
                         }
                         else if (IsMovePre == true && CurLrcItem != null&& CurLrcItem.Value.Time > CurPlayPosition)

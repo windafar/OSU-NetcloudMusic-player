@@ -32,8 +32,8 @@ namespace PlayProjectGame.UserDefinedControl
 
         public ListViewBigFalt()
         {
-            
+
         }
-        
+
     }
 }
