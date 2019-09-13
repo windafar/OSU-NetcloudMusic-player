@@ -13,6 +13,12 @@ namespace PlayProjectGame.Helper
 {
     static public class OtherHelper
     {
+        public static bool IndexExistOfAny(this String source, string[] str)
+        {
+            foreach (var s in str)
+                if (!string.IsNullOrWhiteSpace(s)&&source==s) return true;
+            return false;
+        }
 
         /// <summary>
         /// 非法路径字符替换\/:*?"<>|

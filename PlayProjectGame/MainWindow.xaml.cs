@@ -200,6 +200,11 @@ namespace PlayProjectGame
                 ((SongList)frame.Content).SongListInfo.Text = state.PLD.PlayListInfo;
                 ((SongList)frame.Content).SongListCreator.Text = state.PLD.UersName;
                 ((SongList)frame.Content).GetImage(state.PLD.PlayListId);
+                if (state.curSelected != null)
+                {
+                    ((SongList)frame.Content).SongListListView.SelectedItem = state.curSelected;
+                    ((SongList)frame.Content).SongListListView.ScrollIntoView(state.curSelected);
+                }
             }
             else
             {

@@ -12,14 +12,13 @@ namespace PlayProjectGame
 {
     public delegate void ReplayListChange(PlayListJournalEntry state);
     [Serializable()]
-   public class PlayListJournalEntry :CustomContentState
+    public class PlayListJournalEntry : CustomContentState
     {
-        public string imageSourcePath
-        { get; }
-         public PlayListData PLD
+        public PlayListData PLD
         {
             get;
         }
+        public object curSelected{ get; }
 
         public override string JournalEntryName
         {
@@ -35,11 +34,11 @@ namespace PlayProjectGame
             this.replayListChange(this);
         }
 
-        public PlayListJournalEntry(PlayListData PLD,ReplayListChange replayListChange, string imageSourcePath=null)
+        public PlayListJournalEntry(PlayListData PLD,ReplayListChange replayListChange, object curSelected = null)
         {
             this.PLD = PLD;
-            this.imageSourcePath = imageSourcePath;
             this.replayListChange = replayListChange;
+            this.curSelected = curSelected;
         }
     }
 }

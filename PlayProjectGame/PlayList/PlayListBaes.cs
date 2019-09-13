@@ -216,6 +216,7 @@ namespace PlayProjectGame.PlayList
         /// <param name="IsPlayImmediately">是否要下一个播放</param>
         internal static void AddToPlayList(SongInfoExpend sinfo, bool IsPlayImmediately)
         {
+            if (sinfo == null) return;
             if (ConfigPage.GlobalConfig.AddIndex == 1)
             {
                 int index = PlayListIndex;

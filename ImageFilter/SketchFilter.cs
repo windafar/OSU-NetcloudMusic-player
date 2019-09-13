@@ -18,9 +18,10 @@ namespace ImageFilter
         /// <param name="SourceBmp">原图</param>
         /// <param name="Contrast">预置对比度</param>
         /// <param name="Brightness">预置明度</param>
-        /// <param name="MaxGrayVlue">生成图的最大灰度值</param>
+        /// <param name="MaxGrayVlue">生成图的最大灰度（色度）值</param>
+        /// <param name="IsGray">是否生成灰度图</param>
         /// <remarks>注意应该从返回中取结果，而不是形参中，因为输入图引用有可能已经改变</remarks>
-        static public  Bitmap Sketch(Bitmap SourceBmp, double Contrast=0.1, double Brightness=0,byte MaxGrayVlue=70)
+        static public  Bitmap Sketch(Bitmap SourceBmp, double Contrast=0.1, double Brightness=0,byte MaxGrayVlue=70,bool IsGray=true)
         {
             int X, Y;
             int SourceWidth, SourceHeight, SourceStride, DestStride, DestHeight;
@@ -142,12 +143,20 @@ namespace ImageFilter
                             R= Math.Max(LutP[PowerRed], SourceDataPT[SourceYIndex]);
                             G= Math.Max(LutP[PowerGreen], SourceDataPT[SourceYIndex]);
                             B= Math.Max(LutP[PowerBlue], SourceDataPT[SourceYIndex]);
-                            G = (byte)(.299 * R + .587 * G + .114 * B);
-                            if (G < MaxGrayVlue) G = MaxGrayVlue;
-                            SourceDataP[SourceYIndex] = G;
-                            SourceDataP[SourceYIndex + 1] = G;
-                            SourceDataP[SourceYIndex + 2] = G;
-                            
+                            if (IsGray)
+                            {
+                                G = (byte)(.299 * R + .587 * G + .114 * B);
+                                if (G < MaxGrayVlue) G = MaxGrayVlue;
+                                SourceDataP[SourceYIndex] = G;
+                                SourceDataP[SourceYIndex + 1] = G;
+                                SourceDataP[SourceYIndex + 2] = G;
+                            }
+                            else
+                            {
+                                SourceDataP[SourceYIndex] =R<MaxGrayVlue?MaxGrayVlue:R;
+                                SourceDataP[SourceYIndex + 1] = G < MaxGrayVlue ? MaxGrayVlue : G;
+                                SourceDataP[SourceYIndex + 2] = B < MaxGrayVlue ? MaxGrayVlue : B;
+                            }
 
                             SourceYIndex += 3;
                             DestYindex += 3;

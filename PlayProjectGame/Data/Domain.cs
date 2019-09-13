@@ -46,6 +46,10 @@ namespace PlayProjectGame.Data
                 songArtist = value;
             }
         }
+        public string[] GetSongArtists
+        {
+            get=> SongArtist.Split('/', '&', ',', '、', '(', ')','（','）','，', '・');
+        }
         private string songAlbum;
         public string SongAlbum
         {
@@ -138,6 +142,9 @@ namespace PlayProjectGame.Data
     {
         public SongInfo SongInfo { get; set; }
         public int SongInfoIndex { get; set; }
+        /// <summary>
+        /// 以‘-’格式构,(eg.netcloudId-{id})
+        /// </summary>
         public string Source { get; set; }
         public string SourceName { set; get; }
         public long FileTime { set; get; }
@@ -164,7 +171,7 @@ namespace PlayProjectGame.Data
     {
         int songty;
         /// <summary>
-        /// 1--本地，2--网易云，3--OSU
+        /// 1--本地，2--网易云，3--OSU, 4--专辑，5--艺术家
         /// </summary>
         public int PlayListType
         {

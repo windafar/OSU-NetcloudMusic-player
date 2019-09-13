@@ -45,12 +45,12 @@ namespace PlayProjectGame
             PlayListData PlayListData = null;
             if (cursong.Source.IndexOf("osuname_") == 0)
             {
-                var f = cursong.Source.Remove(0, 8);
+                var f = cursong.Source.Remove(0, "osuname_".Length);
                 PlayListData = MainWindow.CurMainWindowInstence.OsuData.FirstOrDefault(x => x.PlatListName == f);
             }
-            if (cursong.Source.IndexOf("netid_") == 0)
+            else if (cursong.Source.IndexOf("netid_") == 0)
             {
-                var f = cursong.Source.Remove(0, 6);
+                var f = cursong.Source.Remove(0, "netid_".Length);
                 PlayListData = MainWindow.CurMainWindowInstence.NetCloudData.FirstOrDefault(x => {
                     if (x.PlayListId == f)
                     {

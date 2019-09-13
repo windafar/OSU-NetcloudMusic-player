@@ -177,6 +177,9 @@
     <Compile Include="SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SongList\ArtsSelect.xaml.cs">
+      <DependentUpon>ArtsSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongList\MaximumScrollConver.cs" />
     <Compile Include="SongList\SongList.xaml.cs">
       <DependentUpon>SongList.xaml</DependentUpon>
@@ -276,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SongList\ArtsSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

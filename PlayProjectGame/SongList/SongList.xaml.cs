@@ -32,7 +32,7 @@ namespace PlayProjectGame
     public partial class SongList : Page, IProvideCustomContentState
     {
         //拓展的ListView属性放到自定义控件xaml有时候报名称已被使用的异常，轮流替换命名空间编译又没问题了，感觉像是编译器bug，先扔这儿吧
-        
+
         public static readonly DependencyProperty HearderBackgroudProperty = DependencyProperty.Register("HearderBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.White));
         public static readonly DependencyProperty ListViewBackgroudProperty = DependencyProperty.Register("ListViewBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.White));
 
@@ -60,7 +60,7 @@ namespace PlayProjectGame
         public PlayListData PLD;
         static public PlayListData PLDStart;
         //放在最耗时的钩子上用来执行加载完成时的命令
-        static public Queue<string> StartCmd=new Queue<string>();
+        static public Queue<string> StartCmd = new Queue<string>();
 
         internal static void SetPlayListData(PlayListData pld)
         {
@@ -83,72 +83,75 @@ namespace PlayProjectGame
         {
             ImageThread = new Thread((ThreadStart)delegate
             {
-            byte[] AbImageBuff = null;
-            long result;
-            if (GlobalConfigClass._Config.UseCouldMusicSongListCover && long.TryParse(Pid, out result))
-            {
-                AbImageBuff = Data.NetCloudMusicSource.GetCloudMusicSource().GetSongListImage(PLD.PlayListNetImageUri);
-                //之后处理
-            }
-            if (AbImageBuff == null)
-            {
-                if (PLD.PlayListType == 2 || PLD.PlayListType == 1)
+                byte[] AbImageBuff = null;
+                long result;
+                if (GlobalConfigClass._Config.UseCouldMusicSongListCover && long.TryParse(Pid, out result))
+                {
+                    AbImageBuff = Data.NetCloudMusicSource.GetCloudMusicSource().GetSongListImage(PLD.PlayListNetImageUri);
+                    //之后处理
+                }
+                if (AbImageBuff == null)
+                {
                     for (int i = 0; i < PLD.Songs.Count; i++)
                     {
-                        if (PLD.Songs[i].SongInfo.SongPath != null)
+                        if (PLD.Songs[i].SongInfo.SongType == 1 || PLD.Songs[i].SongInfo.SongType == 2)
                         {
-                            MusicTag MT = new MusicTag();
-                            AbImageBuff = MT.GetJPGBuffer(PLD.Songs[i].SongInfo, 10240);
-                            if (AbImageBuff != null)
+                            if (PLD.Songs[i].SongInfo.SongPath != null)
                             {
-                                var ms = new MemoryStream(AbImageBuff);
-                                var img = Helper.UIhelper.ConverTotBitmapImage(new System.Drawing.Bitmap(ms));
-                                img.Freeze();
-                                ms.Dispose();
-                                Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
+                                MusicTag MT = new MusicTag();
+                                AbImageBuff = MT.GetJPGBuffer(PLD.Songs[i].SongInfo, 10240);
+                                if (AbImageBuff != null)
+                                {
+                                    var ms = new MemoryStream(AbImageBuff);
+                                    var img = Helper.UIhelper.ConverTotBitmapImage(new System.Drawing.Bitmap(ms));
+                                    img.Freeze();
+                                    ms.Dispose();
+                                    Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
 
-                                break;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (PLD.Songs[i].SongInfo.SongType == 3)
+                        {
+                            if (PLD.Songs[i].SongInfo.OsuPath != null)
+                            {
+                                var osubgPath = OsuLocalDataGeter.LoadOsuFileNameAs(1, PLD.Songs[i].SongInfo.OsuPath);
+                                if (osubgPath == "") continue;
+                                if (File.Exists(osubgPath))
+                                {
+                                    AbImageBuff = File.ReadAllBytes(osubgPath);
+
+                                    var GenerImage = new SalientRegionDetection().GetSRDFromPath(osubgPath, 1366, 256, "H", "jpg", new System.Drawing.Rectangle(0, 0, 256, 256), 210);
+                                    var img = Helper.UIhelper.ConverTotBitmapImage(GenerImage);
+                                    img.Freeze();
+
+                                    Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
+
+                                    break;
+                                }
                             }
                         }
                     }
-                else if (PLD.PlayListType == 3)
-                    for (int i = 0; i < PLD.Songs.Count; i++)
-                    {
-                        if (PLD.Songs[i].SongInfo.OsuPath != null)
-                        {
-                            var osubgPath = OsuLocalDataGeter.LoadOsuFileNameAs(1, PLD.Songs[i].SongInfo.OsuPath);
-                            if (osubgPath == "") continue;
-                            if (File.Exists(osubgPath))
-                            {
-                                AbImageBuff = File.ReadAllBytes(osubgPath);
-
-                                var GenerImage = new SalientRegionDetection().GetSRDFromPath(osubgPath, 1366, 256, "H", "jpg", new System.Drawing.Rectangle(0, 0, 256, 256), 210);
-                                var img = Helper.UIhelper.ConverTotBitmapImage(GenerImage);
-                                img.Freeze();
-
-                                Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
-
-                                break;
-                            }
-                        }
-                    }
-            }
-            else {
+                }
+                else
+                {
                     var ms = new MemoryStream(AbImageBuff);
                     var img = Helper.UIhelper.ConverTotBitmapImage(new System.Drawing.Bitmap(ms));
                     img.Freeze();
                     ms.Dispose();
                     Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
-            }
-            if (AbImageBuff == null) {
-            Dispatcher.BeginInvoke((ThreadStart)delegate
-            {
-                SongListImage.Source = null;
-            });
-            return;
-        }
+                }
+                if (AbImageBuff == null)
+                {
+                    Dispatcher.BeginInvoke((ThreadStart)delegate
+                    {
+                        SongListImage.Source = null;
+                    });
+                    return;
+                }
 
-            Stream stream = new MemoryStream(AbImageBuff);
+                Stream stream = new MemoryStream(AbImageBuff);
                 ///heard背景
                 double headerHeight = 36;// scrollViewer==null?36:scrollViewer.ActualHeight;
                 headerHeight = headerHeight * UIhelper.GetSystemDpi().Width * 0.01;
@@ -165,8 +168,9 @@ namespace PlayProjectGame
                         ImageBasic.BasicMethodClass.MakeThumbnail(srcBitmap, memoryStream, 900, 900, "W", "jpg");
                         srcBitmap.Dispose();
                         srcBitmap = new System.Drawing.Bitmap(memoryStream);
+                        memoryStream.Dispose();
                     }
-                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.1, 0);
+                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.1);
                     //ImageBasic.BasicMethodClass.WriteEdgeGradual(srcBitmap);//目的是融合图片，有问题，考虑数学上的办法（拉普拉斯和泊松）
 
                     srcBitmap = ImageBasic.BasicMethodClass.AddSpace(srcBitmap, 0, 36, 0, 24);
@@ -177,7 +181,7 @@ namespace PlayProjectGame
                     HearderBackgroud = new ImageBrush(SRDBrushImage) { Stretch = Stretch.None, AlignmentX = AlignmentX.Right, AlignmentY = AlignmentY.Center };
                     if (GlobalConfigClass._Config.UseSongListPageBackground)
                         ListViewBackgroud = new ImageBrush(UIhelper.ConverTotBitmapImage(srcBitmap)) { Stretch = Stretch.None, AlignmentY = AlignmentY.Bottom, AlignmentX = AlignmentX.Right };
-                });                
+                });
             });
             if (ImageThread.ThreadState == ThreadState.Unstarted || ImageThread.ThreadState == ThreadState.Stopped)
                 ImageThread.Start();
@@ -238,7 +242,7 @@ namespace PlayProjectGame
                 sinfo = ((FrameworkElement)e.OriginalSource).DataContext as SongInfoExpend;
             }
             catch { return; }
-                if (sinfo != null && sinfo.SongInfo.SongPath != null)
+            if (sinfo != null && sinfo.SongInfo.SongPath != null)
             {
                 PlayListBase.AddToPlayList(sinfo, true);
                 PlayListBase.PlayAndExceptionPass();
@@ -285,12 +289,21 @@ namespace PlayProjectGame
             SongListInfo.Text = state.PLD.PlayListInfo;
             SongListCreator.Text = state.PLD.UersName;
             GetImage(state.PLD.PlayListId);
-        }
+            if (state.curSelected != null)
+            {
+                SongListListView.SelectedItem = state.curSelected;
+                SongListListView.ScrollIntoView(state.curSelected);
 
+            }
+        }
+        /// <summary>
+        /// 用于保存历史状态
+        /// </summary>
+        /// <returns></returns>
         public CustomContentState GetContentState()
         {
 
-            return new PlayListJournalEntry(PLD, ReplySongListPage_Itself);
+            return new PlayListJournalEntry(PLD, ReplySongListPage_Itself,SongListListView.SelectedItem);
 
         }
 
@@ -302,11 +315,11 @@ namespace PlayProjectGame
 
             //tt = new Timer(delegate
             //{
-                PlayListBase.PlayAndExceptionPass();
+            PlayListBase.PlayAndExceptionPass();
             //    PlayListBase.PlayListIndex++;
             //}, null, 2000, 2000);
 
-           
+
         }
 
         private void AddSongListAddButton_Click(object sender, RoutedEventArgs e)
@@ -316,11 +329,11 @@ namespace PlayProjectGame
 
         private void SongListAddMenu_Click(object sender, RoutedEventArgs e)
         {
-            
+
             SongInfoExpend songEx = SongListListView.SelectedItem as SongInfoExpend;
             if (songEx != null)
             {
-                for(int i = SongListListView.SelectedItems.Count-1; i>=0; i--)
+                for (int i = SongListListView.SelectedItems.Count - 1; i >= 0; i--)
                     PlayListBase.AddToPlayList((SongInfoExpend)SongListListView.SelectedItems[i], false);
             }
         }
@@ -339,8 +352,9 @@ namespace PlayProjectGame
                         {
                             var t = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                             var fi = new FileInfo(x.SongInfo.SongPath);
-                            var dir = System.Environment.CurrentDirectory + "\\back\\"+ OtherHelper.ReplaceValidFileName(t)+"\\";
-                            if (!Directory.Exists(dir)) {
+                            var dir = System.Environment.CurrentDirectory + "\\back\\" + OtherHelper.ReplaceValidFileName(t) + "\\";
+                            if (!Directory.Exists(dir))
+                            {
                                 Directory.CreateDirectory(dir);
                             }
                             fi.MoveTo(dir + fi.Name);
@@ -356,28 +370,31 @@ namespace PlayProjectGame
         private void SongListListView_Loaded(object sender, RoutedEventArgs e)
         {
             var scrollbar = UIhelper.FindChild<ScrollBar>(SongListListView, "PART_VerticalScrollBar");
-            Binding MaximumScrollBinding = new Binding() { NotifyOnTargetUpdated=true, Source = scrollbar, Path = new PropertyPath("Maximum"), Mode = BindingMode.OneWay, Converter = new MaximumScrollConver(), ConverterParameter = _Grid };
+            Binding MaximumScrollBinding = new Binding() { NotifyOnTargetUpdated = true, Source = scrollbar, Path = new PropertyPath("Maximum"), Mode = BindingMode.OneWay, Converter = new MaximumScrollConver(), ConverterParameter = _Grid };
             Binding ValueScrollBinding = new Binding() { Source = scrollbar, Path = new PropertyPath("Value"), Mode = BindingMode.OneWay };
             Binding MinimumScrollBinding = new Binding() { Source = scrollbar, Path = new PropertyPath("Minimum"), Mode = BindingMode.OneWay };
             Binding ViewPortScrollBinding = new Binding() { Source = SongListPageScrollBar, Path = new PropertyPath("ActualHeight"), Mode = BindingMode.OneWay };
-            
+
             SongListPageScrollBar.SetBinding(ScrollBar.MaximumProperty, MaximumScrollBinding);
             SongListPageScrollBar.SetBinding(ScrollBar.ValueProperty, ValueScrollBinding);
             SongListPageScrollBar.SetBinding(ScrollBar.MinimumProperty, MinimumScrollBinding);
             SongListPageScrollBar.SetBinding(ScrollBar.ViewportSizeProperty, ViewPortScrollBinding);
 
 
-            while (StartCmd.Count>0) {
+            while (StartCmd.Count > 0)
+            {
                 var cmd = StartCmd.Dequeue().Split('_');
                 if (cmd.Length < 2) return;
-                switch (cmd[0]) {
+                switch (cmd[0])
+                {
                     case "select":
                         if (cmd[1] == "$currentplay")
                         {
                             SongListListView.ScrollIntoView(PlayListBase.CurSongInfoEx);
                             SongListListView.SelectedItem = PlayListBase.CurSongInfoEx;
                         }
-                        else {
+                        else
+                        {
                             var item = this.PLD.Songs.FirstOrDefault(x => x.SongInfo.SongName == cmd[1]);
                             SongListListView.ScrollIntoView(item);
                             SongListListView.SelectedItem = item;
@@ -418,7 +435,7 @@ namespace PlayProjectGame
                         var newCurMargin = new Thickness(0, _Grid.Margin.Top - value, 0, 0);
                         if (-newCurMargin.Top > SongListPageScrollBar.Maximum)
                             return;//抹除误差，这个误差应该是由于最大滚动数的改变造成，
-                                    //直接使用绑定好的滚动条数据即可
+                                   //直接使用绑定好的滚动条数据即可
                         _Grid.Margin = newCurMargin;
                         SongListPageScrollBar.Value = -newCurMargin.Top;
                     }
@@ -489,7 +506,7 @@ namespace PlayProjectGame
 
             var stffimage = new System.Drawing.Bitmap("AppResource\\overlap1.png");
             ImageBasic.BasicMethodClass.Overlap(GenerImage, stffimage);
-            GenerImage=ImageBasic.BasicMethodClass.AddSpace(GenerImage, 1256, 0, 0, 0);
+            GenerImage = ImageBasic.BasicMethodClass.AddSpace(GenerImage, 1256, 0, 0, 0);
 
             stffimage.Dispose();
 
@@ -523,7 +540,7 @@ namespace PlayProjectGame
 
         private void ExportSongList_Click(object sender, RoutedEventArgs e)
         {
-            File.WriteAllLines(OtherHelper.ReplaceValidFileName(PLD.PlatListName)+".m3u8", PLD.Songs.Select(x => x.SongInfo.SongPath).ToArray(),UTF8Encoding.UTF8);
+            File.WriteAllLines(OtherHelper.ReplaceValidFileName(PLD.PlatListName) + ".m3u8", PLD.Songs.Select(x => x.SongInfo.SongPath).ToArray(), UTF8Encoding.UTF8);
         }
 
         private void SongListPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -549,7 +566,7 @@ namespace PlayProjectGame
             if (sub.Exists)
             {
                 TimeLineListBox.ItemsSource = sub.GetFiles().OrderBy(x => x.CreationTime)
-                    .Select(x=>new {Time=x.Name,Path=x.FullName })
+                    .Select(x => new { Time = x.Name, Path = x.FullName })
                     ;
             }
             if (TimeLineListBox.Visibility == Visibility.Visible)
@@ -567,7 +584,7 @@ namespace PlayProjectGame
             {
                 pld = OtherHelper.ReadXMLObj<PlayListData>(File.ReadAllText(filepath));
             }
-            catch(Exception ex) { MessageBox.Show(ex.Message,"读取历史失败"); }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "读取历史失败"); }
             if (pld != null)
             {
                 if (NavigationService.Content != null)
@@ -575,7 +592,7 @@ namespace PlayProjectGame
                     SongList Pr = NavigationService.Content as SongList;
                     if (Pr != null)
                     {
-                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage));
+                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
                     }
                 }
                 pld.PlatListName += "_" + dataconext.Time;
@@ -584,6 +601,71 @@ namespace PlayProjectGame
                 if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList/SongList.xaml")
                     NavigationService.Navigate(NextUri);
                 else NavigationService.Refresh();
+            }
+        }
+
+        private void SongAlbumLinkClick(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService == null) return;
+            var data = ((TextBlock)sender).DataContext as SongInfoExpend;
+            string albm = data.SongInfo.SongAlbum;
+            string[] arts = data.SongInfo.GetSongArtists;
+            var netcloud = mainWindow.NetCloudData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum==albm ).ToList();
+            var osu = mainWindow.OsuData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum== albm).ToList();
+            netcloud.AddRange(osu);
+            netcloud = netcloud.GroupBy(x => x.SongInfo.SongName).Select(x => x.First()).ToList();
+            PlayListData pld = null;
+            pld = new PlayListData() { PlatListName = "专辑：" + albm, PlayListType = 4, Songs = netcloud };
+            if (NavigationService.Content != null)
+            {
+                SongList Pr = NavigationService.Content as SongList;
+                if (Pr != null)
+                {
+                    NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
+                }
+            }
+            SongList.SetPlayListData(pld);
+            Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+            if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList/SongList.xaml")
+                NavigationService.Navigate(NextUri);
+            else NavigationService.Refresh();
+        }
+
+        private void SongArtistLinkCilcked(object sender, MouseButtonEventArgs e)
+        {
+            if (NavigationService == null) return;
+            var data = ((TextBlock)sender).DataContext as SongInfoExpend;
+            string albm = data.SongInfo.SongAlbum;
+            string[] arts = data.SongInfo.GetSongArtists;
+            arts = arts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            if (arts.Length == 1)
+            {
+                var netcloud = MainWindow.CurMainWindowInstence.NetCloudData.AsParallel().SelectMany(x => x.Songs).Where(x => arts[0].IndexExistOfAny(x.SongInfo.GetSongArtists)).ToList();
+                var osu = MainWindow.CurMainWindowInstence.OsuData.AsParallel().SelectMany(x => x.Songs).Where(x => arts[0].IndexExistOfAny(x.SongInfo.GetSongArtists)).ToList();
+                netcloud.AddRange(osu);
+                netcloud = netcloud.GroupBy(x => x.SongInfo.SongName).Select(x => x.First()).ToList();
+                if (NavigationService.Content != null)
+                {
+                    SongList Pr = NavigationService.Content as SongList;
+                    if (Pr != null)
+                    {
+                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
+                    }
+                }
+
+                PlayListData pld = null;
+                pld = new PlayListData() { PlatListName = "艺术家：" + arts[0], PlayListType = 5, Songs = netcloud };
+                SongList.SetPlayListData(pld);
+                Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                if (NavigationService.Source == null || NavigationService.Source.OriginalString != "SongList/SongList.xaml")
+                    NavigationService.Navigate(NextUri);
+                else NavigationService.Refresh();
+
+            }
+            else
+            {
+                ArtsSelect artsSelect = new ArtsSelect(arts);
+                artsSelect.Show();
             }
         }
     }

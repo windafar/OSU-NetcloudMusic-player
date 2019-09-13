@@ -101,7 +101,7 @@ namespace PlayProjectGame.Data
                                     {
                                         SongInfo = x.First().SongInfo,
                                         SongInfoIndex = y,
-                                        Source = "osuname_All",
+                                        Source = "osuname_OSU曲库",
                                         SourceName = "OSU曲库",
                                         FileTime=x.First().CreatTime
                                     }).OrderByDescending(x=>x.FileTime).ToList()

@@ -185,7 +185,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
-                                            <TextBlock  FontSize="18" Text="{Binding Path=SongInfo.SongArtist}"></TextBlock>
+                                            <TextBlock Cursor="Hand" MouseDown="SongArtistLinkCilcked" FontSize="18" Text="{Binding Path=SongInfo.SongArtist}"></TextBlock>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -206,7 +206,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Opacity="{Binding Path=SongInfo.SongPath,Converter={StaticResource EnableConver}}">
-                                            <TextBlock  FontSize="18" Text="{Binding Path=SongInfo.SongAlbum}"></TextBlock>
+                                            <TextBlock Cursor="Hand" MouseDown="SongAlbumLinkClick" FontSize="18" Text="{Binding Path=SongInfo.SongAlbum}">
+                                            </TextBlock>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
