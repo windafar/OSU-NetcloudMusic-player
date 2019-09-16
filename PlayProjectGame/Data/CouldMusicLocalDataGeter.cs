@@ -339,54 +339,64 @@ namespace PlayProjectGame.Data
             NetClouldMusicData = AllUserPlayList;
             Task.Run(() =>
             {
-                OtherHelper.WriteXMLSerializer(AllUserPlayList, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-                #region 备份歌单数据
                 string filename = DateTime.Now.ToString("yy-MM-dd hh:mm:ss.ff");
-                if (NetClouldMusicData != null && NetClouldMusicData.Count != 0)
-                {
-                    var dir = Directory.CreateDirectory(GlobalConfigClass.DIR_CLOUDMUSIC_SONGLISTHISTORY);
-                    foreach (var u in NetClouldMusicData)
+                //try
+                //{
+                    OtherHelper.WriteXMLSerializer(AllUserPlayList, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
+                    #region 备份歌单数据
+                    if (NetClouldMusicData != null && NetClouldMusicData.Count != 0)
                     {
-                        var subdir = dir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(u.Username + u.Uid));
-                        u.Pids.ForEach(x =>
+                        var dir = Directory.CreateDirectory(GlobalConfigClass.DIR_CLOUDMUSIC_SONGLISTHISTORY);
+                        foreach (var u in NetClouldMusicData)
                         {
-                            var songlistdir = subdir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(x.PlatListName + x.PlayListId));
-                            var path = songlistdir.FullName + "\\" + OtherHelper.ReplaceValidFileName(filename);
-                            if (songlistdir.GetFiles().Count() == 0)
+                            var subdir = dir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(u.Username + u.Uid));
+                            u.Pids.ForEach(x =>
                             {
-                                OtherHelper.WriteXMLSerializer(x, typeof(PlayListData), path);
-                                return;
-                            }
-                            var fs_source = songlistdir.GetFiles().OrderByDescending(f => f.CreationTime).First().OpenRead();
-                            var ms_dest = OtherHelper.WriteXMLSerializerToStream(x, typeof(PlayListData));
-                            if (fs_source.Length != ms_dest.Length)
-                            {
-                                byte[] source = new byte[(int)fs_source.Length];
-                                byte[] dest = new byte[(int)ms_dest.Length];
-                                fs_source.Read(source, 0, source.Length);
-                                ms_dest.Read(dest, 0, dest.Length);
-                                bool iseq = true;
-                                for (int j = 0; j < ms_dest.Length; j++)
+                                var songlistdir = subdir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(x.PlatListName + x.PlayListId));
+                                var path = songlistdir.FullName + "\\" + OtherHelper.ReplaceValidFileName(filename);
+                                if (songlistdir.GetFiles().Count() == 0)
                                 {
-                                    if (source[j] != dest[j])
+                                    OtherHelper.WriteXMLSerializer(x, typeof(PlayListData), path);
+                                    return;
+                                }
+                                var fs_source = songlistdir.GetFiles().OrderByDescending(f => f.CreationTime).First().OpenRead();
+                                var ms_dest = OtherHelper.WriteXMLSerializerToStream(x, typeof(PlayListData));
+
+                                byte[] dest = new byte[(int)ms_dest.Length];
+                                ms_dest.Read(dest, 0, dest.Length);
+                                if (fs_source.Length == ms_dest.Length)
+                                {
+                                    byte[] source = new byte[(int)fs_source.Length];
+                                    fs_source.Read(source, 0, source.Length);
+                                    bool iseq = true;
+                                    for (int j = 0; j < ms_dest.Length; j++)
                                     {
-                                        iseq = false;
-                                        break;
+                                        if (source[j] != dest[j])
+                                        {
+                                            iseq = false;
+                                            break;
+                                        }
+                                    }
+                                    if (!iseq)
+                                    {
+                                        File.WriteAllText(path, Encoding.UTF8.GetString(dest));
                                     }
                                 }
-                                if (!iseq)
-                                {
-                                    File.WriteAllBytes(path, dest);
-                                }
-                            }
+                                else
+                                    File.WriteAllText(path, Encoding.UTF8.GetString(dest));
 
-                            fs_source.Dispose();
-                            ms_dest.Dispose();
 
-                        });
+                                fs_source.Dispose();
+                                ms_dest.Dispose();
+
+                            });
+                        }
                     }
-                }
-                #endregion
+                    #endregion
+               // }
+              //  catch (Exception e) {
+              //      File.WriteAllText("log_"+ filename + ".txt", e.Message);
+             //   }
             });
             return AllUserPlayList;
 

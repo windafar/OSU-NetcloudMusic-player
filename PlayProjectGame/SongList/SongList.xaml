@@ -93,19 +93,14 @@
                         <TextBox Visibility="Collapsed" Name="SearcherBox" TextChanged="SearcherBox_TextChanged" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"  HorizontalAlignment="Right" Width="128" Height="17" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,12,8">
                         </TextBox>
                     </StackPanel>
-                    <StackPanel VerticalAlignment="Center">
+                    <StackPanel MaxHeight="128" VerticalAlignment="Center">
                         <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="SongListHistory"   Margin="12,0,0,0" Background="{x:Null}">
                             <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="History_Click">历史</Hyperlink>
                         </TextBlock>
-                        <ListBox Name="TimeLineListBox" Visibility="Collapsed" Width="200" Height="256" Margin="12,0,0,0">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <userdefinedcontrol:VirtualizingWrapPanel ChildHeight="16"></userdefinedcontrol:VirtualizingWrapPanel>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
+                        <ListBox Name="TimeLineListBox" Visibility="Collapsed" Width="200" Margin="12,0,0,0" Height="110">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Time}" MouseDown="HistoryTime_MouseDown"></TextBlock>
+                                    <TextBlock Height="16" Text="{Binding Time}" MouseDown="HistoryTime_MouseDown"></TextBlock>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

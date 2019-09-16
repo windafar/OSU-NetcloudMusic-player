@@ -170,6 +170,7 @@ namespace PlayProjectGame.Helper
             try
             {
                 xs.Serialize(ms, obj);
+                ms.Seek(0, SeekOrigin.Begin);
             }
             catch (Exception ex)
             {

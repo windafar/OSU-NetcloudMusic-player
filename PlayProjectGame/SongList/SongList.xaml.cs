@@ -561,7 +561,7 @@ namespace PlayProjectGame
             var dir = new DirectoryInfo(GlobalConfigClass.DIR_CLOUDMUSIC_SONGLISTHISTORY);
             if (!dir.Exists) dir.Create();
             if (dir.GetDirectories().Count() == 0) return;
-            string path = dir.GetDirectories().Last().FullName + "\\" + PLD.PlatListName + PLD.PlayListId;
+            string path = dir.GetDirectories().Last().FullName + "\\" + OtherHelper.ReplaceValidFileName(PLD.PlatListName) + PLD.PlayListId;
             var sub = new DirectoryInfo(path);
             if (sub.Exists)
             {
