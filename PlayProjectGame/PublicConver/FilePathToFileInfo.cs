@@ -16,6 +16,7 @@ namespace PlayProjectGame.PublicConver
         {
             var path = (string)value;
             string param = ((string)parameter).ToLower();
+            if (path == null) return "";
             FileInfo fileInfo = new FileInfo(path);
             if (param == "fullname")
                 return fileInfo.FullName;
