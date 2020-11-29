@@ -158,6 +158,7 @@
     <Compile Include="PlayList\QuickPlayListControl.xaml.cs">
       <DependentUpon>QuickPlayListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PublicConver\FilePathToFileInfo.cs" />
     <Compile Include="PublicConver\RatioConver.cs" />
     <Compile Include="SalientRegionDetection.cs" />
     <Compile Include="PlayList\SimplePlayList.xaml.cs">
@@ -199,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MenuItemContainerStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="sobglistMenuItemTemp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

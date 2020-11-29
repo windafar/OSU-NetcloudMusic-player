@@ -377,6 +377,16 @@ namespace AddIn.Audio
             throw new NotImplementedException();
         }
 
+        public IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath, string tag)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion 接口：IDisposable
 
         ///https://github.com/naudio/NAudio/blob/master/Docs/OutputDeviceTypes.md

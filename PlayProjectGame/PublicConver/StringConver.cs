@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace PlayProjectGame.PublicConver
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string result = value as string;
-            return string.IsNullOrWhiteSpace(result)?0.7 : 1;
+            return (string.IsNullOrWhiteSpace(result)||!File.Exists(result))?0.7 : 1;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

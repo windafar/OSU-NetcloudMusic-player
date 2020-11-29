@@ -66,5 +66,6 @@ namespace AddIn.Audio
         List<string> GetDirectSoundOutDeviceName();
         List<string> GetWasApiDeviceName();
         List<string> GetWaveOutDeviceName();
+        IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath,string tag);
     }
 }

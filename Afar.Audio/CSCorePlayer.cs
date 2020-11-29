@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace AddIn.Audio
@@ -243,6 +244,20 @@ namespace AddIn.Audio
             InitializePlayback(Volume,openMethods, device);
         }
 
+        public IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath) 
+        {
+            var i = CodecFactory.Instance.GetCodec(songpath);
+            var w = i.WaveFormat;
+            i.Dispose();
+           return w.GetType().GetProperties().Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(w).ToString())).ToList();
+        }
+        public IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath, string tag)
+        {
+            var i = CodecFactory.Instance.GetCodec(songpath);
+            var w = i.WaveFormat;
+            i.Dispose();
+            return w.GetType().GetProperties().Where(x=>x.Name.ToLower()== tag).Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(w).ToString())).ToList();
+        }
         public void Play()
         {
             

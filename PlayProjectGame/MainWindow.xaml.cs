@@ -136,7 +136,8 @@ namespace PlayProjectGame
         {
             ClundMusicTreeNewThread = new Thread(delegate ()
             {
-                List<PlayListData> List = CouldMusicLocalDataGeter.GetSongList().Last().Pids;
+                var list = CouldMusicLocalDataGeter.GetSongList();
+                List<PlayListData> List = list.Last().Pids;
                 NetCloudData = List;
 
                 Dispatcher.Invoke((ThreadStart)delegate ()

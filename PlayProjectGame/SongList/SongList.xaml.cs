@@ -668,5 +668,12 @@ namespace PlayProjectGame
                 artsSelect.Show();
             }
         }
+
+        private void DetailedMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ((MenuItem)sender).DataContext = SongListListView.SelectedItem;
+
+
+        }
     }
 }

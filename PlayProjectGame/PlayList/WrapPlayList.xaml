@@ -5,23 +5,69 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:efs="http://schemas.microsoft.com/expression/2010/effects"
       xmlns:local="clr-namespace:PlayProjectGame.PlayList"
-      xmlns:UserDefinedControl="clr-namespace:PlayProjectGame.UserDefinedControl"
+      xmlns:UserDefinedControl="clr-namespace:PlayProjectGame.UserDefinedControl" xmlns:publicconver="clr-namespace:PlayProjectGame.PublicConver"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="WrapPlayList" Unloaded="Page_Unloaded" Loaded="Page_Loaded">
     <Page.Resources>
-        <local:ConvaSongInfoToAlbum x:Key="ConvaSongInfoToAlbum"></local:ConvaSongInfoToAlbum>
+        <UserDefinedControl:ConvaSongInfoToAlbum x:Key="ConvaSongInfoToAlbum"></UserDefinedControl:ConvaSongInfoToAlbum>
         <UserDefinedControl:VirtualizingWrapPanel x:Key="VirtualizingWrapPanel"></UserDefinedControl:VirtualizingWrapPanel>
+        <Style TargetType="MenuItem" x:Key="MenuItemOverwriteStyle">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="BorderBrush" Value="White"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="{Binding PlacementTarget.BorderBrush, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <publicconver:FilePathToFileInfo x:Key="FilePathToFileInfo"></publicconver:FilePathToFileInfo>
+
     </Page.Resources>
     <Grid Name="PlayListGrid" MouseDown="PlayListGrid_MouseDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="259*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <!--<Grid.Effect>
-            <BlurEffect Radius="100" RenderingBias="Performance"/>
-        </Grid.Effect>-->
-        <ListBox BorderThickness="0" KeyDown="WrapPlayListBox_KeyDown"  MouseDoubleClick="WrapSongList_MouseDoubleClick" Loaded="WrapPlayListBox_Loaded" Name="WrapPlayListBox"   ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.RowSpan="2" AllowDrop="True" Drop="WrapPlayListBox_Drop" DragEnter="WrapPlayListBox_DragEnter" DragLeave="WrapPlayListBox_DragLeave">
+        <Image Name="BackgroundImage1" Stretch="UniformToFill"></Image>
+        <Image Name="BackgroundImage2" Stretch="UniformToFill"></Image>
+        <Rectangle Panel.ZIndex="1023" IsHitTestVisible="False" >
+            <Rectangle.Fill>
+                <VisualBrush Visual="{Binding ElementName=BackgroundImage1}" Stretch="Uniform"></VisualBrush>
+            </Rectangle.Fill>
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0.3" Color="Transparent"></GradientStop>
+                    <GradientStop Offset="1" Color="#44000000"></GradientStop>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+            <Rectangle.RenderTransform>
+                <ScaleTransform ScaleX="-1"></ScaleTransform>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Panel.ZIndex="1024" IsHitTestVisible="False" >
+            <Rectangle.Fill>
+                <VisualBrush Visual="{Binding ElementName=BackgroundImage2}" Stretch="Uniform"></VisualBrush>
+            </Rectangle.Fill>
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0.3" Color="Transparent"/>
+                    <GradientStop Offset="1" Color="#44000000"></GradientStop>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+            <Rectangle.RenderTransform>
+                <ScaleTransform ScaleX="-1"></ScaleTransform>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+        <ListBox BorderThickness="0" KeyDown="WrapPlayListBox_KeyDown"  MouseDoubleClick="WrapSongList_MouseDoubleClick" Loaded="WrapPlayListBox_Loaded" Name="WrapPlayListBox"   ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.RowSpan="2" AllowDrop="True" Drop="WrapPlayListBox_Drop" DragEnter="WrapPlayListBox_DragEnter" DragLeave="WrapPlayListBox_DragLeave" BorderBrush="{Binding ElementName=page,Path=MainWindow.CurrentThemeBrush}">
+            <ListBox.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0.5,1">
+                    <GradientStop Offset="1"/>
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="#C0ffffff" Offset="0.485"/>
+                </LinearGradientBrush>
+            </ListBox.Background>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UserDefinedControl:VirtualizingWrapPanel
@@ -59,8 +105,82 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ContextMenu>
+                <ContextMenu BorderThickness="1" Background="White" Template="{StaticResource ContextMenuTemp}" >
+                    <MenuItem Name="SongListGoDir" Header="转到源" Click="GoSource_Click"
+                                  Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}" >
+                    </MenuItem>
+
+                    <MenuItem Name="SongListGoSource" Header="转到目录" Click="SongListGoDir_Click"
+                                  Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}" >
+                    </MenuItem>
+                    <MenuItem Name="DetailedMenuItem" Header="详细信息" SubmenuOpened="DetailedMenuItem_Click" Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                  >
+                        <MenuItem
+                                      Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                      >
+                            <MenuItem.Header>
+                                <StackPanel Margin="-22,0,-10,0" Orientation="Horizontal" Background="White">
+                                    <Image Name="contuxtAlbmCover" Width="360" Source="{Binding Converter={StaticResource ConvaSongInfoToAlbum}}"></Image>
+                                    <StackPanel Margin="12,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongName：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongName}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongArt：</TextBlock>
+                                            <TextBlock MouseDown="SongArtistLinkCilcked"  TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongArtist}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongAlbum：</TextBlock>
+                                            <TextBlock MouseDown="SongAlbumLinkClick" TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongAlbum}">
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongLengh：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongLengh}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongPath：</TextBlock>
+                                            <TextBlock MouseDown="SongListGoDir_Click" TextWrapping="Wrap"  TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongPath}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>SongType：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongType}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                                            <TextBlock>SampleRate：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=SampleRate}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>BitsPerSample：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=BitsPerSample}"></TextBlock>
+                                        </StackPanel>
+                                        <!--<StackPanel Orientation="Horizontal">
+                                                <TextBlock>BytesPerSecond：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=BytesPerSecond}"></TextBlock>
+                                            </StackPanel>-->
+                                        <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                                            <TextBlock>FileLength：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=Length}"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>LastWriteTime：</TextBlock>
+                                            <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=LastWriteTime}"></TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </MenuItem>
+                </ContextMenu>
+
+            </ListBox.ContextMenu>
         </ListBox>
         <ScrollBar Grid.Row="0" Grid.RowSpan="1" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Mouse.LostMouseCapture="SongListPageScrollBar_LostMouseCapture" Scroll="SongListPageScrollBar_Scroll"/>
-
     </Grid>
 </Page>

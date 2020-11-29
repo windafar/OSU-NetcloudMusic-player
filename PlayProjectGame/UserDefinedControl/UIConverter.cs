@@ -18,6 +18,7 @@ namespace PlayProjectGame.UserDefinedControl
     {//转换歌曲路径为BitmapImage专辑图片
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null) return null;
             SongInfo sInfo =( value as SongInfoExpend).SongInfo;
             if (sInfo.SongType == 3)
             {

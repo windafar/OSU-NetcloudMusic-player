@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PlayProjectGame"
       xmlns:publicconver="clr-namespace:PlayProjectGame.PublicConver"
       xmlns:userdefinedcontrol="clr-namespace:PlayProjectGame.UserDefinedControl"
-
+      xmlns:mainpro="clr-namespace:PlayProjectGame"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="400"
       Title="SongList" Loaded="Page_Loaded"
@@ -14,6 +14,27 @@
       SizeChanged="SongListPage_SizeChanged"
       >
     <Page.Resources>
+        <publicconver:VisibleConver x:Key="VisibleConver"></publicconver:VisibleConver>
+        <publicconver:EnableConver x:Key="EnableConver"></publicconver:EnableConver>
+        <userdefinedcontrol:ConvaSongInfoToAlbum x:Key="ConvaSongInfoToAlbum"></userdefinedcontrol:ConvaSongInfoToAlbum>
+        <publicconver:FilePathToFileInfo x:Key="FilePathToFileInfo"></publicconver:FilePathToFileInfo>
+        <AlternationConverter x:Key="conBack">
+            <SolidColorBrush Color="#FFF2F2F2"></SolidColorBrush>
+            <SolidColorBrush Color="White"></SolidColorBrush>
+        </AlternationConverter>
+        <AlternationConverter x:Key="conAlign">
+            <HorizontalAlignment>Left</HorizontalAlignment>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <HorizontalAlignment>Right</HorizontalAlignment>
+        </AlternationConverter>
+        <Style x:Key="hyberlinkEffect" TargetType="{x:Type Hyperlink}">
+            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="GridViewColumnHeader" x:Key="GridViewColumnHeaderStyle">
             <Setter Property="Template" Value="{StaticResource GridViewColumnHeaderTemp}"></Setter>
             <Setter Property="Panel.Background" Value="White"></Setter>
@@ -32,25 +53,16 @@
 
             <Setter Property="Template" Value="{StaticResource SongListItemTemp}"></Setter>
         </Style>
-        <publicconver:VisibleConver x:Key="VisibleConver"></publicconver:VisibleConver>
-        <publicconver:EnableConver x:Key="EnableConver"></publicconver:EnableConver>
-        <AlternationConverter x:Key="conBack">
-            <SolidColorBrush Color="#FFF2F2F2"></SolidColorBrush>
-            <SolidColorBrush Color="White"></SolidColorBrush>
-        </AlternationConverter>
-        <AlternationConverter x:Key="conAlign">
-            <HorizontalAlignment>Left</HorizontalAlignment>
-            <HorizontalAlignment>Center</HorizontalAlignment>
-            <HorizontalAlignment>Right</HorizontalAlignment>
-        </AlternationConverter>
-        <Style x:Key="hyberlinkEffect" TargetType="{x:Type Hyperlink}">
-            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"></Setter>
+        <Style TargetType="MenuItem" x:Key="MenuItemOverwriteStyle">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="BorderBrush" Value="White"></Setter>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}"></Setter>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="{Binding PlacementTarget.BorderBrush, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -90,8 +102,7 @@
                         <TextBlock FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" >
                             <Hyperlink Style="{StaticResource hyberlinkEffect}"  Click="ShowSearcherBox">过滤</Hyperlink>
                         </TextBlock>
-                        <TextBox Visibility="Collapsed" Name="SearcherBox" TextChanged="SearcherBox_TextChanged" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"  HorizontalAlignment="Right" Width="128" Height="17" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,12,8">
-                        </TextBox>
+                        <TextBox Visibility="Collapsed" Name="SearcherBox" TextChanged="SearcherBox_TextChanged" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"  HorizontalAlignment="Right" Width="128" Height="17" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,12,8"/>
                     </StackPanel>
                     <StackPanel MaxHeight="128" VerticalAlignment="Center">
                         <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="SongListHistory"   Margin="12,0,0,0" Background="{x:Null}">
@@ -130,7 +141,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.Header>
                                     <HeaderedContentControl Width="24">
-                                        <TextBlock Text="序号" x:Name="Index"></TextBlock>
+                                        <TextBlock Text="序号" x:Name="Index"/>
                                     </HeaderedContentControl>
                                 </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
@@ -232,9 +243,78 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Name="SongListAddMenu" Header="加入播放列表" Click="SongListAddMenu_Click"></MenuItem>
-                        <MenuItem Name="SongListGoDir" Header="转到目录" Click="SongListGoDir_Click"></MenuItem>
+                    <ContextMenu BorderThickness="1" Background="White" Template="{StaticResource ContextMenuTemp}" >
+                        <MenuItem Name="SongListAddMenu" Header="加入播放列表" Click="SongListAddMenu_Click"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                  Template="{DynamicResource MenuItemControlTemplate1}">
+
+                        </MenuItem>
+
+                        <MenuItem Name="SongListGoDir" Header="转到目录" Click="SongListGoDir_Click"
+                                  Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}" >
+                        </MenuItem>
+                        <MenuItem Name="DetailedMenuItem" Header="详细信息" SubmenuOpened="DetailedMenuItem_Click" Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                  >
+                            <MenuItem
+                                      Template="{DynamicResource MenuItemControlTemplate1}"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                      >
+                                <MenuItem.Header>
+                                    <StackPanel Margin="-22,0,-10,0" Orientation="Horizontal" Background="White">
+                                        <Image Name="contuxtAlbmCover" Width="360" Source="{Binding Converter={StaticResource ConvaSongInfoToAlbum}}"></Image>
+                                        <StackPanel Margin="12,0,0,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongName：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongName}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongArt：</TextBlock>
+                                                <TextBlock MouseDown="SongArtistLinkCilcked"  TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongArtist}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongAlbum：</TextBlock>
+                                                <TextBlock MouseDown="SongAlbumLinkClick" TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongAlbum}">
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongLengh：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongLengh}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongPath：</TextBlock>
+                                                <TextBlock MouseDown="SongListGoDir_Click" TextWrapping="Wrap"  TextDecorations="Underline" Cursor="Hand"  Text="{Binding SongInfo.SongPath}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>SongType：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongType}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                                                <TextBlock>SampleRate：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=SampleRate}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>BitsPerSample：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=BitsPerSample}"></TextBlock>
+                                            </StackPanel>
+                                            <!--<StackPanel Orientation="Horizontal">
+                                                <TextBlock>BytesPerSecond：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=BytesPerSecond}"></TextBlock>
+                                            </StackPanel>-->
+                                            <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                                                <TextBlock>FileLength：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=Length}"></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>LastWriteTime：</TextBlock>
+                                                <TextBlock Text="{Binding SongInfo.SongPath, Converter={StaticResource FilePathToFileInfo},ConverterParameter=LastWriteTime}"></TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </MenuItem>
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemsPanel>
@@ -242,6 +322,7 @@
                         <userdefinedcontrol:VirtualizingWrapPanel ChildHeight="39" ChildWidth="{Binding ActualWidth, ElementName=SongListListView, Mode=OneWay}" ExtentContentOffset="100.0" ></userdefinedcontrol:VirtualizingWrapPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
+                
                 <!--<ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
@@ -254,8 +335,8 @@
                 </ListView.ItemContainerStyle>-->
             </userdefinedcontrol:ListViewBigFalt>
         </Grid>
-        <ScrollBar Scroll="SongListPageScrollBar_Scroll" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Grid.Column="8"/>
+        <ScrollBar Scroll="SongListPageScrollBar_Scroll" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Grid.Column="8" d:IsLocked="True"/>
 
     </Grid>
-    
+
 </Page>

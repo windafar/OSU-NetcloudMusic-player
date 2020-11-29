@@ -184,7 +184,7 @@
                 <CheckBox IsChecked="{Binding UseCouldMusicSongListCover}">使用网络上的歌单图片(实验功能)</CheckBox>
             </GroupBox>
 
-            <!--<Button Name="DownAllLrcButton" Click="DownAllLrcButton_Click">DownAllLrcToLrcDir</Button>-->
+            <Button Name="DownAllLrcButton" Click="DownAllLrcButton_Click">DownAllLrcToLrcDir</Button>
             <Button Name="ReloadCloudMusicDataButton" Click="ReloadCloudMusicDataButton_Click">ReloadCloudMusicData</Button>
             <Button Name="ReloadOsuDataButton" Click="ReloadOsuDataButton_Click">ReloadOsucData</Button>
 

@@ -41,24 +41,18 @@ namespace PlayProjectGame.Data
             return reader;
 
         }
-        static public List<UserData> GetSongList()
+        static public List<UserData> GetSongList(bool reload=false)
         {
-            #region 如果可以从从XML中加载SongList集合，则直接加载
-            if (File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
+            #region 尝试从XML中加载原始SongList集合
+            if (!reload&&File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
             {
                 XmlSerializer xs = new XmlSerializer(typeof(List<UserData>));
                 try
                 {
                     FileStream fs = File.OpenRead(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-                    List<UserData> SongList = (List<UserData>)xs.Deserialize(fs);
+                    NetClouldMusicData = (List<UserData>)xs.Deserialize(fs);
                     fs.Dispose();
-                    if (SongList.Count == 0)
-                    {
-                        File.Delete(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-                        return GetSongList();
-                    }
-                    NetClouldMusicData = SongList;
-                    return SongList;
+                    return NetClouldMusicData;
                 }
                 catch (Exception e)
                 {
@@ -68,7 +62,6 @@ namespace PlayProjectGame.Data
 
             }
             #endregion
-
             string ert = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             connStr_Webdb = SQLiteConnectionString.GetConnectionString(ert + @"\Netease\CloudMusic\Library\webdb.dat");
             connStr_Library = SQLiteConnectionString.GetConnectionString(ert + @"\Netease\CloudMusic\Library\library.dat");
@@ -335,73 +328,67 @@ namespace PlayProjectGame.Data
 
             connect_web_user_playlist.Close();
             connect_web_user_playlist.Dispose();
-
             NetClouldMusicData = AllUserPlayList;
-            Task.Run(() =>
-            {
-                string filename = DateTime.Now.ToString("yy-MM-dd hh:mm:ss.ff");
-                //try
-                //{
-                    OtherHelper.WriteXMLSerializer(AllUserPlayList, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-                    #region 备份歌单数据
-                    if (NetClouldMusicData != null && NetClouldMusicData.Count != 0)
-                    {
-                        var dir = Directory.CreateDirectory(GlobalConfigClass.DIR_CLOUDMUSIC_SONGLISTHISTORY);
-                        foreach (var u in NetClouldMusicData)
-                        {
-                            var subdir = dir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(u.Username + u.Uid));
-                            u.Pids.ForEach(x =>
-                            {
-                                var songlistdir = subdir.CreateSubdirectory(OtherHelper.ReplaceValidFileName(x.PlatListName + x.PlayListId));
-                                var path = songlistdir.FullName + "\\" + OtherHelper.ReplaceValidFileName(filename);
-                                if (songlistdir.GetFiles().Count() == 0)
-                                {
-                                    OtherHelper.WriteXMLSerializer(x, typeof(PlayListData), path);
-                                    return;
-                                }
-                                var fs_source = songlistdir.GetFiles().OrderByDescending(f => f.CreationTime).First().OpenRead();
-                                var ms_dest = OtherHelper.WriteXMLSerializerToStream(x, typeof(PlayListData));
-
-                                byte[] dest = new byte[(int)ms_dest.Length];
-                                ms_dest.Read(dest, 0, dest.Length);
-                                if (fs_source.Length == ms_dest.Length)
-                                {
-                                    byte[] source = new byte[(int)fs_source.Length];
-                                    fs_source.Read(source, 0, source.Length);
-                                    bool iseq = true;
-                                    for (int j = 0; j < ms_dest.Length; j++)
-                                    {
-                                        if (source[j] != dest[j])
-                                        {
-                                            iseq = false;
-                                            break;
-                                        }
-                                    }
-                                    if (!iseq)
-                                    {
-                                        File.WriteAllText(path, Encoding.UTF8.GetString(dest));
-                                    }
-                                }
-                                else
-                                    File.WriteAllText(path, Encoding.UTF8.GetString(dest));
-
-
-                                fs_source.Dispose();
-                                ms_dest.Dispose();
-
-                            });
-                        }
-                    }
-                    #endregion
-               // }
-              //  catch (Exception e) {
-              //      File.WriteAllText("log_"+ filename + ".txt", e.Message);
-             //   }
-            });
+            if (!File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
+                backup();
             return AllUserPlayList;
 
         }
 
+        static public List<UserData> AppendNewSongListToXML(List<UserData> newSource) 
+        {
+            if (newSource == null) newSource = new List<UserData>();
+            List<UserData> destData = new List<UserData>();
+            #region 尝试从XML中加载原始SongList集合
+            if (File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(List<UserData>));
+                try
+                {
+                    FileStream fs = File.OpenRead(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
+                    destData = (List<UserData>)xs.Deserialize(fs);
+                    fs.Dispose();
+                }
+                catch (Exception e)
+                {//数据源加载失败则直接返回，否则会覆盖源数据
+                    System.Windows.MessageBox.Show("此时无法从序列化的文件加载歌单：" + e.Message, "xml文件加载");
+                    return null;
+                }
+
+            }
+            #endregion
+
+           // destData = newSource.Union(destData, Helper.Comparer.UserIdComparer).ToList();
+            //不能加进来去重，不能加进来做并集，因为所有依赖单一比较器的都会删掉不同子对象的相同父对象
+            foreach (var su in newSource) 
+            {
+                var du = destData.FirstOrDefault(x => x.Uid == su.Uid);
+                if (du == null) destData.Insert(0,su);
+                else 
+                    foreach (var sp in su.Pids) 
+                    {
+                        var dp = du.Pids.FirstOrDefault(x => x.PlayListId == sp.PlayListId);
+                        if (dp == null) du.Pids.Insert(0,sp);
+                        else
+                            dp.Songs = sp.Songs.Union(dp.Songs, Helper.Comparer.SongPathEqualityComparer).ToList();
+                        //这个Union生成的集合会以第一个为原始集合，即f,s相同时取f
+                    }
+            }
+            NetClouldMusicData = destData;
+            backup();
+            return destData;
+        }
+
+        static public void backup() 
+        {
+            if (NetClouldMusicData == null) throw new InvalidOperationException("备份失败，NetClouldMusicData 对象为空");
+            //Task.Run(() =>
+            //{
+            if(File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
+                File.Delete(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
+            OtherHelper.WriteXMLSerializer(NetClouldMusicData, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
+           // });
+        }
     }
 
     static class SQLiteConnectionString

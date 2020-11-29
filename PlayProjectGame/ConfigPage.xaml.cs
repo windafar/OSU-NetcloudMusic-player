@@ -68,7 +68,7 @@ namespace PlayProjectGame
                                 //处理同名
                                 if (File.Exists(path))
                                     continue;
-                                list[0].DownloadLrc(path);                 
+                                list[0].DownloadLrc(path);//覆盖或者创建                 
                             }
                         }
                     }
@@ -78,10 +78,10 @@ namespace PlayProjectGame
 
         private void ReloadCloudMusicDataButton_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
-                File.Delete(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
             if (MainWindow.CurMainWindowInstence != null) {
-                MainWindow.CurMainWindowInstence.LoadNetCloudMusic();
+                var list = CouldMusicLocalDataGeter.GetSongList(true);
+                var list1=CouldMusicLocalDataGeter.AppendNewSongListToXML(list).Last();
+                MainWindow.CurMainWindowInstence.NetClouldMusicaListBox.ItemsSource = list1.Pids;
             }
         }
 
