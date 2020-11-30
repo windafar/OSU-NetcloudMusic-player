@@ -171,8 +171,8 @@
       <DependentUpon>WrapPlayList.xaml</DependentUpon>
     </Compile>
     <Compile Include="PublicConver\ColorArgConver.cs" />
-    <Compile Include="PublicConver\StringConver.cs" />
     <Compile Include="PublicConver\EnableConver.cs" />
+    <Compile Include="PublicConver\SongFileNameConver.cs" />
     <Compile Include="PublicConver\IntConver.cs" />
     <Compile Include="PublicConver\VisibleConver.cs" />
     <Compile Include="SearchPage.xaml.cs">

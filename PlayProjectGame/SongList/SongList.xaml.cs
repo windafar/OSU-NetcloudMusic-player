@@ -195,7 +195,7 @@ namespace PlayProjectGame
             SongListCreator.Text = PLD.UersName;
             SongListInfo.Text = PLD.PlayListInfo;
             RemoveLoalNotExistSQButton.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
-            SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
+            //SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
             GetImage(PLD.PlayListId);
             view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
             Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
@@ -303,7 +303,7 @@ namespace PlayProjectGame
         public CustomContentState GetContentState()
         {
 
-            return new PlayListJournalEntry(PLD, ReplySongListPage_Itself,SongListListView.SelectedItem);
+            return new PlayListJournalEntry(PLD, ReplySongListPage_Itself, SongListListView.SelectedItem);
 
         }
 
@@ -592,7 +592,7 @@ namespace PlayProjectGame
                     SongList Pr = NavigationService.Content as SongList;
                     if (Pr != null)
                     {
-                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
+                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage, SongListListView.SelectedItem));
                     }
                 }
                 pld.PlatListName += "_" + dataconext.Time;
@@ -610,8 +610,8 @@ namespace PlayProjectGame
             var data = ((TextBlock)sender).DataContext as SongInfoExpend;
             string albm = data.SongInfo.SongAlbum;
             string[] arts = data.SongInfo.GetSongArtists;
-            var netcloud = mainWindow.NetCloudData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum==albm ).ToList();
-            var osu = mainWindow.OsuData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum== albm).ToList();
+            var netcloud = mainWindow.NetCloudData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum == albm).ToList();
+            var osu = mainWindow.OsuData.AsParallel().SelectMany(x => x.Songs).Where(x => x.SongInfo.SongAlbum == albm).ToList();
             netcloud.AddRange(osu);
             netcloud = netcloud.GroupBy(x => x.SongInfo.SongName).Select(x => x.First()).ToList();
             PlayListData pld = null;
@@ -621,7 +621,7 @@ namespace PlayProjectGame
                 SongList Pr = NavigationService.Content as SongList;
                 if (Pr != null)
                 {
-                    NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
+                    NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage, SongListListView.SelectedItem));
                 }
             }
             SongList.SetPlayListData(pld);
@@ -649,7 +649,7 @@ namespace PlayProjectGame
                     SongList Pr = NavigationService.Content as SongList;
                     if (Pr != null)
                     {
-                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage,SongListListView.SelectedItem));
+                        NavigationService.AddBackEntry(new PlayListJournalEntry(Pr.PLD, MainWindow.ReplySongListPage, SongListListView.SelectedItem));
                     }
                 }
 
@@ -675,5 +675,55 @@ namespace PlayProjectGame
 
 
         }
+
+        private void MatchSong_Click(object sender, RoutedEventArgs e)
+        {
+            var filesys = mainWindow.filesyscath;
+            int count=0;
+            if (filesys.Count == 0)//程序运行阶段只能初始化一次
+            {
+                ((Hyperlink)sender).IsEnabled = false;
+                MessageBox.Show("开始初始化文件系统");
+                //Task.Run(() =>
+                //{
+                    var DriveNames = ConfigPage.GlobalConfig.MatchSongFromDivce.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var driveInfo in DriveInfo.GetDrives())
+                    {
+                        if (driveInfo.IsReady)
+                            filesys.AddRange(FileSerch.FileSercher.EnumerateFiles(driveInfo));
+                    }
+                mainWindow.filesyscath = filesys.Where(x =>
+                      {
+                          int index = x.LastIndexOf(".");
+                          string Extension = x.Substring(index+1, x.Length - index-1);
+                          return Extension == "mp3" ||
+                          Extension == "flac" ||
+                        //  Extension == "wav" ||
+                          Extension == "ncm";
+                      }).OrderBy(x => new FileInfo(x).Name).ToList();
+                    Dispatcher.Invoke(() => {
+                        MessageBox.Show("文件系统初始化完成");
+                        ((Hyperlink)sender).IsEnabled = true;
+                    });
+                //});
+            }
+            else if (((Hyperlink)sender).IsEnabled)
+            {
+                Parallel.ForEach(PLD.Songs, p =>
+                {
+                    if (!string.IsNullOrEmpty(p.SongInfo.SongPath)&&!File.Exists(p.SongInfo.SongPath))
+                    {
+                        int index = mainWindow.filesyscath.BinarySearch(p.SongInfo.SongPath, Comparer.SampleFileNameComparer); ;
+                        if (index > -1)
+                        {
+                            p.SongInfo.SongPath= mainWindow.filesyscath[index];
+                            count++;
+                        }
+                    }
+                });
+                MessageBox.Show("匹配完成,共计"+ count);
+            }
+        }
     }
 }
+

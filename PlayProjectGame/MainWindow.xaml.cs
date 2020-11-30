@@ -132,6 +132,8 @@ namespace PlayProjectGame
 
 
         private Thread ClundMusicTreeNewThread;
+        public List<string> filesyscath = new List<string>();//用于匹配歌曲的全局缓存
+
         public void LoadNetCloudMusic()
         {
             ClundMusicTreeNewThread = new Thread(delegate ()

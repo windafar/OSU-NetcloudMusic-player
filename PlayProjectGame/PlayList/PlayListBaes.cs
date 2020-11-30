@@ -51,9 +51,10 @@ namespace PlayProjectGame.PlayList
         static private double secx;//比例
         static public Timer timer = new Timer((TimerCallback)delegate
         {//这一块之后用消息改掉
-            var position = player.Position;
+            TimeSpan position;
             try
             {
+                position = player.Position;
                 secx = (position.TotalSeconds / player.TotalTime.TotalSeconds);
             }
             catch {

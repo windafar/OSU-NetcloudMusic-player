@@ -119,5 +119,56 @@ namespace PlayProjectGame
                 MainWindow.CurMainWindowInstence.LoadOSU(true);
             }
         }
+
+        private void MatchSongListByFileNameClick(object sender, RoutedEventArgs e)
+        {
+            var filesys = MainWindow.CurMainWindowInstence.filesyscath;
+            int count = 0;
+            if (filesys.Count == 0)//程序运行阶段只能初始化一次
+            {
+                ((Button)sender).IsEnabled = false;
+                MessageBox.Show("开始初始化文件系统");
+                //Task.Run(() =>
+                //{
+                var DriveNames = ConfigPage.GlobalConfig.MatchSongFromDivce.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var driveInfo in DriveInfo.GetDrives())
+                {
+                    if (driveInfo.IsReady)
+                        filesys.AddRange(FileSerch.FileSercher.EnumerateFiles(driveInfo));
+                }
+                MainWindow.CurMainWindowInstence.filesyscath = filesys.Where(x =>
+                {
+                    int index = x.LastIndexOf(".");
+                    string Extension = x.Substring(index + 1, x.Length - index - 1);
+                    return Extension == "mp3" ||
+                    Extension == "flac" ||
+                    //  Extension == "wav" ||
+                    Extension == "ncm";
+                }).OrderBy(x => new FileInfo(x).Name).ToList();
+                Dispatcher.Invoke(() => {
+                    MessageBox.Show("文件系统初始化完成,请点击开始匹配");
+                    ((Button)sender).IsEnabled = true;
+                });
+                //});
+            }
+            else if (((Button)sender).IsEnabled)
+            {
+                Parallel.ForEach(MainWindow.CurMainWindowInstence.NetCloudData, p =>
+                {
+                    foreach(var s in p.Songs)
+                        if (!string.IsNullOrEmpty(s.SongInfo.SongPath) && !File.Exists(s.SongInfo.SongPath))
+                        {
+                            int index = MainWindow.CurMainWindowInstence.filesyscath.BinarySearch(s.SongInfo.SongPath, Helper.Comparer.SampleFileNameComparer); ;
+                            if (index > -1)
+                            {
+                                s.SongInfo.SongPath = MainWindow.CurMainWindowInstence.filesyscath[index];
+                                count++;
+                            }
+                        }
+                });
+                MessageBox.Show("匹配完成,共计" + count);
+                CouldMusicLocalDataGeter.backup();
+            }
+        }
     }
 }

@@ -163,7 +163,7 @@ namespace FileSerch
                 var bIsFile = false;
 
                 // This shouldn't be called more than once.
-                if (m_Buffer.ToInt32() != 0)
+                if (m_Buffer.ToInt64() != 0)
                 {
                     throw new Exception("invalid buffer");
                 }
@@ -197,7 +197,7 @@ namespace FileSerch
                     {
                         cb = dwRetBytes;
                         // Pointer to the first record
-                        IntPtr pUsnRecord = new IntPtr(m_Buffer.ToInt32() + 8);
+                        IntPtr pUsnRecord = new IntPtr(m_Buffer.ToInt64() + 8);
 
                         while ((dwRetBytes > 8))
                         {
@@ -205,13 +205,13 @@ namespace FileSerch
                             usnRecord = (USN_RECORD)Marshal.PtrToStructure(pUsnRecord, usnRecord.GetType());
 
                             // The filename within the USN_RECORD.
-                            string FileName = Marshal.PtrToStringUni(new IntPtr(pUsnRecord.ToInt32() + usnRecord.FileNameOffset), usnRecord.FileNameLength / 2);
+                            string FileName = Marshal.PtrToStringUni(new IntPtr(pUsnRecord.ToInt64() + usnRecord.FileNameOffset), usnRecord.FileNameLength / 2);
 
                             bIsFile = !usnRecord.FileAttributes.HasFlag(FileAttributes.Directory);
                             dicFRNLookup.Add(usnRecord.FileReferenceNumber, new FSNode(usnRecord.FileReferenceNumber, usnRecord.ParentFileReferenceNumber, FileName, bIsFile));
 
                             // Pointer to the next record in the buffer.
-                            pUsnRecord = new IntPtr(pUsnRecord.ToInt32() + usnRecord.RecordLength);
+                            pUsnRecord = new IntPtr(pUsnRecord.ToInt64() + usnRecord.RecordLength);
 
                             dwRetBytes -= usnRecord.RecordLength;
                         }

@@ -109,6 +109,7 @@
                         </TextBox.Style>
 
                     </TextBox>
+
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="行为" Name="AddBeh">
@@ -181,12 +182,13 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="网络">
-                <CheckBox IsChecked="{Binding UseCouldMusicSongListCover}">使用网络上的歌单图片(实验功能)</CheckBox>
+                <CheckBox IsChecked="{Binding UseCouldMusicSongListCover}">使用网络上的歌单图片</CheckBox>
             </GroupBox>
 
+            <Button Name="ReloadCloudMusicDataButton" Click="ReloadCloudMusicDataButton_Click" ToolTip="追加云音乐歌单到本地数据文件中,需要大概半分钟">ReloadCloudMusicData</Button>
+            <Button Name="MatchSongListByFileNameButton" Click="MatchSongListByFileNameClick" ToolTip="基于文件名匹配本地被移动的歌曲文件，需要大概半分钟">MatchSongListByFileName</Button>
+            <Button Name="ReloadOsuDataButton" Click="ReloadOsuDataButton_Click" ToolTip="重载osu歌曲数据，需要大概十分钟">ReloadOsucData</Button>
             <Button Name="DownAllLrcButton" Click="DownAllLrcButton_Click">DownAllLrcToLrcDir</Button>
-            <Button Name="ReloadCloudMusicDataButton" Click="ReloadCloudMusicDataButton_Click">ReloadCloudMusicData</Button>
-            <Button Name="ReloadOsuDataButton" Click="ReloadOsuDataButton_Click">ReloadOsucData</Button>
 
         </StackPanel>
     </Grid>

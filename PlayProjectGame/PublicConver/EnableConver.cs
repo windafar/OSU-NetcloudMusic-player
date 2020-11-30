@@ -1,7 +1,7 @@
-﻿using PlayProjectGame.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +10,13 @@ using System.Windows.Data;
 
 namespace PlayProjectGame.PublicConver
 {
-    class StringConver : IValueConverter
+    class EnableConver : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var result = value as SongInfoExpend;
-            if (result == null) return "";
-            return result.SongInfo.SongName + " - " + result.SongInfo.SongArtist;
+            string result = value as string;
+            //return (string.IsNullOrWhiteSpace(result) || !File.Exists(result)) ? 0.7 : 1;
+            return (string.IsNullOrWhiteSpace(result)) ? 0.7 : 1;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

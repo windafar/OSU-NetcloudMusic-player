@@ -330,7 +330,7 @@ namespace PlayProjectGame.Data
             connect_web_user_playlist.Dispose();
             NetClouldMusicData = AllUserPlayList;
             if (!File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
-                backup();
+                backup();//当本地数据文件不存在，即一次启动时才自动备份
             return AllUserPlayList;
 
         }

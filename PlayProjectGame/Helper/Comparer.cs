@@ -1,6 +1,7 @@
 ﻿using PlayProjectGame.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,8 @@ namespace PlayProjectGame.Helper
         public static IComparer<SongInfoExpend> FileCreateTimeEqualityComparer { get; } = new _FileCreateTimeEqualityComparer();
         public static IEqualityComparer<PlayListData> PlayListIdComparer { get; } = new _PlayListIdComparer();
         public static IEqualityComparer<UserData> UserIdComparer { get; } = new _UserIdComparer();
+        public static IComparer<string> SampleFileNameComparer { get; } = new _SampleFileNameComparer();
+
         private class _UserIdComparer : IEqualityComparer<UserData>
         {
             public bool Equals(UserData x, UserData y)
@@ -67,6 +70,15 @@ namespace PlayProjectGame.Helper
             {
                 return obj.Uid.GetHashCode();
             }
+        }
+    }
+
+    internal class _SampleFileNameComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            return (string.Compare( new FileInfo(x).Name, new FileInfo(y).Name));
+
         }
     }
 }

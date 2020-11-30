@@ -49,11 +49,11 @@ namespace PlayProjectGame
         /// <summary>
         /// 指定显示翻译还是当前语言（暂时）
         /// </summary>
-        private bool lrcMode=false;
+        private bool lrcMode = false;
         /// <summary>
         /// LRC背景色
         /// </summary>
-        private string lrcBkColor="#aaffffff";
+        private string lrcBkColor = "#aaffffff";
         /// <summary>
         /// 定义Osu程序的目录
         /// </summary>
@@ -130,7 +130,7 @@ namespace PlayProjectGame
         /// <summary>
         /// 当前使用的驱动
         /// </summary>
-        private string deviceName="";
+        private string deviceName = "";
         /// <summary>
         /// 当前音量
         /// </summary>
@@ -142,6 +142,7 @@ namespace PlayProjectGame
             PropertyChanged?.Invoke(this, e);
         }
         public static GlobalConfigClass _Config;
+        private string matchSongFromDivce="C|D";
 
         private GlobalConfigClass()
         {
@@ -388,15 +389,15 @@ namespace PlayProjectGame
         public int PlaylistItemNum { get => playlistItemNum; set { playlistItemNum = value; OnPropertyChanged(new PropertyChangedEventArgs("PlaylistItemNum")); } }
         public int PlayThreadPriority { get => playThreadPriority; set { playThreadPriority = value; OnPropertyChanged(new PropertyChangedEventArgs("PlayThreadPriority")); } }
         public bool UseAlbumImageCach { get => useAlbumImageCach; set { useAlbumImageCach = value; OnPropertyChanged(new PropertyChangedEventArgs("UseAlbumImageCach")); } }
-        public bool GlobalValueOfSaturation { get => globalValueOfSaturation; set {  globalValueOfSaturation = value;; OnPropertyChanged(new PropertyChangedEventArgs("GlobalValueOfSaturation"));} }
-        public bool GlobalValueOfLight { get => globalValueOfLight; set {  globalValueOfLight = value;; OnPropertyChanged(new PropertyChangedEventArgs("GlobalValueOfLight"));} }
+        public bool GlobalValueOfSaturation { get => globalValueOfSaturation; set { globalValueOfSaturation = value; ; OnPropertyChanged(new PropertyChangedEventArgs("GlobalValueOfSaturation")); } }
+        public bool GlobalValueOfLight { get => globalValueOfLight; set { globalValueOfLight = value; ; OnPropertyChanged(new PropertyChangedEventArgs("GlobalValueOfLight")); } }
         public bool UseSRDImageCach { get => useSRDImageCach; set { useSRDImageCach = value; OnPropertyChanged(new PropertyChangedEventArgs("UseSRDImageCach")); } }
         public bool UseSongListPageBackground { get => useSongListPageBackground; set { useSongListPageBackground = value; OnPropertyChanged(new PropertyChangedEventArgs("UseSongListPageBackground")); } }
-        public bool UseCouldMusicSongListCover{get => useCouldMusicSongListCover; set{useCouldMusicSongListCover = value;OnPropertyChanged(new PropertyChangedEventArgs("UseCouldMusicSongListCover"));}}
+        public bool UseCouldMusicSongListCover { get => useCouldMusicSongListCover; set { useCouldMusicSongListCover = value; OnPropertyChanged(new PropertyChangedEventArgs("UseCouldMusicSongListCover")); } }
 
-        public string DeviceName { get => deviceName; set{ deviceName = value; ; OnPropertyChanged(new PropertyChangedEventArgs("DeviceName")); } }
+        public string DeviceName { get => deviceName; set { deviceName = value; ; OnPropertyChanged(new PropertyChangedEventArgs("DeviceName")); } }
 
-        public string OpenMethodsStr { get { return deviceName.Split('-').Count() == 2 ? deviceName.Split('-')[0]:""; } }
+        public string OpenMethodsStr { get { return deviceName.Split('-').Count() == 2 ? deviceName.Split('-')[0] : ""; } }
         public string DeviceStr { get { return deviceName.Split('-').Count() == 2 ? deviceName.Split('-')[1] : ""; } }
 
         public int CurrentVolume { get => currentVolume; set { currentVolume = value; OnPropertyChanged(new PropertyChangedEventArgs("CurrentVolume")); } }
@@ -404,6 +405,8 @@ namespace PlayProjectGame
         public bool LrcMode { get => lrcMode; set { lrcMode = value; OnPropertyChanged(new PropertyChangedEventArgs("LrcMode")); } }
 
         public string LrcBkColor { get => lrcBkColor; set { lrcBkColor = value; OnPropertyChanged(new PropertyChangedEventArgs("LrcBkColor")); } }
+
+        public string MatchSongFromDivce { get => matchSongFromDivce; set { matchSongFromDivce = value; OnPropertyChanged(new PropertyChangedEventArgs("MatchSongFromDivce")); } }
     }
 
 }
