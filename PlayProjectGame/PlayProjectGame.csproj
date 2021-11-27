@@ -77,6 +77,7 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
@@ -130,6 +131,7 @@
     <Compile Include="Core\FileSerch.cs" />
     <Compile Include="Data\CouldMusicLocalDataGeter.cs" />
     <Compile Include="Data\Domain.cs" />
+    <Compile Include="Data\LocalMusicGeter.cs" />
     <Compile Include="Data\NetCloudMusicSource.cs" />
     <Compile Include="Data\OsuLocalDataGeter.cs" />
     <Compile Include="GlobalConfig.cs" />
@@ -158,6 +160,7 @@
     <Compile Include="PlayList\QuickPlayListControl.xaml.cs">
       <DependentUpon>QuickPlayListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PublicConver\BlurVision.cs" />
     <Compile Include="PublicConver\FilePathToFileInfo.cs" />
     <Compile Include="PublicConver\RatioConver.cs" />
     <Compile Include="SalientRegionDetection.cs" />
@@ -185,6 +188,10 @@
     <Compile Include="SongList\SongList.xaml.cs">
       <DependentUpon>SongList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserDefinedControl\CreatePlayList.xaml.cs">
+      <DependentUpon>CreatePlayList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserDefinedControl\Effect.cs" />
     <Compile Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml.cs">
       <DependentUpon>Hor_FisheyeEff_ListBox.xaml</DependentUpon>
     </Compile>
@@ -303,6 +310,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserDefinedControl\CreatePlayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserDefinedControl\Hor_FisheyeEff_ListBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -348,6 +359,10 @@
     <ProjectReference Include="..\Afar.Lrc\AddIn.Lrc.csproj">
       <Project>{3b53fc0b-f544-41a1-b935-cf88d5ee4874}</Project>
       <Name>AddIn.Lrc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ATL\atldotnet\ATL\ATL.csproj">
+      <Project>{2a6a8e3a-1ee8-46a0-a292-fea69b6f4eac}</Project>
+      <Name>ATL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Data.PublicElem\Communication.csproj">
       <Project>{d6c10a57-bcb0-4015-b6c2-ad99bdd8ccf6}</Project>
@@ -407,6 +422,9 @@
     <EmbeddedResource Include="AppResource\overlap1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppResource\notfind.JPG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

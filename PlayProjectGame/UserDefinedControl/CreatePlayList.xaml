@@ -1,0 +1,28 @@
+﻿<Window x:Class="PlayProjectGame.UserDefinedControl.CreatePlayList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlayProjectGame.UserDefinedControl"
+        mc:Ignorable="d"
+        Title="CreatePlayList" Height="120" Width="200">
+    <Grid>
+        <StackPanel x:Name="SongListFrom" Loaded="SongListFrom_Loaded">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>歌单名称：</TextBlock>
+                <TextBox Width="128" x:Name="SongListName" Text="{Binding PlatListName, Mode=TwoWay}"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>创建者：</TextBlock>
+                <TextBox Width="128"  TextWrapping="Wrap" Text="{Binding UersName, Mode=TwoWay}"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>描述：</TextBlock>
+                <TextBox Width="128"  Text="{Binding PlayListInfo, Mode=TwoWay}"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Click="Button_Click">确定</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

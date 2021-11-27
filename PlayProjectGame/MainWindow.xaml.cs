@@ -24,6 +24,7 @@ using PlayProjectGame.Helper;
 using System.Windows.Media.Animation;
 using WindowDemo;
 using PlayProjectGame.Data;
+using Communication;
 
 namespace PlayProjectGame
 {
@@ -32,7 +33,18 @@ namespace PlayProjectGame
     /// </summary>
     public partial class MainWindow
     {
-        public static readonly DependencyProperty CurrentThemeBrushProperty = DependencyProperty.Register("CurrentThemeBrush", typeof(Brush), typeof(MainWindow), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255,230,230,230))));
+        public static readonly DependencyProperty CurrentThemeBrushProperty = DependencyProperty.Register("CurrentThemeBrush", typeof(Brush), typeof(MainWindow), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255,230,230,230)), CurrentThemeBrushValueCallback));
+
+        private static void CurrentThemeBrushValueCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as MainWindow).StoryboardPlay(e);
+        }
+
+        private void StoryboardPlay(DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
         public static readonly DependencyProperty BottomControlVisibilityProperty = DependencyProperty.Register("BottomControlVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Collapsed));
 
         public Brush CurrentThemeBrush
@@ -97,33 +109,37 @@ namespace PlayProjectGame
                               var color = r1.Result;
                               MainWindow.CurMainWindowInstence.Dispatcher.BeginInvoke((ThreadStart)delegate
                               {
-                                  Color c1 = new Color() { A = 125, B = color.B, G = color.G, R = color.R };
+                                  //Color c1 = new Color() { A = 125, B = color.B, G = color.G, R = color.R };
                                   Color c2 = new Color() { A = 230, B = color.B, G = color.G, R = color.R };
-                                  if (Playing.CurPlayingInstance != null)
+                                  //if (Playing.CurPlayingInstance != null)
+                                  //{
+
+                                  //    Storyboard storyboard = new Storyboard();
+                                  //    Storyboard.SetTarget(storyboard, (CurMainWindowInstence));
+                                  //    Storyboard.SetTargetProperty(storyboard, new PropertyPath("CurrentThemeBrush.Color"));
+
+                                  //    ColorAnimation colorAnimation = new ColorAnimation();
+                                  //    colorAnimation.To = c1;
+                                  //    colorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
+                                  //    storyboard.Children.Add(colorAnimation);
+
+                                  //    storyboard.Begin();
+                                  //}
+                                  //else
+                                  if (MainWindow.CurMainWindowInstence != null)
                                   {
+                                      Storyboard storyboard=new Storyboard();
+                                      Storyboard.SetTarget(storyboard, (CurMainWindowInstence));
+                                      Storyboard.SetTargetProperty(storyboard, new PropertyPath("CurrentThemeBrush.Color"));
 
-                                      //ColorAnimation colorAnimation = new ColorAnimation();
-                                      //colorAnimation.To = c1;
-                                      //colorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-                                      //storyboard.Children.Add(colorAnimation);
+                                      ColorAnimation colorAnimation = new ColorAnimation();
+                                      colorAnimation.To = c2;
+                                      colorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.05));
+                                      storyboard.Children.Add(colorAnimation);
 
-                                      //storyboard.Begin();
+                                      storyboard.Begin();
 
-                                      MainWindow.CurMainWindowInstence.CurrentThemeBrush = new SolidColorBrush(c1);
-                                  }
-                                  else if (MainWindow.CurMainWindowInstence != null)
-                                  {
-                                      //Storyboard.SetTarget(storyboard, (CurMainWindowInstence));
-                                      //Storyboard.SetTargetProperty(storyboard, new PropertyPath("CurrentThemeBrush.Color"));
-
-                                      //ColorAnimation colorAnimation = new ColorAnimation();
-                                      //colorAnimation.To = c2;
-                                      //colorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-                                      //storyboard.Children.Add(colorAnimation);
-
-                                      //storyboard.Begin();
-
-                                      MainWindow.CurMainWindowInstence.CurrentThemeBrush = new SolidColorBrush(c2);
+                                      //MainWindow.CurMainWindowInstence.CurrentThemeBrush = new SolidColorBrush(c2);
                                   }
                   
                               });
@@ -176,15 +192,26 @@ namespace PlayProjectGame
 
         }
 
+        public void LoadLocal() 
+        {
+           // LocalListBox.Items.Clear();
+          //  LocalListBox.ItemsSource = new LocalMusicGeter(new List<SongInfoExpend>(),"新用户","","本地歌单").GetLocalUserData().Pids;
+        }
+
         public MainWindow()
         {
+
+            OtherHelper.MainProExitedCheck();
             ConfigPage.GlobalConfig = GlobalConfigClass.LoadConfig();
 
             InitializeComponent();
+
             PauseButtonCanvas.Visibility = Visibility.Collapsed;
             LoadNetCloudMusic();
 
             LoadOSU(false);
+
+          //  LoadLocal();//闭着眼睛写了一堆错误，算了
 
         }
 
@@ -299,6 +326,29 @@ namespace PlayProjectGame
 
             }
         }
+        private void LocalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //PlayListData pld = LocalListBox.SelectedItem as PlayListData;
+            //if (pld != null)
+            //{
+            //    if (frame.Content != null)
+            //    {
+            //        SongList Pr = frame.Content as SongList;
+            //        if (Pr != null)
+            //        {
+            //            frame.AddBackEntry(new PlayListJournalEntry(Pr.PLD, ReplySongListPage));
+            //        }
+            //    }
+            //    SongList.SetPlayListData(pld);
+            //    Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+            //    if (frame.Source == null || frame.Source.OriginalString != "SongList/SongList.xaml")
+            //        frame.Navigate(NextUri);
+            //    else frame.Refresh();
+            //    //frame.Navigate(new SongList(pld));
+
+            //}
+        }
+
         private void PlayListTextBox_MouseDown_1(object sender, MouseButtonEventArgs e)
         {//待完成
             //可以使用与SongList相同的日志，但必须另外重写恢复函数
@@ -327,25 +377,30 @@ namespace PlayProjectGame
             private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             // Handle messages...
-            //if (msg == 0x004A)
-            //{
-            //    COPYDATASTRUCT cds = new COPYDATASTRUCT();
-            //    var obj = Marshal.PtrToStructure<COPYDATASTRUCT>(lParam);
-            //    switch ((int)wParam)
-            //    {
-            //        case (int)MyMsgType.Playing:
-            //            //PlayListBase.CurrentPlayTime = long.Parse(obj.lpData);
-            //            //updatePlayUI(TimeSpan.FromTicks(PlayListBase.CurrentPlayTime),
-            //            //    TimeSpan.FromTicks(PlayListBase.CurPlayTotalTime));
-            //            updatePlayUI(PlayListBase.player.Position,
-            //                        PlayListBase.player.TotalTime);
-
-            //            break;
-            //        //case (int)MyMsgType.Startplay:
-            //        //    PlayListBase.CurPlayTotalTime = long.Parse(obj.lpData);
-            //         //   break;
-            //    }
-            //}
+            if (msg == 0x004A)
+            {
+                COPYDATASTRUCT cds = new COPYDATASTRUCT();
+                var obj = Marshal.PtrToStructure<COPYDATASTRUCT>(lParam);
+                switch ((int)wParam)
+                {
+                    case (int)MyMsgType.audio_Playing:
+                        //PlayListBase.CurrentPlayTime = long.Parse(obj.lpData);
+                        //updatePlayUI(TimeSpan.FromTicks(PlayListBase.CurrentPlayTime),
+                        //    TimeSpan.FromTicks(PlayListBase.CurPlayTotalTime));
+                        updatePlayUI(PlayListBase.player.Position,
+                                    PlayListBase.player.TotalTime);
+                        break;
+                    case (int)MyMsgType.MainWindow_Show:
+                        if(this.iNotifyIcon != null)this.iNotifyIcon.Visible = false;
+                        this.ShowInTaskbar = true;
+                        this.WindowState = WindowState.Normal;
+                        this.Activate();
+                        break;
+                        //case (int)MyMsgType.Startplay:
+                        //    PlayListBase.CurPlayTotalTime = long.Parse(obj.lpData);
+                        //   break;
+                }
+            }
             return IntPtr.Zero;
         }
 
@@ -375,7 +430,7 @@ namespace PlayProjectGame
         {
             CurMainWindowInstence = this;
             hwndSource = PresentationSource.FromVisual(this) as HwndSource;
-            //hwndSource.AddHook(WndProc);
+            hwndSource.AddHook(WndProc);
             AudioProcess= Helper.OtherHelper.StartAudioProcesses();
             AudioProcess.PriorityClass = ProcessPriorityClass.High ;
             
@@ -406,9 +461,7 @@ namespace PlayProjectGame
             byte[] buff = Helper.OtherHelper.SerializeObject(LRCRefClass.LrcRefDic);
             if(buff!=null) System.IO.File.WriteAllBytes(GlobalConfigClass.OBJ_LRCDIC_REFPATH, buff);
             OtherHelper.WriteXMLSerializer(ConfigPage.GlobalConfig, typeof(GlobalConfigClass), "Config.xml");
-            //DataGeter.WriteSerializer(DataGeter.NetClouldMusicData, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-            //DataGeter.WriteSerializer(OsoDataGeter.OsuListData, typeof(List<UserData>), GlobalConfigClass.XML_OSU_SAVEPATH);
-            //GC.Collect();
+            CouldMusicLocalDataGeter.backup();
             if (AudioProcess != null && !AudioProcess.HasExited)
                 AudioProcess.Kill();//之前的任务取消异常没处理，现在都不知道哪里抛的异常导致的不执行
 
@@ -583,6 +636,13 @@ namespace PlayProjectGame
             ScrollViewer scroller = Helper.UIhelper.FindPrent<ScrollViewer>((DependencyObject)sender);
             scroller.ScrollToVerticalOffset(scroller.ContentVerticalOffset - e.Delta * 0.5);
         }
+
+        private void LocalListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scroller = Helper.UIhelper.FindPrent<ScrollViewer>((DependencyObject)sender);
+            scroller.ScrollToVerticalOffset(scroller.ContentVerticalOffset - e.Delta * 0.5);
+
+        }
         private void scrollViewer_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ScrollViewer scroller = ((ScrollViewer)sender);
@@ -707,6 +767,7 @@ namespace PlayProjectGame
         {
             SongCoverPrvImage.Visibility = Visibility.Collapsed;
         }
+
 
     }
 }

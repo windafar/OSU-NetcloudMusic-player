@@ -15,7 +15,17 @@ namespace Communication
         [MarshalAs(UnmanagedType.LPStr)]
         public string lpData; //发送给目录窗口所在进程的数据
     }
-    public enum MyMsgType { Startplay, Playing, Suspend, Replay, Stop, Drop, Volume, Dispose, Unknown }
+    public enum MyMsgType {
+        MainWindow_Show,
+        audio_Startplay,
+        audio_Playing,
+        audio_Suspend,
+        audio_Replay,
+        audio_Stop,
+        audio_Drop,
+        audio_Volume,
+        audio_Dispose, 
+        Unknown }
     public enum PlayState { playing, stop, suspend, droping }
     public enum AudioProgressCommunicationDataType
     {

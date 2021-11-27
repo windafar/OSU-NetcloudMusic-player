@@ -15,14 +15,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using PlayProjectGame.PlayList;
 using System.Windows.Controls.Primitives;
-using PlayProjectGame.PublicConver;
-using VisualAttentionDetection.CutImage;
-using System.Drawing.Imaging;
 using ImageFilter;
 using PlayProjectGame.Data;
+using System.Diagnostics;
 
 namespace PlayProjectGame
 {
@@ -122,7 +119,7 @@ namespace PlayProjectGame
                                 {
                                     AbImageBuff = File.ReadAllBytes(osubgPath);
 
-                                    var GenerImage = new SalientRegionDetection().GetSRDFromPath(osubgPath, 1366, 256, "H", "jpg", new System.Drawing.Rectangle(0, 0, 256, 256), 210);
+                                    var GenerImage = new SalientRegionDetection().GetSRDFromPath(osubgPath, 256, 256, "H", "jpg", new System.Drawing.Rectangle(0, 0, 256, 256), 210);
                                     var img = Helper.UIhelper.ConverTotBitmapImage(GenerImage);
                                     img.Freeze();
 
@@ -183,7 +180,7 @@ namespace PlayProjectGame
                         ListViewBackgroud = new ImageBrush(UIhelper.ConverTotBitmapImage(srcBitmap)) { Stretch = Stretch.None, AlignmentY = AlignmentY.Bottom, AlignmentX = AlignmentX.Right };
                 });
             });
-            if (ImageThread.ThreadState == ThreadState.Unstarted || ImageThread.ThreadState == ThreadState.Stopped)
+            if (ImageThread.ThreadState == System.Threading.ThreadState.Unstarted || ImageThread.ThreadState == System.Threading.ThreadState.Stopped)
                 ImageThread.Start();
             else
                 ImageThread.Abort();
@@ -196,6 +193,7 @@ namespace PlayProjectGame
             SongListInfo.Text = PLD.PlayListInfo;
             RemoveLoalNotExistSQButton.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
             //SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
+            ImportSong.Visibility= PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
             GetImage(PLD.PlayListId);
             view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
             Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
@@ -204,23 +202,9 @@ namespace PlayProjectGame
         }
 
         ListCollectionView view;//此视图用于过滤
-        //private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
-        //{
-        //    view.Filter = new Predicate<object>(filterSong);
-        //}
-        //private void TextBox_TextChanged_2(object sender, TextChangedEventArgs e)
-        //{
-        //    view.Filter = new Predicate<object>(filterArtist);
-        //}
-        //private void TextBox_TextChanged_3(object sender, TextChangedEventArgs e)
-        //{
-        //    view.Filter = new Predicate<object>(filterAlbum);
-        //}
-        private void SearcherBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            view.Filter = new Predicate<object>(filterAll);
-        }
-        public bool filterAll(object item)
+
+        private void SearcherBox_TextChanged(object sender, TextChangedEventArgs e) => view.Filter = new Predicate<object>(FilterAll);
+        public bool FilterAll(object item)
         {
             var it = ((SongInfoExpend)item).SongInfo;
             var result = false;
@@ -236,7 +220,7 @@ namespace PlayProjectGame
         private void SongListListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //如果是双击的Item
-            SongInfoExpend sinfo = null;
+            SongInfoExpend sinfo;
             try
             {
                 sinfo = ((FrameworkElement)e.OriginalSource).DataContext as SongInfoExpend;
@@ -300,12 +284,7 @@ namespace PlayProjectGame
         /// 用于保存历史状态
         /// </summary>
         /// <returns></returns>
-        public CustomContentState GetContentState()
-        {
-
-            return new PlayListJournalEntry(PLD, ReplySongListPage_Itself, SongListListView.SelectedItem);
-
-        }
+        public CustomContentState GetContentState() => new PlayListJournalEntry(PLD, ReplySongListPage_Itself, SongListListView.SelectedItem);
 
         private void PlaySongListButton_Click(object sender, RoutedEventArgs e)
         {
@@ -322,16 +301,11 @@ namespace PlayProjectGame
 
         }
 
-        private void AddSongListAddButton_Click(object sender, RoutedEventArgs e)
-        {
-            PlayListBase.AddToPlayList(PLD.Songs, true);
-        }
+        private void AddSongListAddButton_Click(object sender, RoutedEventArgs e) => PlayListBase.AddToPlayList(PLD.Songs, true);
 
         private void SongListAddMenu_Click(object sender, RoutedEventArgs e)
         {
-
-            SongInfoExpend songEx = SongListListView.SelectedItem as SongInfoExpend;
-            if (songEx != null)
+            if (SongListListView.SelectedItem is SongInfoExpend songEx)
             {
                 for (int i = SongListListView.SelectedItems.Count - 1; i >= 0; i--)
                     PlayListBase.AddToPlayList((SongInfoExpend)SongListListView.SelectedItems[i], false);
@@ -526,7 +500,7 @@ namespace PlayProjectGame
         private void SongListListView_DragLeave(object sender, DragEventArgs e)
         {
             SongInfoExpend source = (SongInfoExpend)e.Data.GetData(typeof(SongInfoExpend));
-            source.DataContainerName = "SongList";
+            source.dataContainer = SongInfoExpend.DataContainerType.SongList;
         }
 
         private void SongListGoDir_Click(object sender, RoutedEventArgs e)
@@ -676,52 +650,49 @@ namespace PlayProjectGame
 
         }
 
-        private void MatchSong_Click(object sender, RoutedEventArgs e)
+        private void ImportSong_Click(object sender, RoutedEventArgs e)
         {
-            var filesys = mainWindow.filesyscath;
-            int count=0;
-            if (filesys.Count == 0)//程序运行阶段只能初始化一次
+            var selecteddata = UIhelper.SelectFile("audio");
+            if (selecteddata != null)
+                PLD.Songs.InsertRange(SongListListView.SelectedIndex == -1 ? 0 : SongListListView.SelectedIndex, selecteddata.Select(x =>
+                     {
+                         var track = new MusicTag().GetAudioTrack(x);
+                        //var codec = PlayListBase.player.GetCodecInfo(x, "");
+                        return new SongInfoExpend(new SongInfoExpend
+                         {
+                             SongInfo = new SongInfo
+                             {
+                                 SongType = 1,
+                                 SongPath = x,
+                                 SongAlbum = track.Album,
+                                 SongArtist = track.Artist,
+                                 SongId = x,
+                                 SongName = track.Title
+                             },
+                             dataContainer = SongInfoExpend.DataContainerType.SongList,
+                             Source = "netid_" + PLD.PlayListId,
+                             SourceName = PLD.PlatListName,
+                             FileTime = new FileInfo(x).CreationTime.Ticks,
+                             SongInfoIndex = PLD.Songs.Count
+                        });
+                     }));
+            NavigationService.Refresh();
+        }
+
+        private void SongToSongList_Click(object sender, RoutedEventArgs e)
+        {
+            var wind = new UserDefinedControl.CreatePlayList();
+            wind.Owner = this.mainWindow;
+            wind.songInfoExpends = SongListListView.SelectedItems.Cast<SongInfoExpend>();
+            wind.Show();
+        }
+
+        private void PlayListDelMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (SongListListView.SelectedItem != null)
             {
-                ((Hyperlink)sender).IsEnabled = false;
-                MessageBox.Show("开始初始化文件系统");
-                //Task.Run(() =>
-                //{
-                    var DriveNames = ConfigPage.GlobalConfig.MatchSongFromDivce.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var driveInfo in DriveInfo.GetDrives())
-                    {
-                        if (driveInfo.IsReady)
-                            filesys.AddRange(FileSerch.FileSercher.EnumerateFiles(driveInfo));
-                    }
-                mainWindow.filesyscath = filesys.Where(x =>
-                      {
-                          int index = x.LastIndexOf(".");
-                          string Extension = x.Substring(index+1, x.Length - index-1);
-                          return Extension == "mp3" ||
-                          Extension == "flac" ||
-                        //  Extension == "wav" ||
-                          Extension == "ncm";
-                      }).OrderBy(x => new FileInfo(x).Name).ToList();
-                    Dispatcher.Invoke(() => {
-                        MessageBox.Show("文件系统初始化完成");
-                        ((Hyperlink)sender).IsEnabled = true;
-                    });
-                //});
-            }
-            else if (((Hyperlink)sender).IsEnabled)
-            {
-                Parallel.ForEach(PLD.Songs, p =>
-                {
-                    if (!string.IsNullOrEmpty(p.SongInfo.SongPath)&&!File.Exists(p.SongInfo.SongPath))
-                    {
-                        int index = mainWindow.filesyscath.BinarySearch(p.SongInfo.SongPath, Comparer.SampleFileNameComparer); ;
-                        if (index > -1)
-                        {
-                            p.SongInfo.SongPath= mainWindow.filesyscath[index];
-                            count++;
-                        }
-                    }
-                });
-                MessageBox.Show("匹配完成,共计"+ count);
+                PLD.Songs.Remove(SongListListView.SelectedItem as SongInfoExpend);
+                NavigationService.Refresh();
             }
         }
     }

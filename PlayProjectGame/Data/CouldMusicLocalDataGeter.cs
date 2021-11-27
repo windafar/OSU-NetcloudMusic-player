@@ -13,6 +13,7 @@ using System.Threading;
 using System.Security.Cryptography;
 using System.Collections;
 using PlayProjectGame.Helper;
+using Microsoft.VisualBasic.Devices;
 
 namespace PlayProjectGame.Data
 {
@@ -384,10 +385,13 @@ namespace PlayProjectGame.Data
             if (NetClouldMusicData == null) throw new InvalidOperationException("备份失败，NetClouldMusicData 对象为空");
             //Task.Run(() =>
             //{
-            if(File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
+            OtherHelper.WriteXMLSerializer(NetClouldMusicData, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH+"_back");
+
+            if (File.Exists(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH))
                 File.Delete(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-            OtherHelper.WriteXMLSerializer(NetClouldMusicData, typeof(List<UserData>), GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
-           // });
+            Computer MyComputer = new Computer();
+            MyComputer.FileSystem.RenameFile(new FileInfo(GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH).FullName + "_back",  GlobalConfigClass.XML_CLOUDMUSIC_SAVEPATH);
+            // });
         }
     }
 

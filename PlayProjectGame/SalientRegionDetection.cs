@@ -80,6 +80,7 @@ namespace PlayProjectGame.PlayList
         {
             if (R == null) R = new System.Drawing.Rectangle(0, 0, 256, 256);
             MemoryStream ms_out = new MemoryStream();
+            if(!File.Exists(filepath))return null;
             Bitmap Srcbitmap = new Bitmap(filepath);
             //压缩尺寸以加快速度
             BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out, Math.Min(prewidth, Srcbitmap.Width), Math.Min(preheight, Srcbitmap.Height), premode, pretype);
@@ -88,8 +89,10 @@ namespace PlayProjectGame.PlayList
             ms_out.Dispose();
 
             var vdcmap = VisualAttentionDetectionClass.SalientRegionDetectionBasedOnFT(vdcSrcBitmap);
-            //if (R.Width > Srcbitmap.Width || R.Height > Srcbitmap.Height)
-            {//格式化输出图片尺寸
+            if (R.Width > Srcbitmap.Width || R.Height > Srcbitmap.Height)
+            {//如果以高为缩放标准，而原图又是高度大于宽度，又要求输出图宽度大于高度的话就会出现问题，暂时没空解决这个问题，使用强制改变输出值
+                
+                //格式化输出图片尺寸
                 ms_out = new MemoryStream();
                 BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out, R.Width*1, R.Height*1, premode, pretype);
                 Srcbitmap.Dispose();

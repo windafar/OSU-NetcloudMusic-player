@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 using System.Xml.Serialization;
 
 namespace PlayProjectGame.Helper
@@ -16,7 +19,7 @@ namespace PlayProjectGame.Helper
         public static bool IndexExistOfAny(this String source, string[] str)
         {
             foreach (var s in str)
-                if (!string.IsNullOrWhiteSpace(s)&&source==s) return true;
+                if (!string.IsNullOrWhiteSpace(s) && source == s) return true;
             return false;
         }
 
@@ -153,6 +156,7 @@ namespace PlayProjectGame.Helper
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message, "xml文件保存");
+                if (File.Exists(path)) File.Delete(path);
             }
 
         }
@@ -201,15 +205,32 @@ namespace PlayProjectGame.Helper
             return o.ToString();
         }
 
-        public static Process StartAudioProcesses() {
-            var pros = Process.GetProcesses().FirstOrDefault(x=>x.ProcessName== "AudioSTAProgress");
+        public static Process StartAudioProcesses()
+        {
+            var pros = Process.GetProcesses().FirstOrDefault(x => x.ProcessName == "AudioSTAProgress");
             if (pros == null)
             {
-               string str= Environment.CurrentDirectory+"\\";
-                pros = Process.Start(str+@"AudioSTAProgress.exe");
+                string str = Environment.CurrentDirectory + "\\";
+                pros = Process.Start(str + @"AudioSTAProgress.exe");
             }
             pros.PriorityClass = ProcessPriorityClass.High;
             return pros;
+        }
+
+        public static void MainProExitedCheck()
+        {
+
+            var pros = Process.GetProcesses()
+                .Where(x => x.ProcessName == Process.GetCurrentProcess().ProcessName)
+                .Where(x=>x.Id != Process.GetCurrentProcess().Id).ToList();
+            if (pros.Count() >= 1)
+            {
+                Communication.Communication.SendMsg(
+                    pros.First().MainWindowHandle,
+                    Communication.MyMsgType.MainWindow_Show, "");
+                Thread.Sleep(1000);
+                Process.GetCurrentProcess().Kill();
+            }
         }
     }
 }

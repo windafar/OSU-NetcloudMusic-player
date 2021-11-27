@@ -98,6 +98,9 @@
                     <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="ExportSongList"   Margin="12,0,0,0" Background="{x:Null}">
                         <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="ExportSongList_Click">导出歌单</Hyperlink>
                     </TextBlock>
+                    <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="ImportSong"   Margin="12,0,0,0" Background="{x:Null}">
+                        <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="ImportSong_Click">导入歌曲</Hyperlink>
+                    </TextBlock>
                     <StackPanel VerticalAlignment="Center" Margin="18,0,0,0">
                         <TextBlock FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" >
                             <Hyperlink Style="{StaticResource hyberlinkEffect}"  Click="ShowSearcherBox">过滤</Hyperlink>
@@ -252,11 +255,16 @@
                                   Template="{DynamicResource MenuItemControlTemplate1}">
 
                         </MenuItem>
+                        <MenuItem Name="PlayListDelMenu" Header="从歌单中删除" Click="PlayListDelMenu_Click"
+                                 Style="{StaticResource MenuItemOverwriteStyle}"
+                                  Template="{DynamicResource MenuItemControlTemplate1}">
 
+                        </MenuItem>
                         <MenuItem Name="SongListGoDir" Header="转到目录" Click="SongListGoDir_Click"
                                   Template="{DynamicResource MenuItemControlTemplate1}"
                                  Style="{StaticResource MenuItemOverwriteStyle}" >
                         </MenuItem>
+                        <!--<MenuItem Name="SongToSongList" Header="创建到新歌单" Click="SongToSongList_Click" Style="{StaticResource MenuItemOverwriteStyle}" Template="{DynamicResource MenuItemControlTemplate1}"></MenuItem>-->
                         <MenuItem Name="DetailedMenuItem" Header="详细信息" SubmenuOpened="DetailedMenuItem_Click" Template="{DynamicResource MenuItemControlTemplate1}"
                                  Style="{StaticResource MenuItemOverwriteStyle}"
                                   >

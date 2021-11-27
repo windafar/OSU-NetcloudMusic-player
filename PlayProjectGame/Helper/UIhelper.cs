@@ -272,27 +272,36 @@ where T : DependencyObject
               }, null, Timeout.Infinite, sec);
         }
 
-        ///// <summary>
-        ///// 该函数用于使用二分法寻找使用listBox子控件集合中已经生成的一段。*未完成(sqrt(n)-1) ~（2n！-1）(n,迭代数)
-        ///// 函数说明：该函数配合虚拟化使用，依托虚拟化寻找处于视口的任意一项。难点在于二分法的收敛方向确定。。
-        ///// </summary>
-        ///// <param name="listbox">当前listbox引用</param>
-        ///// <param name="beforIndex">集合前端</param>
-        ///// <param name="afterIndex">集合后端</param>
-        ///// <param name="iterationNum">迭代数</param>
-        //public static void FindNoCachItem(this UserDefinedControl.Hor_FisheyeEff_ListBox listbox,int beforIndex, int afterIndex,int iterationNum)
-        //{
-        //    int index = (int)(afterIndex + beforIndex) / 2;
-        //   DependencyObject item= listbox.ImageListBox.ItemContainerGenerator.ContainerFromIndex(index);
-        //    if (item == null)
-        //    {
-        //        FindNoCachItem(listbox, beforIndex, index,iterationNum);
-        //        FindNoCachItem(listbox, index, afterIndex,iterationNum);//此处有问题，待以后改进，极端情况还不如索引（差一个收敛方向）
-        //    }
-        //    else
-        //    {
+        /// <summary>
+        /// SelectFile对话框
+        /// </summary>
+        /// <param name="type">type：text，audio</param>
+        /// <returns></returns>
+        public static string[] SelectFile(string type)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "text" , "文档文件(*.doc,*.xls,*.txt)|*.doc;*.xls;*.txt|All files (*.*)|*.*"},
+                { "audio","音频文件(*.mp3,*.flac,*.wav)|*.mp3;*.flac;*.wav|All files (*.*)|*.*"}
+            };
 
-        //    }
-        //}
+        var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = dic[type],
+                Multiselect = true,//: \"图像文件(*.bmp, *.jpg)|*.bmp;*.jpg|所有文件(*.*)|*.*\"”
+
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                return openFileDialog.FileNames;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
     }
 }

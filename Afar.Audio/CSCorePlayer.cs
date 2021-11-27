@@ -225,9 +225,12 @@ namespace AddIn.Audio
             }
             else
                 _waveSource = CodecFactory.Instance.GetCodec(_filePath);
-            _soundOut.Initialize(_waveSource);
-            _soundOut.Volume = Volume/100f;
-
+            lock (obj)
+            {
+                if (_soundOut == null) return;//奇怪，为啥锁了还能是空的，暂时不管了
+                _soundOut.Initialize(_waveSource);
+                _soundOut.Volume = Volume / 100f;
+            }
             //_soundOut.Stopped += _soundOut_Stopped;
             _total = _waveSource.GetLength();
         }
@@ -237,12 +240,20 @@ namespace AddIn.Audio
         //    //PlaybackStopped?.Invoke(audioPlayer);
         //}
 
-        public void Open(string pFilePath,int Volume=50, string openMethods = "waveout", string device = "扬声器")
+        public void Open(string pFilePath, int Volume = 50, string openMethods = "waveout", string device = "扬声器")
         {
             CleanupPlayback();
             _filePath = pFilePath;
-            InitializePlayback(Volume,openMethods, device);
-        }
+            try
+            {
+                    InitializePlayback(Volume, openMethods, device);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+
+            }
+            }
 
         public IEnumerable<KeyValuePair<string, string>> GetCodecInfo(string songpath) 
         {
@@ -256,7 +267,7 @@ namespace AddIn.Audio
             var i = CodecFactory.Instance.GetCodec(songpath);
             var w = i.WaveFormat;
             i.Dispose();
-            return w.GetType().GetProperties().Where(x=>x.Name.ToLower()== tag).Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(w).ToString())).ToList();
+            return w.GetType().GetProperties().Where(x=>x.Name.ToLower()== tag|| string.IsNullOrWhiteSpace(tag)).Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(w).ToString())).ToList();
         }
         public void Play()
         {
@@ -330,6 +341,7 @@ namespace AddIn.Audio
 
         private bool m_disposed;
         private TimeSpan _total;
+        private object obj=new object();
 
         private void CleanupPlayback()
         {

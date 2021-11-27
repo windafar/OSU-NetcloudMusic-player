@@ -51,9 +51,9 @@
             </Rectangle.RenderTransform>
         </Rectangle>
 
-        <ScrollViewer x:Name="ScrollLrc" Width="Auto" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.IsSharedSizeScope="True" Grid.Column="1" BorderBrush="#ffffffff">
+        <ScrollViewer x:Name="ScrollLrc" Grid.Column="0" Grid.ColumnSpan="1"  Grid.Row="0" Grid.RowSpan="1" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True" BorderBrush="#ffffffff">
             <StackPanel>
-            <ListBox ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" BorderBrush="#ffffffff">
+                <ListBox Panel.ZIndex="-1"  Grid.Column="0" Grid.ColumnSpan="1"  Grid.Row="0" Grid.RowSpan="1" ItemContainerStyle="{StaticResource LrcListStyle}"  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" BorderBrush="#ffffffff">
                 <!--<ListBox  x:Name="LrcList" HorizontalContentAlignment="Center" FontSize="16" Foreground="Black" BorderBrush="{x:Null}" RenderTransformOrigin="0.66,-0.248" Grid.IsSharedSizeScope="True" Loaded="LrcList_Loaded" >-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -88,7 +88,7 @@
             自动加载歌词失败点击<Hyperlink Name="ReSercharHyperlink" Click="ReSercharHyperlink_Click">重新搜索</Hyperlink>
         </TextBlock>
         <Button Opacity="0.6" Background="#00000000" Name="MusicNoteButton" Click="MusicNoteButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#00707070" Foreground="#99000000">音乐笔记</Button>
-        <Grid Mouse.MouseEnter="PlayingGrid_MouseEnter"  Name = "PlayingGrid" Loaded="PlayingGrid_Loaded" LostFocus="PlayingGrid_LostFocus" />
+        <Grid Panel.ZIndex="-1" Mouse.MouseEnter="PlayingGrid_MouseEnter"  Name = "PlayingGrid" Loaded="PlayingGrid_Loaded" LostFocus="PlayingGrid_LostFocus" />
 
     </Grid>
 </Page>

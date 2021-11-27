@@ -48,8 +48,9 @@ namespace PlayProjectGame.Data
         }
         public string[] GetSongArtists
         {
-            get=> SongArtist.Split('/', '&', ',', '、', '(', ')','（','）','，', '・');
+            get => SongArtist.Split('/', '&', ',', '、', '(', ')', '（', '）', '，', '・');
         }
+
         private string songAlbum;
         public string SongAlbum
         {
@@ -143,15 +144,24 @@ namespace PlayProjectGame.Data
         public SongInfo SongInfo { get; set; }
         public int SongInfoIndex { get; set; }
         /// <summary>
-        /// 以‘-’格式构,(eg.netcloudId-{id})
+        /// 表示歌曲所属歌单源
+        /// 以‘-’格式表示,前部分表示固定歌单类型，后部分表示所属源的id
+        /// (netId_{pid})
+        /// (osuname_{collname})
+        /// (localfile_{songListName})
         /// </summary>
         public string Source { get; set; }
+        /// <summary>
+        /// 表示歌曲所属歌单源的友好名称
+        /// </summary>
         public string SourceName { set; get; }
         public long FileTime { set; get; }
         /// <summary>
         /// 指定在跨控件操作时的容器名称
+        /// value："",SongList(歌单页面SongList控件)
         /// </summary>
-        public string DataContainerName { set; get; }
+        public enum DataContainerType {SongList,none}
+        public DataContainerType dataContainer;
         public string SongNameAndArtist { get => SongInfo.SongName + " - " + SongInfo.SongArtist.Trim(','); }
         public SongInfoExpend()
         {
@@ -161,7 +171,7 @@ namespace PlayProjectGame.Data
             SongInfo = songInfoex.SongInfo;
             SongInfoIndex = songInfoex.SongInfoIndex;
             Source = songInfoex.Source;
-            DataContainerName = songInfoex.DataContainerName;
+            dataContainer = songInfoex.dataContainer;
             FileTime = songInfoex.FileTime;
         }
 

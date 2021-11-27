@@ -108,13 +108,13 @@ namespace PlayProjectGame
             if (PlayListBase.PlayListSongs.Count == 0)
             {
                 PlayListBase.PlayListIndex = 0;
-                PlayListBase.SendMsg(MyMsgType.Stop, "");
+                PlayListBase.SendMsg(MyMsgType.audio_Stop, "");
             }
             else if ((j = PlayListBase.PlayListSongs.IndexOf(curinfo)) >= 0)
             {
                 PlayListBase.PlayListIndex = j + 1;
             }
-            else { PlayListBase.SendMsg(MyMsgType.Stop,""); }
+            else { PlayListBase.SendMsg(MyMsgType.audio_Stop, ""); }
 
         }
 

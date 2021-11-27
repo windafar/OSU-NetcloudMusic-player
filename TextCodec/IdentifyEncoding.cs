@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AddIn.Lrc
+namespace TextCodec
 {
     //测试主程序
     //class AppTest

@@ -227,7 +227,7 @@ namespace PlayProjectGame.PlayList
             //if (deste == null) return;
 
 
-            if (source.DataContainerName == "SongList")
+            if (source.dataContainer == SongInfoExpend.DataContainerType.SongList)
             {
                 int index = PlayListBase.PlayListSongs.IndexOf(deste) + 1;
                 PlayListBase.AddToPlayList(source, index);
@@ -248,9 +248,9 @@ namespace PlayProjectGame.PlayList
                     }
                 }
             }
-            source.DataContainerName = "";
+            source.dataContainer = SongInfoExpend.DataContainerType.none;
             if(deste!=null)
-            deste.DataContainerName = "";
+            deste.dataContainer = SongInfoExpend.DataContainerType.none;
             FrameworkElement elemt = ((FrameworkElement)e.OriginalSource);
             elemt = Helper.UIhelper.FindPrent<Grid>(elemt);
             Helper.UIhelper.FindChild<Line>(elemt, "").Visibility = Visibility.Collapsed;

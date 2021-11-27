@@ -102,7 +102,7 @@ namespace PlayProjectGame.PlayList
             if (PlayListBase.PlayListSongs.Count == 0)
             {
                 PlayListBase.PlayListIndex = 0;
-                PlayListBase.SendMsg(MyMsgType.Stop, "");
+                PlayListBase.SendMsg(MyMsgType.audio_Stop, "");
             }
             else if ((j = PlayListBase.PlayListSongs.IndexOf(curinfo)) >= 0)
             {
@@ -110,7 +110,7 @@ namespace PlayProjectGame.PlayList
             }
             else
             {
-                PlayListBase.SendMsg(MyMsgType.Stop, "");
+                PlayListBase.SendMsg(MyMsgType.audio_Stop, "");
             }
 
         }
@@ -203,7 +203,7 @@ namespace PlayProjectGame.PlayList
                         //System.Diagnostics.Debug.Print("文件：" + (ss - DateTime.Now).TotalSeconds.ToString());
 
                     }
-                    else if (data.SongInfo.SongType == 2)
+                    else if (data.SongInfo.SongType == 2|| data.SongInfo.SongType == 1)
                     {
                         apath = Core.Cach.CachPool.GetAbPath(data.SongInfo);
                         if (GlobalConfigClass._Config.UseAlbumImageCach && File.Exists(apath))

@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using VisualAttentionDetection.OtherAppy;
-
+using ATL;
 namespace PlayProjectGame.Helper
 {
     struct MatchBtStream
@@ -199,7 +199,8 @@ namespace PlayProjectGame.Helper
                 SEstreame.StartIndex = curIndex;
                 return Tag_GetIDv2ImageBuffer(FileBtBuff, SEstreame);
             }
-            else return null;
+            else return File.ReadAllBytes(@"./AppResource/notfind.png");
+            ;
 
         }
         private byte[] GetJPGBufferFromOtherFile(FileStream fs)
@@ -273,7 +274,7 @@ namespace PlayProjectGame.Helper
             }
             else
             {//
-                return null;
+                return File.ReadAllBytes(@"./AppResource/notfind.jpg");
             }
         }
         private bool Tag_GetIDv2ImageLength(byte[] FileBtBuff, out int curIndex, out int length)
@@ -380,6 +381,7 @@ namespace PlayProjectGame.Helper
             }
             else
             {//
+                return File.ReadAllBytes(@"./AppResource/notfind.jpg");
                 return null;
             }
 
@@ -452,6 +454,12 @@ namespace PlayProjectGame.Helper
             float[] fft = new float[512];
             //   Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT1024);
             return fft;
+        }
+
+        public Track GetAudioTrack(string audioFilePath)
+        {  
+
+            return new Track(audioFilePath);
         }
 
         /// <summary>
