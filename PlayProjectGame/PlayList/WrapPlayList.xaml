@@ -26,8 +26,8 @@
     </Page.Resources>
     <Grid Name="PlayListGrid" MouseDown="PlayListGrid_MouseDown">
         <Grid.RowDefinitions>
-            <RowDefinition Height="259*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="{ Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page,  AncestorLevel=1}, Path=ActualHeight}"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Image Name="BackgroundImage1" Stretch="UniformToFill"></Image>
         <Image Name="BackgroundImage2" Stretch="UniformToFill"></Image>
@@ -41,6 +41,7 @@
                     <GradientStop Offset="1" Color="#44000000"></GradientStop>
                 </LinearGradientBrush>
             </Rectangle.OpacityMask>
+            <!--gs#：bug这里结合mainpage下方的的viewbrush会导致错位，以后处理-->
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleX="-1"></ScaleTransform>
             </Rectangle.RenderTransform>

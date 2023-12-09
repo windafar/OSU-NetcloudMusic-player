@@ -30,8 +30,8 @@ namespace PlayProjectGame
     {
         //拓展的ListView属性放到自定义控件xaml有时候报名称已被使用的异常，轮流替换命名空间编译又没问题了，感觉像是编译器bug，先扔这儿吧
 
-        public static readonly DependencyProperty HearderBackgroudProperty = DependencyProperty.Register("HearderBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.White));
-        public static readonly DependencyProperty ListViewBackgroudProperty = DependencyProperty.Register("ListViewBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.White));
+        public static readonly DependencyProperty HearderBackgroudProperty = DependencyProperty.Register("HearderBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.Transparent));
+        public static readonly DependencyProperty ListViewBackgroudProperty = DependencyProperty.Register("ListViewBackgroud", typeof(Brush), typeof(SongList), new PropertyMetadata(Brushes.Transparent));
 
         private MainWindow mainWindow = MainWindow.CurMainWindowInstence;
         public MainWindow MainWindow { get => mainWindow; set => mainWindow = value; }
@@ -173,9 +173,9 @@ namespace PlayProjectGame
                     {
                         srcBitmap = new System.Drawing.Bitmap(stream);
                     }
-                    catch (ArgumentException)                    
+                    catch (ArgumentException)
                     {
-                        srcBitmap = new System.Drawing.Bitmap(128,128);
+                        srcBitmap = new System.Drawing.Bitmap(128, 128);
                     }
                     if (srcBitmap.Width > 900)
                     {
@@ -185,7 +185,7 @@ namespace PlayProjectGame
                         srcBitmap = new System.Drawing.Bitmap(memoryStream);
                         memoryStream.Dispose();
                     }
-                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.13, 0,230,false);
+                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.13, 0, 230, false);
                     //ImageBasic.BasicMethodClass.WriteEdgeGradual(srcBitmap);//目的是融合图片，有问题，考虑数学上的办法（拉普拉斯和泊松）
 
                     srcBitmap = ImageBasic.BasicMethodClass.AddSpace(srcBitmap, 0, 36, 0, 24);
@@ -195,7 +195,8 @@ namespace PlayProjectGame
                 {
                     HearderBackgroud = new ImageBrush(SRDBrushImage) { Stretch = Stretch.None, AlignmentX = AlignmentX.Right, AlignmentY = AlignmentY.Center };
                     if (GlobalConfigClass._Config.UseSongListPageBackground)
-                        ListViewBackgroud = new ImageBrush(UIhelper.ConverTotBitmapImage(srcBitmap)) { Stretch = Stretch.None, AlignmentY = AlignmentY.Bottom, AlignmentX = AlignmentX.Right };
+                        ListViewBackgroud = new ImageBrush(UIhelper.ConverTotBitmapImage(srcBitmap)) { Stretch = Stretch.None, AlignmentY = AlignmentY.Center, AlignmentX = AlignmentX.Right };
+                    else ListViewBackgroud = Brushes.Transparent;
                 });
             });
             if (ImageThread.ThreadState == System.Threading.ThreadState.Unstarted || ImageThread.ThreadState == System.Threading.ThreadState.Stopped)

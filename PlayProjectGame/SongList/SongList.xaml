@@ -20,7 +20,7 @@
         <publicconver:FilePathToFileInfo x:Key="FilePathToFileInfo"></publicconver:FilePathToFileInfo>
         <AlternationConverter x:Key="conBack">
             <SolidColorBrush Color="#FFF2F2F2"></SolidColorBrush>
-            <SolidColorBrush Color="White"></SolidColorBrush>
+            <SolidColorBrush Color="Transparent"></SolidColorBrush>
         </AlternationConverter>
         <AlternationConverter x:Key="conAlign">
             <HorizontalAlignment>Left</HorizontalAlignment>
@@ -37,7 +37,7 @@
         </Style>
         <Style TargetType="GridViewColumnHeader" x:Key="GridViewColumnHeaderStyle">
             <Setter Property="Template" Value="{StaticResource GridViewColumnHeaderTemp}"></Setter>
-            <Setter Property="Panel.Background" Value="White"></Setter>
+            <Setter Property="Panel.Background" Value="Transparent"></Setter>
             <Setter Property="Border.Margin" Value="0,0,0,0"></Setter>
             <Setter Property="Border.Background" Value="Transparent"></Setter>
             <Setter Property="Border.BorderThickness" Value="0"></Setter>
@@ -54,8 +54,8 @@
             <Setter Property="Template" Value="{StaticResource SongListItemTemp}"></Setter>
         </Style>
         <Style TargetType="MenuItem" x:Key="MenuItemOverwriteStyle">
-            <Setter Property="Background" Value="White"></Setter>
-            <Setter Property="BorderBrush" Value="White"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
             <Style.Triggers>
                 <Trigger Property="IsHighlighted" Value="True">
                     <Setter Property="Background" Value="{Binding PlacementTarget.BorderBrush, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
@@ -68,7 +68,7 @@
               Value="True" />
             <Setter Property="OverridesDefaultStyle"
               Value="true" />
-            <Setter Property="Panel.Background" Value="White"/>
+            <Setter Property="Panel.Background" Value="Transparent"/>
             <Style.Triggers>
                 <Trigger Property="Orientation"
                  Value="Horizontal">
