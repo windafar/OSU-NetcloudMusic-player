@@ -100,11 +100,22 @@ namespace PlayProjectGame
                                 if (AbImageBuff != null)
                                 {
                                     var ms = new MemoryStream(AbImageBuff);
-                                    var img = Helper.UIhelper.ConverTotBitmapImage(new System.Drawing.Bitmap(ms));
-                                    img.Freeze();
-                                    ms.Dispose();
-                                    Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
-
+                                    BitmapImage img;
+                                    try
+                                    {
+                                        img = Helper.UIhelper.ConverTotBitmapImage(new System.Drawing.Bitmap(ms));
+                                        img.Freeze();
+                                        Dispatcher.BeginInvoke((ThreadStart)(() => { SongListImage.Source = img; }));
+                                    }
+                                    catch(Exception)
+                                    {
+                                        img = null;
+                                      
+                                    }
+                                    finally
+                                    {
+                                        ms.Dispose();
+                                    }
                                     break;
                                 }
                             }
@@ -158,7 +169,14 @@ namespace PlayProjectGame
                 System.Drawing.Bitmap srcBitmap = null;
                 if (GlobalConfigClass._Config.UseSongListPageBackground)
                 {
-                    srcBitmap = new System.Drawing.Bitmap(stream);
+                    try
+                    {
+                        srcBitmap = new System.Drawing.Bitmap(stream);
+                    }
+                    catch (ArgumentException)                    
+                    {
+                        srcBitmap = new System.Drawing.Bitmap(128,128);
+                    }
                     if (srcBitmap.Width > 900)
                     {
                         MemoryStream memoryStream = new MemoryStream();
@@ -167,7 +185,7 @@ namespace PlayProjectGame
                         srcBitmap = new System.Drawing.Bitmap(memoryStream);
                         memoryStream.Dispose();
                     }
-                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.1);
+                    srcBitmap = SketchFilter.Sketch(srcBitmap, 0.13, 0,230,false);
                     //ImageBasic.BasicMethodClass.WriteEdgeGradual(srcBitmap);//目的是融合图片，有问题，考虑数学上的办法（拉普拉斯和泊松）
 
                     srcBitmap = ImageBasic.BasicMethodClass.AddSpace(srcBitmap, 0, 36, 0, 24);
@@ -187,18 +205,22 @@ namespace PlayProjectGame
         }
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SongListListView.ItemsSource = PLD.Songs;
-            SongListName.Text = PLD.PlatListName;
-            SongListCreator.Text = PLD.UersName;
-            SongListInfo.Text = PLD.PlayListInfo;
-            RemoveLoalNotExistSQButton.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
-            //SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
-            ImportSong.Visibility= PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
-            GetImage(PLD.PlayListId);
-            view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
-            Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
-            SongListInfoSrcoller.Height = Math.Abs(point.Y);
-            _Grid = UIhelper.FindPrent<Grid>(SongListListView);
+            Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                SongListListView.ItemsSource = PLD.Songs;
+                SongListName.Text = PLD.PlatListName;
+                SongListCreator.Text = PLD.UersName;
+                SongListInfo.Text = PLD.PlayListInfo;
+                RemoveLoalNotExistSQButton.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
+                //SongListHistory.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed; ;
+                ImportSong.Visibility = PLD.PlayListType == 2 ? Visibility.Visible : Visibility.Collapsed;
+                GetImage(PLD.PlayListId);
+                view = (ListCollectionView)CollectionViewSource.GetDefaultView(SongListListView.ItemsSource);
+                Point point = SongListInfo.TranslatePoint(new Point(0, 0), SongListListView);
+                SongListInfoSrcoller.Height = Math.Abs(point.Y);
+                _Grid = UIhelper.FindPrent<Grid>(SongListListView);
+
+            });
         }
 
         ListCollectionView view;//此视图用于过滤
@@ -209,12 +231,21 @@ namespace PlayProjectGame
             var it = ((SongInfoExpend)item).SongInfo;
             var result = false;
             if (!result)
+            {
+                if (it.SongName == null) return false;
                 result = it.SongName.IndexOf(SearcherBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
             if (!result)
+            {
+                if (it.SongAlbum == null) return false;
+
                 result = it.SongAlbum.IndexOf(SearcherBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
             if (!result)
+            { if (it.SongArtist == null) return false;
                 result = it.SongArtist.IndexOf(SearcherBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
-            return result;
+            }
+                return result;
         }
 
         private void SongListListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -316,7 +347,7 @@ namespace PlayProjectGame
         {
             var result = PLD.Songs.Where(x => (!x.SongInfo.LocalFlac && x.SongInfo.RemoteFlac));
             var Num = 0;
-            if (MessageBox.Show("将要移除" + result.Count() + "项", "确认", MessageBoxButton.YesNo)
+            if (MessageBox.Show("将要移除" + result.Count() + "项，请至少在程序所在磁盘上留足"+ result.Count()*20+"Mkb的空间", "确认", MessageBoxButton.YesNo)
                 == MessageBoxResult.Yes)
             {
                 PLD.Songs.Where(x => (!x.SongInfo.LocalFlac && x.SongInfo.RemoteFlac)).ToList()
@@ -331,8 +362,17 @@ namespace PlayProjectGame
                             {
                                 Directory.CreateDirectory(dir);
                             }
-                            fi.MoveTo(dir + fi.Name);
+                            try
+                            {
+                                fi.MoveTo(dir + fi.Name);
+                            }
+                            catch (Exception ex) 
+                            {
 
+                                MessageBox.Show("移除"+fi.FullName+"时发生错误，文件未移动："+ex.Message);
+                                Num--;
+                                
+                            }
                             Num++;
                         }
                         x.SongInfo.SongPath = null;
@@ -484,7 +524,7 @@ namespace PlayProjectGame
 
             stffimage.Dispose();
 
-            return (UIhelper.ConverTotBitmapImage(GenerImage));
+            return UIhelper.ConverTotBitmapImage(GenerImage);
         }
 
         private void SongListListView_DragEnter(object sender, DragEventArgs e)
@@ -515,6 +555,8 @@ namespace PlayProjectGame
         private void ExportSongList_Click(object sender, RoutedEventArgs e)
         {
             File.WriteAllLines(OtherHelper.ReplaceValidFileName(PLD.PlatListName) + ".m3u8", PLD.Songs.Select(x => x.SongInfo.SongPath).ToArray(), UTF8Encoding.UTF8);
+            File.WriteAllLines(OtherHelper.ReplaceValidFileName(PLD.PlatListName) + ".m3u8", PLD.Songs.Select(x => x.SongNameAndArtist).ToArray(), UTF8Encoding.UTF8);
+
         }
 
         private void SongListPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -664,18 +706,19 @@ namespace PlayProjectGame
                              {
                                  SongType = 1,
                                  SongPath = x,
-                                 SongAlbum = track.Album,
-                                 SongArtist = track.Artist,
+                                 SongAlbum = track == null ? ""  : track.Album,
+                                 SongArtist = track == null ? "" : track.JoinedArtists,
                                  SongId = x,
-                                 SongName = track.Title
+                                 SongName = track == null ? new FileInfo(x).Name : track.Title,
                              },
                              dataContainer = SongInfoExpend.DataContainerType.SongList,
-                             Source = "netid_" + PLD.PlayListId,
+                             Source = "localfile_" + PLD.PlayListId,
                              SourceName = PLD.PlatListName,
                              FileTime = new FileInfo(x).CreationTime.Ticks,
                              SongInfoIndex = PLD.Songs.Count
                         });
                      }));
+            CouldMusicLocalDataGeter.backup();
             NavigationService.Refresh();
         }
 

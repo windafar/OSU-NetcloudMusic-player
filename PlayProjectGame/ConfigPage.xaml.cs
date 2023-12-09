@@ -80,7 +80,7 @@ namespace PlayProjectGame
         {
             if (MainWindow.CurMainWindowInstence != null) {
                 var list = CouldMusicLocalDataGeter.GetSongList(true);
-                var list1=CouldMusicLocalDataGeter.AppendNewSongListToXML(list).Last();
+                var list1=CouldMusicLocalDataGeter.AppendManyNewSongListToXML(list).Last();
                 MainWindow.CurMainWindowInstence.NetClouldMusicaListBox.ItemsSource = list1.Pids;
             }
         }

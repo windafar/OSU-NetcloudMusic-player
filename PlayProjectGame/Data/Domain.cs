@@ -162,7 +162,7 @@ namespace PlayProjectGame.Data
         /// </summary>
         public enum DataContainerType {SongList,none}
         public DataContainerType dataContainer;
-        public string SongNameAndArtist { get => SongInfo.SongName + " - " + SongInfo.SongArtist.Trim(','); }
+        public string SongNameAndArtist { get => SongInfo.SongArtist.Trim(',') + " - " + SongInfo.SongName; }
         public SongInfoExpend()
         {
         }

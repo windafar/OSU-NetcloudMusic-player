@@ -225,7 +225,7 @@ namespace AddIn.Audio
             }
             else
                 _waveSource = CodecFactory.Instance.GetCodec(_filePath);
-            lock (obj)
+            lock (obj_soundOut)
             {
                 if (_soundOut == null) return;//奇怪，为啥锁了还能是空的，暂时不管了
                 _soundOut.Initialize(_waveSource);
@@ -341,20 +341,24 @@ namespace AddIn.Audio
 
         private bool m_disposed;
         private TimeSpan _total;
-        private object obj=new object();
+        private readonly object objdispose=new object();
+        private readonly object obj_soundOut = new object();
 
         private void CleanupPlayback()
         {
-            if (_soundOut != null)
-            {
-                _soundOut.Dispose();
-                _soundOut = null;
-            }
+            lock (objdispose) {
+                if (_soundOut != null)
+                {
+
+                    _soundOut.Dispose();
+                    _soundOut = null;
+                }
+           
             if (_waveSource != null)
             {
                 _waveSource.Dispose();
                 _waveSource = null;
-            }
+            } }
         }
 
         protected virtual void Dispose(bool disposing)

@@ -12,18 +12,13 @@ namespace PlayProjectGame.Data
 {
     class LocalMusicGeter
     {
-        public LocalMusicGeter(IEnumerable<SongInfoExpend> songInfoExpends, string userName, string songListinfo, string songListName)
+        public LocalMusicGeter(string userName)
         {
-            SongInfoExpends = songInfoExpends;
             UserName = userName;
-            SongListinfo = songListinfo;
-            SongListName = songListName;
         }
         UserData LocalUserData;
-        public IEnumerable<SongInfoExpend> SongInfoExpends { get; }
+
         public string UserName { get; }
-        public string SongListinfo { get; }
-        public string SongListName { get; }
 
         public UserData GetLocalUserData ()
         {
@@ -31,7 +26,7 @@ namespace PlayProjectGame.Data
             if (File.Exists(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH))
             {
                 LocalUserData = ReadUserDataByXML();
-                LocalUserData.Pids.Insert(0, CreateLocalSongList().Pids.First());
+                
 
 
             }
@@ -46,31 +41,70 @@ namespace PlayProjectGame.Data
 
         private UserData ReadUserDataByXML()
         {
-            XmlSerializer xs = new XmlSerializer(typeof(UserData));
-            try
+            if (File.Exists(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH))
             {
-                FileStream fs = File.OpenRead(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH);
-                UserData Data = (UserData)xs.Deserialize(fs);
-                fs.Dispose();
-                return Data;
+                XmlSerializer xs = new XmlSerializer(typeof(UserData));
+                try
+                {
+                    FileStream fs = File.OpenRead(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH);
+                    UserData Data = (UserData)xs.Deserialize(fs);
+                    fs.Dispose();
+                    return Data;
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show("此时无法从序列化的文件加载歌单：" + e.Message, "xml文件加载");
+                    return null;
+                }
             }
-            catch (Exception e)
-            {
-                System.Windows.MessageBox.Show("此时无法从序列化的文件加载歌单：" + e.Message, "xml文件加载");
-                return null;
-            }
+            else return null;
         }
 
         private UserData CreateLocalSongList()
         {
+            UserData userData = ReadUserDataByXML();
+            
+            if (userData != null) return userData;
+            List<string> filesys = new List<string>();
+            var DriveNames = ConfigPage.GlobalConfig.MatchSongFromDivce.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var driveInfo in DriveInfo.GetDrives())
+            {
+                if (driveInfo.IsReady)
+                    filesys.AddRange(FileSerch.FileSercher.EnumerateFiles(driveInfo));
+            }
+            filesys = filesys.Where(x =>
+            {
+                int index = x.LastIndexOf(".");
+                
+                string Extension = x.Substring(index + 1, x.Length - index - 1);
+                if (Extension == "mp3" ||
+                Extension == "flac"
+                //  Extension == "wav" ||
+                // Extension == "ncm";
+                ) {
+                    FileInfo fileinfo = new FileInfo(x);
+                    if (fileinfo.Length < 1024 * 1024 * 2) return false;
+                    return true;
+                }
+                return false;
+            }).Distinct().OrderBy(x => new FileInfo(x).LastWriteTime).ToList();
+
             UserData NewLocalUserData = new UserData() { Pids = new List<PlayListData>(), Username = UserName, Uid = Guid.NewGuid().ToString() };
             NewLocalUserData.Pids.Add(new PlayListData
             {
-                PlatListName = SongListName,
-                Songs = SongInfoExpends.ToList(),
-                PlayListInfo = SongListinfo,
+                PlatListName = "本地歌曲",
+                Songs = filesys.Select(x=>new SongInfoExpend {
+                    SongInfo=new SongInfo {
+                        SongPath=x,
+                        SongName=new FileInfo(x).Name.Split('-').Length==2? new FileInfo(x).Name.Split('-')[1]: new FileInfo(x).Name,
+                        SongArtist= new FileInfo(x).Name.Split('-').Length == 2 ? new FileInfo(x).Name.Split('-')[0] : "",
+                        SongId =DateTime.Now.Ticks.ToString(),
+                        SongType=1
+                    },
+                }).ToList(),
+                PlayListInfo = "计算机上的所有歌曲",
                 UersName = UserName,
-                UserId = NewLocalUserData.Uid,
+                UserId = UserName,
                 PlayListType = 1,
                 PlayListId = Guid.NewGuid().ToString()
             });
@@ -81,7 +115,7 @@ namespace PlayProjectGame.Data
         {
             if (LocalUserData == null) throw new InvalidOperationException("备份失败，NetClouldMusicData 对象为空");
 
-            OtherHelper.WriteXMLSerializer(LocalUserData, typeof(UserData), GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH + "_back");
+            OtherHelper.WriteXMLSerializer(LocalUserData, typeof(UserData), GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH);
 
             if (File.Exists(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH))
                 File.Delete(GlobalConfigClass.XML_LOCALMUSIC_SAVEPATH);

@@ -336,7 +336,7 @@ namespace PlayProjectGame.Data
 
         }
 
-        static public List<UserData> AppendNewSongListToXML(List<UserData> newSource) 
+        static public List<UserData> AppendManyNewSongListToXML(List<UserData> newSource) 
         {
             if (newSource == null) newSource = new List<UserData>();
             List<UserData> destData = new List<UserData>();

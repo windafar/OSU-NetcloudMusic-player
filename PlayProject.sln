@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32127.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddIn.Lrc", "Afar.Lrc\AddIn.Lrc.csproj", "{3B53FC0B-F544-41A1-B935-CF88D5EE4874}"
 EndProject
@@ -38,8 +38,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowDemo", "WindowDemo\WindowDemo\WindowDemo.csproj", "{CDCC0FDC-B3FA-4462-A37F-863CB93EB452}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayProjectGameTests", "PlayProjectGameTests\PlayProjectGameTests.csproj", "{EF221201-3D68-49DF-A370-D79FDA2FFF92}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATL", "ATL\atldotnet\ATL\ATL.csproj", "{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -353,26 +351,6 @@ Global
 		{EF221201-3D68-49DF-A370-D79FDA2FFF92}.Release|x64.ActiveCfg = Release|Any CPU
 		{EF221201-3D68-49DF-A370-D79FDA2FFF92}.Release|x64.Build.0 = Release|Any CPU
 		{EF221201-3D68-49DF-A370-D79FDA2FFF92}.Release|x86.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|Win32.Build.0 = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|x64.Build.0 = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Debug|x86.Build.0 = Debug|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Win32.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|Win32.Build.0 = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|x64.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|x64.Build.0 = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|x86.ActiveCfg = Release|Any CPU
-		{2A6A8E3A-1EE8-46A0-A292-FEA69B6F4EAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

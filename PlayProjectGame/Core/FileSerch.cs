@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace FileSerch
 {
@@ -184,7 +185,9 @@ namespace FileSerch
                 // Check if the volume handle is valid.
                 if (m_hCJ == INVALID_HANDLE_VALUE)
                 {
-                    throw new Exception("Couldn't open handle to the volume.");
+                    // throw new Exception("Couldn't open handle to the volume.");
+                    Debug.WriteLine("Couldn't open handle to the volume.");
+                    yield break;
                 }
 
                 mft.StartFileReferenceNumber = 0;

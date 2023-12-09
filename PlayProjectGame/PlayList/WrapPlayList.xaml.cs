@@ -483,6 +483,7 @@ namespace PlayProjectGame.PlayList
         {
             var cursong = PlayListBase.PlayListSongs[PlayListBase.PlayListIndex - 1];
             PlayListData PlayListData = null;
+            if (cursong.Source == null) cursong.Source = "netid_local";//gs:bug.233摊手
             if (cursong.Source.IndexOf("osuname_") == 0)
             {
                 var f = cursong.Source.Remove(0, 8);

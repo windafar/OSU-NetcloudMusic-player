@@ -10,7 +10,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="400"
       Title="SongList" Loaded="Page_Loaded"
-      Name="SongListPage"  VisualClearTypeHint="Auto"
+      Name="SongListPage"  
       SizeChanged="SongListPage_SizeChanged"
       >
     <Page.Resources>
@@ -62,6 +62,35 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="SongListScrollBar"
+           TargetType="{x:Type ScrollBar}">
+            <Setter Property="SnapsToDevicePixels"
+              Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+              Value="true" />
+            <Setter Property="Panel.Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation"
+                 Value="Horizontal">
+                    <Setter Property="Width"
+                  Value="Auto" />
+                    <Setter Property="Height"
+                  Value="8" />
+                    <Setter Property="Template"
+                        Value="{StaticResource HScrollBarTemp}" />
+                </Trigger>
+                <Trigger Property="Orientation"
+                 Value="Vertical">
+                    <Setter Property="Width"
+                  Value="8" />
+                    <Setter Property="Height"
+                  Value="Auto" />
+                    <Setter Property="Template"
+                        Value="{StaticResource VScrollBarTemp}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
 
     </Page.Resources>
     <Grid>
@@ -93,7 +122,7 @@
                     </TextBlock>
                     <TextBlock Margin="18,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" >操作：</TextBlock>
                     <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="RemoveLoalNotExistSQButton" Margin="0,0,0,0" >
-                        <Hyperlink Style="{StaticResource hyberlinkEffect}"  Click="RemoveLoalNotExistSQButton_Click">移除歌单的非无损音频</Hyperlink>
+                        <Hyperlink ToolTip="强烈建议在云音乐中创建一个新的临时歌单用来执行此操作，以避免删除了已下架歌曲" Style="{StaticResource hyberlinkEffect}"  Click="RemoveLoalNotExistSQButton_Click">移除歌单的非无损音频</Hyperlink>
                     </TextBlock>
                     <TextBlock  FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{Binding MainWindow.CurrentThemeBrush, ElementName= SongListPage}" Name="ExportSongList"   Margin="12,0,0,0" Background="{x:Null}">
                         <Hyperlink  Style="{StaticResource hyberlinkEffect}" Click="ExportSongList_Click">导出歌单</Hyperlink>
@@ -346,7 +375,7 @@
                 </ListView.ItemContainerStyle>-->
             </userdefinedcontrol:ListViewBigFalt>
         </Grid>
-        <ScrollBar Scroll="SongListPageScrollBar_Scroll" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Grid.Column="8" d:IsLocked="True"/>
+        <ScrollBar Style="{StaticResource SongListScrollBar}" Scroll="SongListPageScrollBar_Scroll" Panel.ZIndex="2" Name="SongListPageScrollBar" HorizontalAlignment="Right" Grid.Column="8" d:IsLocked="True"/>
 
     </Grid>
 

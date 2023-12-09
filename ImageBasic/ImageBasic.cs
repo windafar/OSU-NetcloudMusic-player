@@ -160,6 +160,21 @@ namespace ImageBasic
 
         #endregion
 
+        #region 加速缓存
+        public static class Cach
+        {
+            static Cach()
+            {
+                SqrValue = new byte[65026];
+                for (int Y = 0; Y < 65026; Y++) SqrValue[Y] = (byte)(255 - (int)Math.Sqrt(Y));// 计算查找表，注意已经砸查找表里进行了反色
+            }
+
+            public static byte[] SqrValue { get; }
+        }
+       
+
+        #endregion
+
         #region 颜色转换
         /// <summary>
         /// 获取24位深RGB到8位灰阶图
@@ -1903,6 +1918,7 @@ namespace ImageBasic
         }
         public static Bitmap AddSpace(Bitmap source, int left, int top, int right, int bottom)
         {
+            
             if (source.PixelFormat == PixelFormat.DontCare) return null;
             Bitmap bitmap = new Bitmap((int)source.Width + left + right, source.Height + top + right, PixelFormat.Format24bppRgb);
             Graphics g = Graphics.FromImage(bitmap);

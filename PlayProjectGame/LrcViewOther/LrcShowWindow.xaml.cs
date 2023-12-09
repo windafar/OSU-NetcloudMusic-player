@@ -60,7 +60,7 @@ namespace PlayProjectGame.LrcViewOther
             }
             //UpdateDesktopLrcScroller将运行在新的定时器里面，所以注意CurLrcItem是不是下一项，预计是下一项，最糟糕的是第二次是下一项
             //更改此计时器间隔测试线程切换的可能
-            double ItemLrcMillsecTotal = __curItem.Next.Value.Time.TotalMilliseconds - __curItem.Value.Time.TotalMilliseconds;//当前项LRC的存在时间
+            double ItemLrcMillsecTotal = __curItem.Next.Value.Time.TotalMilliseconds - __curItem.Value.Time.TotalMilliseconds+1;//当前项LRC的存在时间
             double ItemLrcMillsecCur = (PlayListBase.player.Position - __curItem.Value.Time).TotalMilliseconds;//一项LRC当前已经走过的时间
            // double ItemLrcMillsecCur = TimeSpan.FromTicks(PlayListBase.CurrentPlayTime - __curItem.Value.Time.Ticks).TotalMilliseconds;//一项LRC当前已经走过的时间
             double ItemLrcLenIndex = (ItemLrcMillsecCur / ItemLrcMillsecTotal) * (CurLrcTextBox.ActualWidth - DesktopLrcWindow.ActualWidth+30);//这30是其他控件的呈现高度，最后多出来的应该为30/4-1

@@ -13,7 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using VisualAttentionDetection.OtherAppy;
-using ATL;
 namespace PlayProjectGame.Helper
 {
     struct MatchBtStream
@@ -23,12 +22,15 @@ namespace PlayProjectGame.Helper
         public int EndIndex;
         public byte[] buff;
         public int length;//apic指定的长度或者其他手动确定的长度
+        
     }
+    
     /// <summary>
     /// 处理歌曲TAG相关的类,不需要数据上下文的定义为静态
     /// </summary>
     class MusicTag : IDisposable
     {
+        
         /// <summary>
         /// 用于存放临时数据
         /// </summary>
@@ -121,9 +123,16 @@ namespace PlayProjectGame.Helper
         {
             string path = Core.Cach.CachPool.GetAbPath(songInfo);
             if (GlobalConfigClass._Config.UseAlbumImageCach && File.Exists(path)) {
-                lock (path)
+                lock (MainWindow.CurMainWindowInstence.cachobj)
                 {
-                    return File.ReadAllBytes(path);
+                    try
+                    {
+                        return File.ReadAllBytes(path);//这里怎么会有占用异常呢。。。
+                    }
+                    catch (IOException) 
+                    {
+                        return new byte[10];
+                    }
                 }
                 // byte[] buffer;
                 //using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -176,9 +185,14 @@ namespace PlayProjectGame.Helper
         public Bitmap GetBitmapFromBuffer(byte[] buffer)
         {
             var ms = new MemoryStream(buffer);
-            var b = new Bitmap(ms);
-            //ms.Dispose();
-            return b;
+            try
+            {
+                var b = new Bitmap(ms);
+                //ms.Dispose();
+                return b;
+            }
+            catch { return new Bitmap(128, 128); }
+
         }
 
 
@@ -456,10 +470,28 @@ namespace PlayProjectGame.Helper
             return fft;
         }
 
-        public Track GetAudioTrack(string audioFilePath)
-        {  
+        public TagLib.Tag GetAudioTrack(string audioFilePath)
+        {
+            /*
+             // assume you've got to the point where you have a StorageFile 
+            // via a file picker or something similar
 
-            return new Track(audioFilePath);
+            var fileStream = await (StorageFile)file.OpenStreamForReadAsync();
+
+            var tagFile = TagLib.File.Create(new StreamFileAbstraction(file.Name,
+				             fileStream, fileStream);
+
+            var tags = tagFile.GetTag(TagTypes.Id3v2);
+
+            Debug.WriteLine(tags.Title);
+             */
+            FileStream fileStream = new FileStream(audioFilePath,FileMode.Open);
+            var tagFile = TagLib.File.Create(new TagLib.StreamFileAbstraction(audioFilePath,
+                 fileStream, fileStream));
+
+            var tags = tagFile.GetTag(TagLib.TagTypes.Id3v2);
+
+            return tags;
         }
 
         /// <summary>

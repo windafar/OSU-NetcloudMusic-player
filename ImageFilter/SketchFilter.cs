@@ -21,7 +21,7 @@ namespace ImageFilter
         /// <param name="MaxGrayVlue">生成图的最大灰度（色度）值</param>
         /// <param name="IsGray">是否生成灰度图</param>
         /// <remarks>注意应该从返回中取结果，而不是形参中，因为输入图引用有可能已经改变</remarks>
-        static public  Bitmap Sketch(Bitmap SourceBmp, double Contrast=0.1, double Brightness=0,byte MaxGrayVlue=70,bool IsGray=true)
+        static public  Bitmap Sketch(Bitmap SourceBmp, double Contrast=0.1, double Brightness=0,byte MaxGrayVlue=0,bool IsGray=true)
         {
             int X, Y;
             int SourceWidth, SourceHeight, SourceStride, DestStride, DestHeight;
@@ -34,8 +34,7 @@ namespace ImageFilter
                 if (SourceBmp.PixelFormat != System.Drawing.Imaging.PixelFormat.Format24bppRgb) throw new FormatException();
             }
 
-            byte[] SqrValue = new byte[65026];
-            for (Y = 0; Y < 65026; Y++) SqrValue[Y] = (byte)(255 - (int)Math.Sqrt(Y));// 计算查找表，注意已经砸查找表里进行了反色
+            byte[] SqrValue = BasicMethodClass.Cach.SqrValue;
 
             SourceWidth = SourceBmp.Width; SourceHeight = SourceBmp.Height; SourceStride = (int)((SourceBmp.Width * 3 + 3) & 0XFFFFFFFC);//gs:即使二进制的倒数第三位以后的置为0，整个数目以4的倍数递增
             DestStride = (SourceWidth + 2) * 3; DestHeight = SourceHeight + 2;// 宽度和高度都扩展2个像素
@@ -143,10 +142,13 @@ namespace ImageFilter
                             R= Math.Max(LutP[PowerRed], SourceDataPT[SourceYIndex]);
                             G= Math.Max(LutP[PowerGreen], SourceDataPT[SourceYIndex]);
                             B= Math.Max(LutP[PowerBlue], SourceDataPT[SourceYIndex]);
+                            //R = LutP[PowerRed];
+                            //G = LutP[PowerGreen];
+                            //B = LutP[PowerBlue];
                             if (IsGray)
                             {
                                 G = (byte)(.299 * R + .587 * G + .114 * B);
-                                if (G < MaxGrayVlue) G = MaxGrayVlue;
+                                if (G < MaxGrayVlue) G = MaxGrayVlue;//值越大越亮
                                 SourceDataP[SourceYIndex] = G;
                                 SourceDataP[SourceYIndex + 1] = G;
                                 SourceDataP[SourceYIndex + 2] = G;

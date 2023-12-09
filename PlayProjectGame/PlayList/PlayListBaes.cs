@@ -89,9 +89,6 @@ namespace PlayProjectGame.PlayList
         }
         static private int playListIndex = 1;
         /// <summary>
-        /// 异常触发计数，该字段用来妥当的处理在播放中不同情况的异常
-        /// </summary>
-        /// <summary>
         /// 从1开始计数的播放列表位置
         /// </summary>
         static public int PlayListIndex

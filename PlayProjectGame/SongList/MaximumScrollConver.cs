@@ -14,7 +14,10 @@ namespace PlayProjectGame
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var v = (double)value;
-            var p = Math.Abs((((Grid)parameter).Margin.Top));
+            double p;
+            if (parameter != null)
+                p = Math.Abs((((Grid)parameter).Margin.Top));
+            else p = 0;
             return v + p;
         }
 

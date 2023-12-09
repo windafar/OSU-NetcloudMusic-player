@@ -97,7 +97,17 @@
                    FontSize="18"
                    FontFamily="DengXian"
                    MouseLeftButtonDown="PlayingTextBox_MouseLeftButtonDown"/>-->
-                <Expander Header="歌单" IsEnabled="True" Margin="0,10,0,10" FontSize="18" Visibility="{Binding Visibility, ElementName=NetClouldMusicaListBox}">
+                <Expander  IsEnabled="True" Margin="0,10,0,10" FontSize="18" Visibility="{Binding Visibility, ElementName=NetClouldMusicaListBox}">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0">歌单</TextBlock>
+                            <Button Name="CreateSongListButton" Click="CreateSongListButton_Click"  Width="15" Height="15"   Padding="-7.5" Margin="2,0,0,0" TextBlock.TextAlignment="Center"  BorderThickness="0" BorderBrush="WhiteSmoke" Background="White" Grid.Column="1">+</Button>
+                        </Grid>
+                    </Expander.Header>
                     <ListBox  x:Name="NetClouldMusicaListBox" PreviewMouseWheel="NetClouldMusicaListBox_PreviewMouseWheel"
                   ItemContainerStyle="{StaticResource SongListBoxItemStyle}"
                               VirtualizingPanel.IsVirtualizing="True"
@@ -125,7 +135,7 @@
                         <System:String>&gt;</System:String>
                     </ListBox>
                 </Expander>
-                <!--<Expander Visibility="{Binding Visibility, ElementName=LocalListBox}" Header="创建的歌单" IsEnabled="True" Margin="0,10,0,10" FontSize="18">
+                <Expander Visibility="{Binding Visibility, ElementName=LocalListBox}" Header="本地歌曲" IsEnabled="True" Margin="0,10,0,10" FontSize="18">
                     <ListBox x:Name="LocalListBox"
                   ItemContainerStyle="{StaticResource SongListBoxItemStyle}"
                   VirtualizingPanel.IsVirtualizing="True"
@@ -139,7 +149,7 @@
 
                         <System:String>&gt;</System:String>
                     </ListBox>
-                </Expander>-->
+                </Expander>
 
                 <TextBlock x:Name="ConfigTextBox"
                    Text="设置"

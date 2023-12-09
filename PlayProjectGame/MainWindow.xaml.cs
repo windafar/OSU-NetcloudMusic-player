@@ -90,13 +90,13 @@ namespace PlayProjectGame
                        return;
                    }
                    var r2 = new System.IO.MemoryStream(r1.Result);
-                   MainWindow.CurMainWindowInstence.Dispatcher.BeginInvoke((ThreadStart)delegate
+                   CurMainWindowInstence.Dispatcher.BeginInvoke((ThreadStart)delegate
                    {
-                       MainWindow.CurMainWindowInstence.PlayAblum.Source = UIhelper.ConveBitmapImage(r2);
+                       CurMainWindowInstence.PlayAblum.Source = UIhelper.ConveBitmapImage(r2);
                        //r2.Dispose();
-                       MainWindow.CurMainWindowInstence.PlaySongName.Text = sinfo.SongName;
-                       MainWindow.CurMainWindowInstence.PlaySongArt.Text = sinfo.SongArtist.Trim(',');
-                       MainWindow.CurMainWindowInstence.Icon = UIhelper.ConveBitmapImage(r2);
+                       CurMainWindowInstence.PlaySongName.Text = sinfo.SongName;
+                       CurMainWindowInstence.PlaySongArt.Text = sinfo.SongArtist==null?"":sinfo.SongArtist.Trim(',');
+                       CurMainWindowInstence.Icon = UIhelper.ConveBitmapImage(r2);
 
                    });
 
@@ -149,13 +149,13 @@ namespace PlayProjectGame
 
         private Thread ClundMusicTreeNewThread;
         public List<string> filesyscath = new List<string>();//用于匹配歌曲的全局缓存
-
         public void LoadNetCloudMusic()
         {
             ClundMusicTreeNewThread = new Thread(delegate ()
             {
                 var list = CouldMusicLocalDataGeter.GetSongList();
-                List<PlayListData> List = list.Last().Pids;
+                
+                List<PlayListData> List =  list.Last().Pids;
                 NetCloudData = List;
 
                 Dispatcher.Invoke((ThreadStart)delegate ()
@@ -194,8 +194,16 @@ namespace PlayProjectGame
 
         public void LoadLocal() 
         {
-           // LocalListBox.Items.Clear();
-          //  LocalListBox.ItemsSource = new LocalMusicGeter(new List<SongInfoExpend>(),"新用户","","本地歌单").GetLocalUserData().Pids;
+            LocalListBox.Items.Clear();
+            Task t = Task.Run(() =>
+              {
+                  var listsource = new LocalMusicGeter("本地用户").GetLocalUserData().Pids;
+                  Dispatcher.Invoke(() =>
+                  {
+                      LocalListBox.ItemsSource = listsource;
+                  });
+              });
+
         }
 
         public MainWindow()
@@ -211,7 +219,7 @@ namespace PlayProjectGame
 
             LoadOSU(false);
 
-          //  LoadLocal();//闭着眼睛写了一堆错误，算了
+            LoadLocal();
 
         }
 
@@ -294,12 +302,16 @@ namespace PlayProjectGame
                         frame.AddBackEntry(new PlayListJournalEntry(Pr.PLD, ReplySongListPage));
                     }
                 }
-                SongList.SetPlayListData(pld);
-                Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
-                if (frame.Source==null||frame.Source.OriginalString != "SongList/SongList.xaml")
-                    frame.Navigate(NextUri);
-                else frame.Refresh();
+                Dispatcher.BeginInvoke((ThreadStart)delegate
+                {
+                    SongList.SetPlayListData(pld);
+                    Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                    if (frame.Source == null || frame.Source.OriginalString != "SongList/SongList.xaml")
+                        frame.Navigate(NextUri);
+                    else frame.Refresh();
+                }
                 //frame.Navigate(new SongList(pld));
+                );
             }
 
         }
@@ -307,6 +319,31 @@ namespace PlayProjectGame
         private void OSUListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PlayListData pld = OSUListBox.SelectedItem as PlayListData;
+            if (pld != null)
+            {
+                if (frame.Content != null)
+                {
+                    SongList Pr = frame.Content as SongList;
+                    if (Pr != null)
+                    {
+                        frame.AddBackEntry(new PlayListJournalEntry(Pr.PLD, ReplySongListPage));
+                    }
+                }
+                Dispatcher.BeginInvoke((ThreadStart)delegate
+                {
+                    SongList.SetPlayListData(pld);
+                    Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
+                    if (frame.Source == null || frame.Source.OriginalString != "SongList/SongList.xaml")
+                        frame.Navigate(NextUri);
+                    else frame.Refresh();
+                    //frame.Navigate(new SongList(pld));
+
+                });
+            }
+        }
+        private void LocalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PlayListData pld = LocalListBox.SelectedItem as PlayListData;
             if (pld != null)
             {
                 if (frame.Content != null)
@@ -325,28 +362,6 @@ namespace PlayProjectGame
                 //frame.Navigate(new SongList(pld));
 
             }
-        }
-        private void LocalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //PlayListData pld = LocalListBox.SelectedItem as PlayListData;
-            //if (pld != null)
-            //{
-            //    if (frame.Content != null)
-            //    {
-            //        SongList Pr = frame.Content as SongList;
-            //        if (Pr != null)
-            //        {
-            //            frame.AddBackEntry(new PlayListJournalEntry(Pr.PLD, ReplySongListPage));
-            //        }
-            //    }
-            //    SongList.SetPlayListData(pld);
-            //    Uri NextUri = new Uri("SongList/SongList.xaml", UriKind.Relative);
-            //    if (frame.Source == null || frame.Source.OriginalString != "SongList/SongList.xaml")
-            //        frame.Navigate(NextUri);
-            //    else frame.Refresh();
-            //    //frame.Navigate(new SongList(pld));
-
-            //}
         }
 
         private void PlayListTextBox_MouseDown_1(object sender, MouseButtonEventArgs e)
@@ -371,8 +386,9 @@ namespace PlayProjectGame
         #endregion
 
         #region 窗口相关事件
-            #region 子进程事件
-            public HwndSource hwndSource;
+        #region 子进程事件
+        public readonly object cachobj = new object();
+        public HwndSource hwndSource;
             public Process AudioProcess;
             private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -768,6 +784,11 @@ namespace PlayProjectGame
             SongCoverPrvImage.Visibility = Visibility.Collapsed;
         }
 
-
+        private void CreateSongListButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window window = new PlayProjectGame.CreateSongListWindow();
+            window.Show();
+            
+        }
     }
 }

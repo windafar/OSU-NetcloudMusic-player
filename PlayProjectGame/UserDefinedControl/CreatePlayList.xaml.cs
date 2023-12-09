@@ -29,7 +29,7 @@ namespace PlayProjectGame.UserDefinedControl
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             PlayListData pld = ((FrameworkElement)sender).DataContext as PlayListData;
-            LocalMusicGeter localMusicGeter = new LocalMusicGeter(songInfoExpends, pld.UersName,pld.PlayListInfo,pld.PlatListName);
+           // LocalMusicGeter localMusicGeter = new LocalMusicGeter(songInfoExpends, pld.UersName,pld.PlayListInfo,pld.PlatListName);
          //   MainWindow.CurMainWindowInstence.LocalListBox.ItemsSource= localMusicGeter.GetLocalUserData().Pids;
         }
 

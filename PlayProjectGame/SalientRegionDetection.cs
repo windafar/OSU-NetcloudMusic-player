@@ -34,8 +34,14 @@ namespace PlayProjectGame.PlayList
             int Tolerance = 200)
         {
             if (R == null) R = new System.Drawing.Rectangle(0, 0, 256, 256);
+            Bitmap Srcbitmap;
+            InImageStream.Seek(0, 0);
+            try { Srcbitmap = new Bitmap(InImageStream); }
+            catch (ArgumentException)
+            { return new Bitmap(256,256); }
+
+
             MemoryStream ms_out = new MemoryStream();
-            Bitmap Srcbitmap = new Bitmap(InImageStream);
             //压缩尺寸以加快速度
             BasicMethodClass.MakeThumbnail(Srcbitmap, ms_out,Math.Min(prewidth,Srcbitmap.Width),Math.Min(preheight,Srcbitmap.Height), premode, pretype);
             if (InImageStream == null) throw new Exception("not expectation result");

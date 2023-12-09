@@ -68,6 +68,13 @@ namespace PlayProjectGame.Helper
             try
             {
                 bitmap.Save(ms, ImageFormat.Jpeg);
+                bitmap.Dispose();
+                ms.Seek(0, SeekOrigin.Begin);
+                var bitImage = new BitmapImage();
+                bitImage.BeginInit();
+                bitImage.StreamSource = ms;
+                bitImage.EndInit();
+                return bitImage;
             }
             catch(Exception e) {
                 Debug.Print(e.Message);
@@ -75,13 +82,7 @@ namespace PlayProjectGame.Helper
                 bitmap.Dispose();
                 return null;
             }
-            bitmap.Dispose();
-            ms.Seek(0, SeekOrigin.Begin);
-            var bitImage = new BitmapImage();
-            bitImage.BeginInit();
-            bitImage.StreamSource = ms;
-            bitImage.EndInit();
-            return bitImage;
+
         }
         /// <summary>
         /// 转换BitmapImage成Bitmap
@@ -104,46 +105,24 @@ namespace PlayProjectGame.Helper
 
         public static BitmapImage ConveBitmapImage(Stream stream)
         {
-            Bitmap bit = new Bitmap(stream);
+            try
+            {
+                Bitmap bit;
+                try
+                {
+                    bit = new Bitmap(stream);
+                }
+                catch {
+                    bit = new Bitmap(128, 128);
+                }
+                return ConverTotBitmapImage(bit);
 
-            return ConverTotBitmapImage(bit);
-            ////BitmapImage bitmap = new BitmapImage();
-            ////bitmap.BeginInit();
-            ////stream.Seek(0, SeekOrigin.Begin);
+            }
+            catch
+            {
+                return new BitmapImage();
+            }
 
-            ////bitmap.StreamSource = stream;
-            ////try
-            ////{
-            ////    try
-            ////    {
-            ////        stream.Seek(0, SeekOrigin.Current);
-            ////        bitmap.EndInit();
-            ////    }
-            ////    catch (NotSupportedException)
-            ////    {
-            ////        MemoryStream saveStream = new MemoryStream();
-            ////        if (!MakeThumbnail(stream, saveStream, 602, 602, "W", "jpg"))
-            ////            return null;
-            ////        bitmap = new BitmapImage();
-            ////        bitmap.BeginInit();
-            ////        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            ////        saveStream.Seek(0, SeekOrigin.Begin);
-            ////        saveStream.Seek(0, SeekOrigin.Current); bitmap.StreamSource = saveStream;
-            ////        bitmap.EndInit();
-            ////        bitmap.Freeze();
-            ////        saveStream.Dispose();
-            ////    }
-            ////    bitmap.Freeze();
-
-            ////}
-            ////catch (Exception)
-            ////{
-
-            ////    return null;
-            ////}
-
-
-            //return bitmap;
         }
 
         /// <summary>
