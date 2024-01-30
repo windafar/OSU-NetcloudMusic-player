@@ -85,13 +85,14 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="204*"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ScrollViewer x:Name="scrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                       Mouse.PreviewMouseDown="scrollViewer_MouseDown" Mouse.MouseMove="scrollViewer_MouseMove" Mouse.MouseUp="scrollViewer_MouseUp">
+            <ScrollViewer  x:Name="scrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                       Mouse.PreviewMouseDown="scrollViewer_MouseDown" Mouse.MouseMove="scrollViewer_MouseMove" Mouse.MouseUp="scrollViewer_MouseUp"
+                        Margin="0"  Padding="0" Background="Transparent">
                 <StackPanel HorizontalAlignment="Left"
-                      Margin="5,0,0,0"
+                      Margin="0"
                       VerticalAlignment="Top">
                     <TextBlock x:Name="PlayListTextBox"
                        Text="正在播放"
@@ -166,7 +167,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <GridSplitter Grid.Row="1" Width="2" Background="#66F0F0F0" BorderThickness="0" />
+            <GridSplitter Grid.Row="1" Grid.Column="0" Grid.IsSharedSizeScope="True" Width="2" Background="#66F0F0F0" BorderThickness="0"  />
             <Frame x:Name="frame"
                LoadCompleted="Frame_LoadCompleted"
                Grid.Row="0"
@@ -205,14 +206,14 @@
             </Rectangle.Effect>
         </Rectangle>
 
-        <StackPanel  MouseDown="CurPlayStackPanel_MouseDown"  Name="CurPlayStackPanel" Width="{Binding ActualWidth, ElementName=scrollViewer, Mode=OneWay}"  Grid.Row="2" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" Height="98" Margin="0,-158,0,0" Orientation="Horizontal"  Visibility="{Binding Path=BottomControlVisibility, ElementName=window}">
+        <StackPanel  Background="Transparent"  MouseDown="CurPlayStackPanel_MouseDown"  Name="CurPlayStackPanel" Width="{Binding ActualWidth, ElementName=scrollViewer, Mode=OneWay}"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch"  HorizontalAlignment="Left" Height="98" Margin="0,-158,0,0" Orientation="Horizontal"  Visibility="{Binding Path=BottomControlVisibility, ElementName=window}">
             <Border BorderThickness="1,1,1,1" BorderBrush="{Binding CurrentThemeBrush, ElementName=window}">
                 <Image  Height="98" x:Name="PlayAblum" />
                 <Border.Effect>
                     <DropShadowEffect ShadowDepth="1" BlurRadius="2" Opacity="0.5"></DropShadowEffect>
                 </Border.Effect>
             </Border>
-            <Grid x:Name="grid1">
+            <Grid x:Name="grid1" Width="1200px">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24px"/>
                     <RowDefinition/>

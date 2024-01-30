@@ -50,8 +50,8 @@
                                 <Setter.Value>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                         <LinearGradientBrush.GradientStops>
-                                            <GradientStop Color="#FFF2F2F2" Offset="0" />
-                                            <GradientStop Color="#FFD5D5D5" Offset="1" />
+                                            <GradientStop Color="#00F2F2F2" Offset="0" />
+                                            <GradientStop Color="#00D5D5D5" Offset="1" />
                                         </LinearGradientBrush.GradientStops>
                                     </LinearGradientBrush>
                                 </Setter.Value>
