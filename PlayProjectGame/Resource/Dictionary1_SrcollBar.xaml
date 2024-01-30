@@ -22,7 +22,7 @@
                                         <s:Boolean>True</s:Boolean>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter Property="Panel.Background" Value="tr"/>
+                                <Setter Property="Panel.Background" Value="White"/>
                                 <Setter Property="UIElement.Focusable">
                                     <Setter.Value>
                                         <s:Boolean>False</s:Boolean>
@@ -64,7 +64,7 @@
                                 <Setter Property="Control.Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Thumb">
-                                            <Rectangle Name="Border" Stroke="#FFDDDDDD" Fill="#66DDDDDD" Margin="0"></Rectangle>
+                                            <Rectangle Name="Border" Stroke="#FFDDDDDD" Fill="#66DDDDDD"></Rectangle>
                                             <ControlTemplate.Triggers>
                                                 <EventTrigger RoutedEvent="MouseEnter">
                                                     <EventTrigger.Actions>

@@ -85,7 +85,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="204*"></ColumnDefinition>
+                <ColumnDefinition Width="204"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <ScrollViewer  x:Name="scrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -167,7 +167,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <GridSplitter Grid.Row="1" Grid.Column="0" Grid.IsSharedSizeScope="True" Width="2" Background="#66F0F0F0" BorderThickness="0"  />
+            <GridSplitter Grid.Row="1" Grid.IsSharedSizeScope="True" Width="2" Background="#66F0F0F0" BorderThickness="0"  />
             <Frame x:Name="frame"
                LoadCompleted="Frame_LoadCompleted"
                Grid.Row="0"
@@ -273,7 +273,7 @@
                 </StackPanel>
 
             </Button>
-            
+
             <Button x:Name="NextButton"
               BorderBrush="{x:Null}"
               Background="Transparent"
@@ -300,10 +300,10 @@
                 Visibility="{Binding Path=BottomControlVisibility, ElementName=window}"
                 />
 
-        
+
         <TextBlock Visibility="{Binding Path=BottomControlVisibility, ElementName=window}" x:Name="DesktopLrctextBlock" Grid.Column="2"  Grid.Row="2" TextWrapping="Wrap" Text="Lyrics" MouseDown="DesktopLrctextBlock_MouseDown" FontSize="16" FontFamily="Times New Roman" Background="Transparent" Margin="0" Padding="24,18,0,0"/>
         <Grid Visibility="{Binding ElementName=SongCoverPrvImage, Path=Visibility, Mode=OneWay}" Grid.RowSpan="3" Grid.ColumnSpan="3" Panel.ZIndex="1023" Background="#99060606"></Grid>
         <Image MouseDown="SongCoverPrvImage_MouseDown" Visibility="Collapsed" Panel.ZIndex="1024" Grid.RowSpan="3" Grid.ColumnSpan="3" x:Name="SongCoverPrvImage" Source="{Binding Icon, ElementName=window}"/>
     </Grid>
-       
+
 </PlayProjectGame:CustomWindow>
